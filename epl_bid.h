@@ -45,7 +45,7 @@ void epl_bid_end(EPL_job_info *epl_job_info);
 
 int epl_bid_reply_len(int model, unsigned char code);
 
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
 void epl_kernel_init(EPL_job_info *epl_job_info);
 #endif
 

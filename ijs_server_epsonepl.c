@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -828,7 +828,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       epl_job_info->connectivity = VIA_LIBIEEE1284;
     }
 #endif
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
   /* We catch both /dev/usb/lp[0-9] and /dev/usblp[0-9] */
   else if (strncmp(s, "/dev/usb",8) == 0)   
     {

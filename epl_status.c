@@ -28,7 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -58,7 +58,7 @@ int epl_status(int argc, char **argv)
       fprintf(stderr, "Copyright (c) 2003 Hin-Tak Leung, Roberto Ragusa\n");
 
       fprintf(stderr, "Built with <generic> ");
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
       fprintf(stderr, "<kernel usb device> ");
 #endif
 #ifdef HAVE_KERNEL_1284
@@ -92,7 +92,7 @@ int epl_status(int argc, char **argv)
       exit(1);
     }
   
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
   if (strncmp(argv[2], "/dev/usb",8) == 0)   
     {
       fprintf(stderr, "Using kernel usb device\n");

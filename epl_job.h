@@ -48,7 +48,7 @@ struct _EPL_job_info {
   int pixel_h;
   int pixel_v;
   int connectivity;
-#if defined(HAVE_KERNEL_DEVICE) || defined(HAVE_KERNEL_1284)
+#if defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_KERNEL_1284)
   int kernel_fd;
 #endif
 

@@ -23,7 +23,7 @@ if test "$with_kernelusb"  != no ; then
            -o "$major" -eq 2 -a "$minor" -ge 6 \
            -o "$major" -eq 2 -a "$minor" -eq 5 -a "$patch" -ge 7 \
            -o "$major" -eq 2 -a "$minor" -eq 4 -a "$patch" -ge 19 ; then
-         HAVE_KERNEL_DEVICE=-DHAVE_KERNEL_DEVICE
+         HAVE_KERNEL_USB_DEVICE=-DHAVE_KERNEL_USB_DEVICE
          KUSB_EXTRA_OBJS=epl_utils_kusb.o
          BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o"
          AC_MSG_RESULT(Linux ${major}.${minor}.${patch} ... seems good.)
@@ -92,7 +92,7 @@ else
 AC_MSG_RESULT(no)
 fi
 
-AC_SUBST(HAVE_KERNEL_DEVICE)
+AC_SUBST(HAVE_KERNEL_USB_DEVICE)
 AC_SUBST(HAVE_KERNEL_1284)
 AC_SUBST(HAVE_LIBIEEE1284)
 AC_SUBST(HAVE_LIBUSB)

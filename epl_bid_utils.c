@@ -41,7 +41,7 @@ void epl_bid_init(EPL_job_info *epl_job_info)
       epl_libusb_init(epl_job_info);
       break;
 #endif 
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
     case VIA_KERNEL_USB: 
       epl_kernel_init(epl_job_info);
       break;

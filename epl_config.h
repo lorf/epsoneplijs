@@ -111,6 +111,6 @@
 #include "libieee1284/include/ieee1284.h"
 #endif 
 
-#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_DEVICE) || defined(HAVE_LIBIEEE1284)
+#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_LIBIEEE1284)
 #define USE_FLOW_CONTROL
 #endif

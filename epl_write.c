@@ -31,7 +31,7 @@
 
 #include <stdlib.h>
 
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
 #include <unistd.h>
 #endif
 
@@ -114,7 +114,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 			          EPL_USB_READ_TIMEOUT);
 	      break;
 #endif
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
 	    case VIA_KERNEL_USB: 
 	      ret = read(epl_job_info->kernel_fd,
 		         in_buf,
@@ -184,7 +184,7 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
 				EPL_USB_WRITE_TIMEOUT);
 	  break;
 #endif
-#ifdef HAVE_KERNEL_DEVICE
+#ifdef HAVE_KERNEL_USB_DEVICE
 	case  VIA_KERNEL_USB:
 	  ret = write (epl_job_info->kernel_fd, buffer, length);
 	  break;
