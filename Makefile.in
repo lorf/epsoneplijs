@@ -37,7 +37,7 @@ INSTALL = @INSTALL@
 
 IJS_COMMON_OBJ=ijs$(OBJ)
 
-all:	libijs.a libijs$(SHARED_OBJ) ijs_client_example$(EXE) ijs_server_example$(EXE) ijs_server_epsonepl$(EXE) $(EXTRA_BINS) 
+all:	ijs_server_epsonepl$(EXE) $(EXTRA_BINS) 
 
 LIB_OBJS=ijs$(OBJ) ijs_client$(OBJ) ijs_server$(OBJ) $(IJS_EXEC_SERVER)
 
