@@ -47,7 +47,7 @@ typedef struct _Stream {
   int bits;          /* count in temp */
 } typ_stream;
 
-void stripe_init(void);
+void cache_init(void);
 
 void stream_init(typ_stream *stream);
 

@@ -86,7 +86,7 @@ common_clean:
 
 clean: common_clean
 	$(RM) *~ gmon.out core ijs_spec.log ijs_spec.tex ijs_spec.aux libijs.a libijs$(SHARED_OBJ) config.cache config.log config.status ijs-config testlibusb$(EXE) test5700lusb$(EXE) libusb/libusb.spec
-	[ -d libusb ] && (cd libusb ; make clean) 
+	[ -d libusb ] && (cd libusb ; make clean) || true
 
 install: all
 	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(bindir)/ijs_server_epsonepl$(EXE)

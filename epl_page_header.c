@@ -33,10 +33,10 @@ int epl_page_header(EPL_job_info *epl_job_info)
   char *ts;
   char paper_code;
   char stripe_size;
-  int bytes_per_row;
+  int bytes_per_row_2;
   int hor_pixels;
   int ver_pixels;
-  int stripes_per_page;
+  int total_stripes;
   int copies;
   int cust_paper_hor;
   int cust_paper_ver;
@@ -51,10 +51,10 @@ int epl_page_header(EPL_job_info *epl_job_info)
 
   paper_code = (char)0xff;	/* 0xff is custom size */
   stripe_size = 64;
-  bytes_per_row = ((epl_job_info->pixel_h + 32 - 1) / 32) * 4;
+  bytes_per_row_2 = epl_job_info->bytes_per_row_2;
   hor_pixels = epl_job_info->pixel_h;
   ver_pixels = epl_job_info->pixel_v;
-  stripes_per_page = (epl_job_info->pixel_v + stripe_size - 1) / stripe_size;
+  total_stripes = epl_job_info->total_stripes;
   copies=1;
   cust_paper_hor = epl_job_info->paper_size_mm_h;
   cust_paper_ver = epl_job_info->paper_size_mm_v;
@@ -69,14 +69,14 @@ int epl_page_header(EPL_job_info *epl_job_info)
 	0x02, 0x00,
         paper_code,
         stripe_size,
-        bytes_per_row >> 8, bytes_per_row,
+        bytes_per_row_2 >> 8, bytes_per_row_2,
         0x00,
         0x00,
         0x00,
         0x00,
         ver_pixels >> 8, ver_pixels,
         hor_pixels >> 8, hor_pixels,
-        stripes_per_page >> 8, stripes_per_page,
+        total_stripes >> 8, total_stripes,
         0xff, /* tray */
         0x00,
         copies,
@@ -95,14 +95,14 @@ int epl_page_header(EPL_job_info *epl_job_info)
         0x04,0x00,
         paper_code,
         stripe_size,
-        bytes_per_row >> 8, bytes_per_row,
+        bytes_per_row_2 >> 8, bytes_per_row_2,
         0x00,
         0x00,
         0x00,
         0x00,
         ver_pixels >> 8, ver_pixels,
         hor_pixels >> 8, hor_pixels,
-        stripes_per_page >> 8, stripes_per_page,
+        total_stripes >> 8, total_stripes,
         0x00, /* tray */
         0x00,
         copies,

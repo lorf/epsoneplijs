@@ -35,7 +35,11 @@ Installation
   (be sure /usr/local/bin is in your path, if it isn't, try with 
   "./configure --prefix=/usr")
 
-  Check the content of the script "foomatic/copy_to_foomatic" in this source 
+  Note for maintainers, distributors, expert users:
+  epl_config.h contains some compile-time options, please have
+  a look at it.
+
+  Check the content of the script "README.foomatic" in this source 
   bundle for notes on foomatic and cups. Read the "FAQ" file, and so browse 
   the mailing list archive (link at the bottom of 
   http://sourceforge.net/projects/epsonepl/)  for frequently asked questions

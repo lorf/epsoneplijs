@@ -16,6 +16,7 @@
 
 #define USE_4BIT_CODE
 
+#include "epl_config.h"
 #include "epl_compress.h"
 
 struct proto {
@@ -70,7 +71,7 @@ static unsigned char cache[16];
 static char byte2cache[256];
 static int lri;
 
-void stripe_init(void)
+void cache_init(void)
 {
   int i;
   for( i = 0 ; i < 16 ; i++)
@@ -97,7 +98,7 @@ void stream_init(typ_stream *stream)
   stream->temp = 0;
   stream->bits = 0;
 #ifdef USE_4BIT_CODE
-  stripe_init();  /* doing it here is a ugly hack (but correct) */
+  cache_init();  /* doing it here is a ugly hack (but correct) */
 #endif
 }
 
@@ -185,6 +186,7 @@ int epl_compress_row(typ_stream *stream,
   int x = 0 ;
 
     while ( x < wbytes ) {
+#ifdef USE_DELTA_STRATEGY
       if ( *(ptr_row_current + x) 
            == *(ptr_row_prev + x)) 
         {
@@ -195,6 +197,11 @@ int epl_compress_row(typ_stream *stream,
 			       ptr_row_prev + x, 
 			       wbytes - x);
         }
+#else
+      if (0)
+        {
+	}
+#endif
       else if ((x >= 1) 
 	       && ( *(ptr_row_current + x) 
 		    == *(ptr_row_current + x - 1)))
