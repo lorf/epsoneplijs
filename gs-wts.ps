@@ -1,0 +1,15 @@
+%!PS-Adobe-3.0
+%%
+%% This postcsript code snipplet switches on the Well-Tempered
+%% Screening feature in Ghostcript 8.00+.
+%%
+%% Adapted from Raph Levien's WTS announcement.
+%%
+<< /UseWTS true >> setuserparams
+<<
+  /AccurateScreens true
+  /HalftoneType 1
+  /SpotFunction { 180 mul cos exch 180 mul cos add 2 div}
+  /Frequency 137
+  /Angle 45
+>> sethalftone

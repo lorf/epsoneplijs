@@ -42,7 +42,7 @@ void epl_57_dump_extra(int length, unsigned char *buffer);
   jam, etc.
 */
 
-void epl_57interpret(unsigned char *buffer, int len)
+void epl_57interpret(EPL_job_info *epl_job_info, unsigned char *buffer, int len)
 {
   long free_memory;
   long page_printed;
@@ -88,6 +88,7 @@ void epl_57interpret(unsigned char *buffer, int len)
 	  (0xff & buffer[7]) , /* Readiness Flag */
 	  (0xff & buffer[13])  /* Fault Count */
 	  ); 
+  epl_job_info->free_mem_last_update = free_memory;
   /* Readiness = 0x04 during powersaving mode ; deeper sleep to 0x05 */
 
   switch (buffer[14])
@@ -241,8 +242,9 @@ void epl_57interpret(unsigned char *buffer, int len)
 	    }
 	  
 	  fprintf(stderr,"\n");
-
+   /* - no need to abort, as the printer dies at this point -  
 	  exit(1);
+   */
 	}
       i_abort++ ;
     }

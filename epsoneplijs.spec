@@ -75,7 +75,7 @@ exit 0
 
 %files
 %defattr(-, root, root)
-%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test* apsfilter cups epl_docs foomatic 
+%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test* apsfilter cups epl_docs foomatic gs-wts.ps 
 /usr/bin/*
 
 %changelog

@@ -307,7 +307,7 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
     {
 #ifdef USE_FLOW_CONTROL
     case MODEL_5700L:
-      epl_57interpret(p, len);
+      epl_57interpret(epl_job_info, p, len);
       break;
 
     case MODEL_5800L:

@@ -69,6 +69,8 @@ struct parport_list *port_list;
   int free_mem_last_update;
   int bytes_sent_after_last_update;
   int stripes_sent_after_last_update;
+  int bytes_sent_this_page;
+  int stripes_sent_this_page;
   
 #define TOTAL_MEM_DEFAULT_VALUE (2*1048576)
 #define FREE_MEM_LOW_LEVEL 0x20000
@@ -121,7 +123,7 @@ int epl_usb_reply_len(int model, unsigned char code);
 
 int epl_identify(char *string);
 
-void epl_57interpret(unsigned char *buffer, int len);
+void epl_57interpret(EPL_job_info *epl_job_info, unsigned char *buffer, int len);
 
 void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 

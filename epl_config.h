@@ -81,6 +81,27 @@
 **/
 #define COARSE_HORIZONTAL_POSITION
 
+/*
+ * PRINT_AS_MUCH_AS_POSSIBLE_ON_LOW_MEMORY (default on)
+ * 
+ * In case of full-page graphics with heavy dithering,
+ * the printer memory runs low in the middle of printing
+ * a page. No amount of polling will help. So there are 
+ * 3 options:
+ * (1) polling forever and wait for a miracle.
+ * (2) abort or push more data forward, let 
+ *     the printer crashes and spit out a blank page 
+ *     (at least in the case of 5700L)
+ * (3) Print all white for the bottom part of the page
+ *      (i.e. print as much as possible)
+ *
+ * Choice (3) wastes paper/toner, but at least the user
+ * get to see *something*, whereas (2) requires
+ * power-recyling the printer. Both are bad...
+ * 
+ */
+#define PRINT_AS_MUCH_AS_POSSIBLE_ON_LOW_MEMORY
+
 
 /**
  *************************************************************

@@ -1,3 +1,9 @@
+2004-09-23: cvs - Hin-Tak Leung
+   . Documentation and script addition about flowcontrol=nowhere
+   . rough work on "print as much as possible on low mem". Also
+     checking in new postscript code for turning on well-tempered
+     screening in ghostscript 8.00+.
+	
 2004-09-16: cvs - Hin-Tak Leung
    . A lot of 6200L-read interpretation updates; switch 6100L to use
      6200L read interpretation.

@@ -60,6 +60,7 @@ FLOWCONTROL=off
   #              --with-libusb and --with-kernelusb respectively.
   # the "libieee1284" and lp device name option is only available if compiled 
   #              --with-libieee1284 and --with-kernel1284 respectively.
+  # there is also a "nowhere" option for development use.
   IJSPARMS="$IJSPARMS,EplFlowControl=$FLOWCONTROL"
 
 ##################################################### End of options part #

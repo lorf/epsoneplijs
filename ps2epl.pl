@@ -7,6 +7,8 @@
 
 use strict;
 
+$ENV{'PATH'} = ".:" . $ENV{'PATH'};
+
 my $papersize='a4';
 
 my $model='EPL5700L';
@@ -40,7 +42,7 @@ Available options:
    ritech       = on, off
    density      = 1, 2, 3, 4, 5
    tonersave    = on, off
-   flowcontrol  = libusb, libiee1284, /dev/usb/lp0, /dev/lp0 (and other devices) 
+   flowcontrol  = libusb, libiee1284, /dev/usb/lp0, /dev/lp0 (and other devices), nowhere 
 
 EOF
 }
@@ -100,11 +102,21 @@ print "Model = ${model} , Papersize = ${papersize}, IjsParams=${ijsparams}\n";
 
 $ENV{'PATH'} = ".:" . $ENV{'PATH'};
 
+my @extra_gs_options = ();
+
+#more than one postscript file, probably
+#to turn on wts
+if ($infile =~ /\.ps\s/) 
+{
+    push @extra_gs_options, ("-dMaxBitmap=500000000");
+}
+
 exec ("gs",
       "-sPAPERSIZE=${papersize}",
       "-dFIXEDMEDIA",	  
       "-sProcessColorModel=DeviceGray",
       "-dBitsPerSample=1",	  
+      @extra_gs_options,
       "-sDEVICE=ijs",
       "-sIjsServer=ijs_server_epsonepl",
       "-sDeviceManufacturer=Epson",
@@ -115,5 +127,5 @@ exec ("gs",
       "-dSAFER", 
       "-dBATCH", 
       "-sOutputFile=${outfile}",
-      "$infile"
+      (split / /, $infile)
       );
