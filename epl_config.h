@@ -50,7 +50,8 @@
  * no particular disadvantages in having this enabled. Epson drivers for
  * Windows/Mac have no such option (yes, they may crash the printer).
 **/
-#define STRIPE_OVERFLOW_WORKAROUND
+#define STRIPE_OVERFLOW_WORKAROUND_HEADER
+#define STRIPE_OVERFLOW_WORKAROUND_STRIPE_PAD
 
 
 /**
@@ -90,7 +91,8 @@
 **/
 
 #ifdef STRICT_WIN32_COMPATIBILITY
-#undef STRIPE_OVERFLOW_WORKAROUND
+#undef STRIPE_OVERFLOW_WORKAROUND_HEADER
+#undef STRIPE_OVERFLOW_WORKAROUND_STRIPE_PAD
 #define USE_DELTA_STRATEGY 
 #endif
 
@@ -104,6 +106,11 @@
 #include "libusb/usb.h"
 #endif 
 
-#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_DEVICE) 
+#ifdef HAVE_LIBIEEE1284
+#define _POSIX_C_SOURCE 199309L
+#include "libieee1284/include/ieee1284.h"
+#endif 
+
+#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_DEVICE) || defined(HAVE_LIBIEEE1284)
 #define USE_FLOW_CONTROL
 #endif

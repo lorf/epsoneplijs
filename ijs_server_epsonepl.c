@@ -49,7 +49,7 @@
 #include "ijs_server.h"
 
 #include "epl_job.h"
-#include "epl_usb.h"
+#include "epl_bid.h"
 
 #define BUF_SIZE 4096
 
@@ -808,17 +808,24 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   s = find_param(pl, "EplFlowControl");
   if (s == NULL)
     {
-      epl_job_info->connectivity = VIA_PPORT;
+      epl_job_info->connectivity = VIA_STDOUT_PIPE;
     }
   else if (strcmp(s, "off") == 0)
     {
-      epl_job_info->connectivity = VIA_PPORT;
+      epl_job_info->connectivity = VIA_STDOUT_PIPE;
     }
 #ifdef HAVE_LIBUSB
   else if (strcmp(s, "libusb") == 0)
     {
       fprintf(stderr, "Using libusb\n");
       epl_job_info->connectivity = VIA_LIBUSB;
+    }
+#endif
+#ifdef HAVE_LIBIEEE1284
+  else if (strcmp(s, "libieee1284") == 0)
+    {
+      fprintf(stderr, "Using libieee1284\n");
+      epl_job_info->connectivity = VIA_LIBIEEE1284;
     }
 #endif
 #ifdef HAVE_KERNEL_DEVICE
@@ -833,7 +840,25 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 	  if (epl_job_info->kernel_fd < 0) 
 	    {
 	      fprintf(stderr, "Can't open device %s, aborting!\n", s);
-	      perror("Open kernel device");
+	      perror("Kernel device");
+	      return 1;
+	    }    				          
+	}
+    }
+#endif
+#ifdef HAVE_KERNEL_1284
+  /* We catch both /dev/lp0 */
+  else if (strncmp(s, "/dev/lp",7) == 0)   
+    {
+      fprintf(stderr, "Using kernel parallel port device\n");
+      if (epl_job_info->connectivity != VIA_KERNEL_1284) 
+	{
+	  epl_job_info->connectivity = VIA_KERNEL_1284;
+	  epl_job_info->kernel_fd = open(s, O_RDWR |O_SYNC);
+	  if (epl_job_info->kernel_fd < 0) 
+	    {
+	      fprintf(stderr, "Can't open device %s, aborting!\n", s);
+	      perror("Kernel device");
 	      return 1;
 	    }    				          
 	}
@@ -869,9 +894,8 @@ main (int argc, char **argv)
   
   if (argc > 1) /* the IJS plugin is being run stand-alone */ 
     {
-      fprintf(stderr, "Epson EPL-5x00L IJS plugin version: %s\n", EPL_VERSION);
-      fprintf(stderr, "Copyright (c) 2003 Hin-Tak Leung, Roberto Ragusa\n");
-      fprintf(stderr, "Please read the accompanied README file for usage\n");
+      /* we'll try to get status if the plugin is being run stand-alone */
+      epl_status(argc, argv);
       exit(0);
     } 
 
@@ -962,9 +986,10 @@ main (int argc, char **argv)
       if (epl_job_started == EPL_JOB_STARTED_NO) /* only do one job header per job */
 	{
 	  /* init USB if needed */
-          if ((epl_job_info->connectivity != VIA_PPORT))
+          if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
-              epl_usb_init(epl_job_info);
+              epl_bid_init(epl_job_info);
+              epl_bid_prejob(epl_job_info);
             }
 
           status = epl_job_header (epl_job_info);      
@@ -978,7 +1003,7 @@ main (int argc, char **argv)
           gettimeofday(&(epl_job_info->time_last_write), NULL);
 #endif
 #ifdef USE_FLOW_CONTROL
-          if ((epl_job_info->connectivity != VIA_PPORT))
+          if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
               /* initialize estimated_freemem */
               epl_poll(epl_job_info, 0);
@@ -990,9 +1015,9 @@ main (int argc, char **argv)
       
       /* Page header */
       
-      if ((epl_job_info->connectivity != VIA_PPORT))
+      if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
         {
-          epl_usb_mid(epl_job_info);
+          epl_bid_mid(epl_job_info);
         }
 
       status = epl_page_header(epl_job_info);
@@ -1005,9 +1030,9 @@ main (int argc, char **argv)
       bytes_per_row = (ph.n_chan * ph.bps * ph.width + 8 - 1) / 8 ;
       total_bytes = bytes_per_row * ph.height;
 
-      bytes_per_row_padded = bytes_per_row;
+      bytes_per_row_padded = (bytes_per_row + 3) & ~003;
       
-#ifdef STRIPE_OVERFLOW_WORKAROUND
+#ifdef STRIPE_OVERFLOW_WORKAROUND_STRIPE_PAD
       bytes_per_row_padded += 2 ;
 #endif
 
@@ -1078,8 +1103,6 @@ main (int argc, char **argv)
 	  stream_pad16bit(stream);
 
 #ifdef USE_FLOW_CONTROL
-          if ((epl_job_info->connectivity != VIA_PPORT))
-            {
               /*
                  If our estimated free mem is too low, we check the real
                  value and refuse to go ahead if it is really low.
@@ -1094,21 +1117,21 @@ main (int argc, char **argv)
                  hopeless anyway.
                  NOTE: this doesn't use 100% CPU because epl_poll
                  sleeps for some time (adaptively chosen) if memory is low.
-                    --  rora
-               */
-              while (epl_job_info->estimated_free_mem < FREE_MEM_LOW_LEVEL)
-	        {
-	          fprintf(stderr, "low free memory 0x%8.8x, going to poll\n",
-	                  epl_job_info->estimated_free_mem);
-                  epl_poll(epl_job_info, 2); /* we just need the memory value */
-	        }
-              /*
+
                  We're overestimating the amount of memory we're consuming.
                  This is not a problem, it simply triggers the above
                  verification earlier.
                  A factor of 2 could be enough, according to my logs.
                    --  rora
 	      */          
+          if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
+            {
+              while (epl_job_info->estimated_free_mem < FREE_MEM_LOW_LEVEL)
+	        {
+	          fprintf(stderr, "low free memory 0x%8.8x, going to poll\n",
+	                  epl_job_info->estimated_free_mem);
+                  epl_poll(epl_job_info, 2); /* we just need the memory value */
+	        }
               epl_job_info->estimated_free_mem -= 3 * stream->count + 64;
             }
 #endif
@@ -1137,9 +1160,9 @@ main (int argc, char **argv)
           fprintf (stderr, "output error\n");
           exit (1);
         }
-      if ((epl_job_info->connectivity != VIA_PPORT))
+      if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
         {
-          epl_usb_end(epl_job_info);
+          epl_bid_end(epl_job_info);
         }
     }
 

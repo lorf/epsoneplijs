@@ -36,7 +36,7 @@
 #endif
 
 #include "epl_job.h"
-#include "epl_usb.h"
+#include "epl_bid.h"
 
 /* sleep routine only used here */
 void do_subsec_sleep(EPL_job_info *epl_job_info);
@@ -47,10 +47,6 @@ void hex_dump(char *title, char *prefix, char *buffer, int len, int maxrows);
 /* this interprets the replies from the printer */
 void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsigned char code);
 
-/* sleep */
-void sleep_milliseconds(int ms);
-
-
 /* Bi-directional communication routine */
 
 int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
@@ -60,7 +56,9 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
   /* use a different buffer to read, to be safe; probably not necessary */
   char in_buf[256]; 
 
+#ifdef EPL_DBUG
   hex_dump("We said", "->", buffer, length, 5);
+#endif
 
   ret_write = epl_write_uni(epl_job_info, buffer, length);  
   
@@ -70,7 +68,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
       exit(1);
     }
   
-  if (epl_job_info->connectivity != VIA_PPORT)
+  if (epl_job_info->connectivity != VIA_STDOUT_PIPE)
     {
       int ret = 0;
       unsigned char code;
@@ -94,40 +92,49 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	}
       /* we could get here with code=0x1b (5900L) or other values (6100L) */
       /* the called function returns -1 for invalid values */
-      reply_size = epl_usb_reply_len(epl_job_info, code);
+      reply_size = epl_bid_reply_len(epl_job_info->model, code);
 
       if (reply_size == -1) /* something is wrong */
         {
           fprintf(stderr, "We don't know the reply size for the code %2.2x, but we try to go on (crossed fingers)\n", 
                   code);
-          reply_size = 0;
+          reply_size = 100; /* if we don't know, we try to read a lot */
         }
 
       if (reply_size != 0) /* we have to read something */
         {
-#ifdef HAVE_LIBUSB
-          if (epl_job_info->connectivity == VIA_LIBUSB) 
+          switch(epl_job_info->connectivity) 
 	    {
+#ifdef HAVE_LIBUSB
+	    case VIA_LIBUSB: 
 	      ret = usb_bulk_read(epl_job_info->usb_dev_hd,
 			          epl_job_info->usb_in_ep,
 			          in_buf,
 			          reply_size,
 			          EPL_USB_READ_TIMEOUT);
-	    } 
+	      break;
 #endif
-
 #ifdef HAVE_KERNEL_DEVICE
-          if (epl_job_info->connectivity == VIA_KERNEL_USB) 
-	    {
+	    case VIA_KERNEL_USB: 
 	      ret = read(epl_job_info->kernel_fd,
 		         in_buf,
 		         reply_size);
-	    }
+	      break;
 #endif
-        }
-      else
-        {
-          ret = 0;
+#ifdef HAVE_KERNEL_1284
+	    case VIA_KERNEL_1284: 
+	      ret = read(epl_job_info->kernel_fd,
+		         in_buf,
+		         reply_size);
+	      break;
+#endif
+#ifdef HAVE_LIBIEEE1284
+	    case VIA_LIBIEEE1284:
+	      ret = epl_libieee1284_read(epl_job_info->port, in_buf, reply_size);
+#endif
+	    default:
+	      ret = 0;
+	    }
 	}
 
       if (ret != reply_size) 
@@ -136,14 +143,16 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 		  reply_size,
 		  ret);
 	  fprintf(stderr, "**USB reply from printer different size from expected: \n**If you don't see this message too often, it is probably OK\n**See FAQ.\n");
-	}
 
-      if (ret > 0)
+	  if (ret > 0)
+	    {
+	      hex_dump("Printer replied", "<-", in_buf, ret, 5);
+	    }
+	}
+      else
 	{
-          hex_dump("Printer replied", "<-", in_buf, ret, 5);
           epl_interpret_reply(epl_job_info, in_buf, ret, code);
 	}
-
     } 
   return ret_write;
 }
@@ -154,37 +163,49 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
 {  
   int ret = 0;
 
-  if (epl_job_info->connectivity != VIA_PPORT)
+  if (epl_job_info->connectivity != VIA_STDOUT_PIPE)
     {
       /* 5700L needs a slow data transfer */
       if (epl_job_info->model == MODEL_5700L)
         {
           do_subsec_sleep(epl_job_info);
         }
-
-#ifdef HAVE_LIBUSB
-      if(epl_job_info->connectivity == VIA_LIBUSB) 
+      
+      switch (epl_job_info->connectivity)
 	{
+#ifdef HAVE_LIBUSB
+	case VIA_LIBUSB:
 	  ret = usb_bulk_write (epl_job_info->usb_dev_hd, 
 				epl_job_info->usb_out_ep,
 				buffer, length, 
 				EPL_USB_WRITE_TIMEOUT);
-	}
+	  break;
 #endif
-      
 #ifdef HAVE_KERNEL_DEVICE
-      if(epl_job_info->connectivity == VIA_KERNEL_USB) 
-	{
+	case  VIA_KERNEL_USB:
 	  ret = write (epl_job_info->kernel_fd, buffer, length);
-	}
+	  break;
 #endif
-            
-     return ret;
+#ifdef HAVE_KERNEL_1284
+	case  VIA_KERNEL_1284:
+	  ret = write (epl_job_info->kernel_fd, buffer, length);
+	  break;
+#endif
+	  
+#ifdef HAVE_LIBIEEE1284
+	case VIA_LIBIEEE1284:
+	  ret = epl_libieee1284_write(epl_job_info->port, buffer, length);
+	  break;
+#endif
+	default:
+	  ret = 0;
+	}
     }
   else  
     {
-      return fwrite(buffer, 1, length, epl_job_info->outfile);
+      ret = fwrite(buffer, 1, length, epl_job_info->outfile);
     }
+  return ret;
 }
 
 /* 
@@ -296,121 +317,27 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
 
   switch (epl_job_info->model)
     {
+#ifdef USE_FLOW_CONTROL
     case MODEL_5700L:
       epl_job_info->estimated_free_mem = 2*1048576; /* fake */
+      epl_57interpret(p, len);
       break;
 
     case MODEL_5800L:
+      /* 5800L uses the routine same as the 5900L */
+      epl_59interpret(epl_job_info, p, len, code);
+      break;
+
     case MODEL_5900L:
-      {
-        int free_memory;
-        static int last_waited_milliseconds = 1;
-	
-        if (len < 18)
-          {
-            /* This condition should never happen */
-            fprintf(stderr, "**Reply size too short - This condition should never happen.");
-          }
-        if (len != 18 + p[0x11])
-          {
-            /* This condition should never happen */
-            fprintf(stderr, "**Reply size inconsistent - This condition should never happen.");
-          }
-
-        fprintf(stderr, "Printer tells:\n");
-        free_memory = (p[0x04] << 16) | (p[0x05] << 8) | p[0x06];
-        fprintf(stderr, "  free memory      = 0x%8.8x\n", free_memory);
-
-        fprintf(stderr, "  status(0x07)     = 0x%2.2x:",p[0x07]);
-        if (p[0x07] & 0x80) fprintf(stderr, " UNKNOWN_80");
-        if (p[0x07] & 0x40) fprintf(stderr, " UNKNOWN_40");
-        if (p[0x07] & 0x20) fprintf(stderr, " UNKNOWN_20");
-        if (p[0x07] & 0x10) fprintf(stderr, " JOB_PENDING");
-        if (p[0x07] & 0x08) fprintf(stderr, " UNKNOWN_08");
-        if (p[0x07] & 0x04) fprintf(stderr, " ENERGY_SAVING");
-        if (p[0x07] & 0x02) fprintf(stderr, " WARMING_UP");
-        if (p[0x07] & 0x01) fprintf(stderr, " JOB_FINISHED?");
-        fprintf(stderr, "\n");
-
-        fprintf(stderr, "  status(0x09)     = 0x%2.2x:",p[0x09]);
-        if (p[0x09]&0x80) fprintf(stderr, " UNKNOWN_80");
-        if (p[0x09]&0x40) fprintf(stderr, " UNKNOWN_40");
-        if (p[0x09]&0x20) fprintf(stderr, " UNKNOWN_20");
-        if (p[0x09]&0x10) fprintf(stderr, " UNKNOWN_10");
-        if (p[0x09]&0x08) fprintf(stderr, " UNKNOWN_08");
-        if (p[0x09]&0x04) fprintf(stderr, " OPEN_COVER");
-        if (p[0x09]&0x02) fprintf(stderr, " NO_PAPER");
-        if (p[0x09]&0x01) fprintf(stderr, " UNKNOWN_01");
-        fprintf(stderr, "\n");
-
-        fprintf(stderr, "  pages just print = %i\n", (p[0x0d] << 8) | p[0x0e]);
-
-        if (p[0x11] == 0)
-          {
-            fprintf(stderr, "no extension\n");
-          }
-        else if (p[0x11] == 0x01)
-          {
-            fprintf(stderr, "0x01 extension:\n");
-          }
-        else if (p[0x11] == 0x0f)
-          {
-            fprintf(stderr, "0x0f extension:\n");
-            fprintf(stderr, "  Installed memory = %iMiB\n", p[0x1b]);
-          }
-        else if (p[0x11] == 0x11)
-          {
-            fprintf(stderr, "0x11 extension:\n");
-            fprintf(stderr, "  printed pages    = %i\n", (p[0x19] << 8) | p[0x1a]);
-            fprintf(stderr, "  toner supply     = %i%%\n", p[0x1b]);
-            fprintf(stderr, "  imaging supply   = %i%%\n", p[0x1c]);
-            fprintf(stderr, "  paper supply     = %i%%\n", p[0x1d]);
-          }
-        else
-          {
-            fprintf(stderr, "unknown 0x%2.2x extension, ignoring\n", p[0x11]);
-          }
-
-        fprintf(stderr, "updating freemem estimate from 0x%8.8x",
-	        epl_job_info->estimated_free_mem);
-        epl_job_info->estimated_free_mem = free_memory;
-        fprintf(stderr, " to 0x%8.8x\n", epl_job_info->estimated_free_mem);
-
-        /* If the buffer is almost full, go to sleep.
-           Increase sleeping time if this condition persists.
-           So, calling this function continuosly is not a problem.
-             --  rora
-         */
-        if (free_memory < FREE_MEM_LOW_LEVEL)
-          {
-            int ms;
-            ms = last_waited_milliseconds * 2; /* exponential back off */
-            if (ms > 5000 ) ms = 5000; /* no more than five second */
-            sleep_milliseconds(ms);
-            last_waited_milliseconds = ms;
-          }
-        else
-          {
-            last_waited_milliseconds = 1;
-          }
-      }
+      epl_59interpret(epl_job_info, p, len, code);
       break;
 
     case MODEL_6100L:
       epl_job_info->estimated_free_mem = 2*1048576; /* fake */
       break;
+#endif
+    default:
+      break;
     }
 }
 
-/*
-   sleep for (at least) some milliseconds
-*/
-void sleep_milliseconds(int ms)
-{
-  struct timespec ts;
-
-  fprintf(stderr, "sleeping %i milliseconds\n", ms);
-  ts.tv_sec = ms / 1000;
-  ts.tv_nsec = 1000000 * (ms % 1000);
-  nanosleep(&ts, NULL);
-}

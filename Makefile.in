@@ -1,12 +1,13 @@
 # Unix
 
 CC=@CC@
-CFLAGS_EXTRA_DEFS=@HAVE_KERNEL_DEVICE@ @HAVE_LIBUSB@
+CFLAGS_EXTRA_DEFS=@HAVE_KERNEL_DEVICE@ @HAVE_LIBUSB@ @HAVE_KERNEL_1284@ @HAVE_LIBIEEE1284@
 CFLAGS= $(CFLAGS_EXTRA_DEFS) -g -O2 -Wall -ansi -pedantic -Wmissing-prototypes
-LDPATH=@LIBUSB_EXTRA_LDPATH@
-LDLIBS=@LIBUSB_EXTRA_LDLIBS@
-EXTRA_DEPS=@LIBUSB_EXTRA_DEPS@
-EXTRA_BINS=@LIBUSB_EXTRA_BINS@
+LDPATH=@LIBUSB_EXTRA_LDPATH@ @LIBIEEE1284_EXTRA_LDPATH@ 
+LDLIBS=@LIBUSB_EXTRA_LDLIBS@ @LIBIEEE1284_EXTRA_LDLIBS@
+EXTRA_DEPS=@LIBUSB_EXTRA_DEPS@ @LIBIEEE1284_EXTRA_DEPS@ 
+EXTRA_BINS=@LIBUSB_EXTRA_BINS@ @LIBIEEE1284_EXTRA_BINS@ 
+EXTRA_OBJS=@KUSB_EXTRA_OBJS@ @LIBUSB_EXTRA_OBJS@ @LIBIEEE1284_EXTRA_OBJS@ @BID_EXTRA_OBJS@
 OBJ=.@OBJEXT@
 EXE=@EXEEXT@
 
@@ -40,11 +41,11 @@ all:	libijs.a libijs$(SHARED_OBJ) ijs_client_example$(EXE) ijs_server_example$(E
 
 LIB_OBJS=ijs$(OBJ) ijs_client$(OBJ) ijs_server$(OBJ) $(IJS_EXEC_SERVER)
 
-EPL_USB_OBJS=epl_write$(OBJ) epl_usb_utils$(OBJ) epl_usb_replies$(OBJ)
+EPL_BID_OBJS=epl_write$(OBJ) epl_bid_utils$(OBJ) epl_bid_replies$(OBJ) epl_status$(OBJ)
 
 EPL_OBJS=epl_job_header$(OBJ) epl_page_header$(OBJ) epl_page_footer$(OBJ) \
            epl_job_footer$(OBJ) epl_print_stripe$(OBJ) epl_poll$(OBJ) epl_compress$(OBJ) \
-          $(EPL_USB_OBJS)         
+          $(EPL_BID_OBJS) $(EXTRA_OBJS)        
 
 libijs.a:	$(LIB_OBJS)
 	rm -f $@
@@ -81,12 +82,19 @@ libusb/.libs/libusb.a:
 	(cd libusb ; ./autogen.sh ; ./configure --disable-shared ; make)
 	$(RM) libusb/libusb.spec
 
+
+# libieee1284.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 
+libieee1284/.libs/libieee1284.a:
+	(cd libieee1284 ; ./autogen.sh ; ./configure --disable-shared ; make)
+	$(RM) libieee1284/libieee1284.spec
+
 common_clean:
 	$(RM) *$(OBJ) ijs_client_example$(EXE) ijs_server_example$(EXE) ijs_server_epsonepl$(EXE)
 
 clean: common_clean
-	$(RM) *~ gmon.out core ijs_spec.log ijs_spec.tex ijs_spec.aux libijs.a libijs$(SHARED_OBJ) config.cache config.log config.status ijs-config testlibusb$(EXE) test5700lusb$(EXE) libusb/libusb.spec
+	$(RM) *~ gmon.out core ijs_spec.log ijs_spec.tex ijs_spec.aux libijs.a libijs$(SHARED_OBJ) config.cache config.log config.status ijs-config testlibusb$(EXE) test5700lusb$(EXE) libieee1284/lib1284.spec 
 	[ -d libusb ] && (cd libusb ; make clean) || true
+	[ -d libieee1284 ] && (cd libieee1284 ; make clean) || true
 
 install: all
 	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(bindir)/ijs_server_epsonepl$(EXE)

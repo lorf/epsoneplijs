@@ -22,7 +22,7 @@
  * SOFTWARE.
 **/
 
-#define EPL_VERSION "0.3.0cvs"
+#define EPL_VERSION "0.4.0cvs"
 
 #include <stdio.h>
 #include <sys/time.h>
@@ -48,7 +48,7 @@ struct _EPL_job_info {
   int pixel_h;
   int pixel_v;
   int connectivity;
-#ifdef HAVE_KERNEL_DEVICE
+#if defined(HAVE_KERNEL_DEVICE) || defined(HAVE_KERNEL_1284)
   int kernel_fd;
 #endif
 
@@ -56,6 +56,10 @@ struct _EPL_job_info {
   usb_dev_handle *usb_dev_hd;
   int usb_out_ep;
   int usb_in_ep;
+#endif
+
+#ifdef HAVE_LIBIEEE1284
+struct parport *port;
 #endif
   
 #ifdef USE_FLOW_CONTROL
@@ -73,10 +77,12 @@ struct _EPL_job_info {
 #define MODEL_6100L   5
 #define MODEL_USEDSLOTS 6 /* this is the number of printers we have */
 
-#define PRE_INIT       -1
-#define VIA_PPORT       0
-#define VIA_LIBUSB      1
-#define VIA_KERNEL_USB  2
+#define PRE_INIT        -1
+#define VIA_STDOUT_PIPE        0
+#define VIA_LIBUSB       1
+#define VIA_KERNEL_USB   2
+#define VIA_LIBIEEE1284  3
+#define VIA_KERNEL_1284  4
 
 #define EPL_JOB_STARTED_YES 1
 #define EPL_JOB_STARTED_NO  2
@@ -96,6 +102,17 @@ int epl_job_footer(EPL_job_info *epl_job_info);
 int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length);
 
 int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length); 
+
+int epl_status(int argc, char **argv);
+
+int epl_usb_reply_len(int model, unsigned char code);
+
+int epl_identify(char *string);
+
+void epl_57interpret(unsigned char *buffer, int len);
+
+void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int code);
+
 
 #ifdef EPL_DEBUG
 
