@@ -1,3 +1,6 @@
+2004-06-18: cvs - Hin-Tak Leung
+   . update IJS component to 0.35
+	
 2004-06-02: cvs - Hin-Tak Leung
    . ppc 'unsigned char'/x86 'signed char' fix in epl_compress.c
 	

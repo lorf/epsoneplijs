@@ -178,6 +178,8 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	  ts += sprintf(ts, "                  ");      /* The padding is significant! */
 	  ts += sprintf(ts, "                  ");
 	  /* this is 6200L-specific code - no idea what it means */
+   /* 04 01 31 ca 89 */
+   /* 04 01 31 a6 9a */
 	  if (epl_job_info->model == MODEL_6200L)
 	    {
 	      ts += epl_sprintf_wrap(ts,10);
