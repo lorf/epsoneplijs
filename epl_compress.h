@@ -47,6 +47,8 @@ typedef struct _Stream {
   int bits;          /* count in temp */
 } typ_stream;
 
+void stripe_init(void);
+
 void stream_init(typ_stream *stream);
 
 void stream_pad16bit(typ_stream *stream);

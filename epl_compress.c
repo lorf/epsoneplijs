@@ -66,19 +66,22 @@ static struct proto op_table[] =
 
 
 #ifdef USE_4BIT_CODE
-static char cache[16];
+static unsigned char cache[16];
 static char byte2cache[256];
 static int lri;
 
-void stripe_init(void){
+void stripe_init(void)
+{
   int i;
-  for( i = 0 ; i < 16 ; i++){
-    cache[i] = i;
-    byte2cache[i] = i;
-  }
-  for(i = 16 ; i < 256 ; i++){
-    byte2cache[i] = -1;
-  }
+  for( i = 0 ; i < 16 ; i++)
+    {
+      cache[i] = i;
+      byte2cache[i] = i;
+    }
+  for(i = 16 ; i < 256 ; i++)
+    {
+      byte2cache[i] = -1;
+    }
   lri = 0;
 }
 #endif
@@ -222,34 +225,38 @@ int epl_compress_row(typ_stream *stream,
 			       ptr_row_current + x - 3,
 			       wbytes - x);
         }
-#ifdef USE_4BIT_CODE
-      else if (byte2cache[(unsigned char)*(ptr_row_current + x)] >= 0)
-        { 
-          stream_append(stream,
-	                op_table[UNKNOWN].code, 
-		        op_table[UNKNOWN].width);
-          stream_append(stream,
-	                byte2cache[(unsigned char)*(ptr_row_current + x)], 
-		        4);
-          x++;
-        }
-#endif
-      else 
-        { 
-          stream_append(stream,op_table[LITERAL].code, 
-		        op_table[LITERAL].width);
+      else
+        {
           /* The printer takes 1 as black, 
-	     ghostscript raster generates max value for white (i.e. 1 for B/W),
+             ghostscript raster generates max value for white (i.e. 1 for B/W),
              hence literal requires bit-reversing.
           */ 
-          stream_append(stream, (*(ptr_row_current + x) ^ 0xff) & 0xff, 8);
+          int byte = (*(ptr_row_current + x) ^ 0xff) & 0xff;
 #ifdef USE_4BIT_CODE
-          byte2cache[(unsigned char)cache[lri]] = -1;
-	  cache[lri] = *(ptr_row_current + x);
-	  byte2cache[(unsigned char)*(ptr_row_current + x)] = lri;
-          lri = (lri + 1) & 0xf;
+          if (byte2cache[byte] >= 0)
+            { 
+              stream_append(stream,
+	                    op_table[UNKNOWN].code, 
+		            op_table[UNKNOWN].width);
+              stream_append(stream,
+	                    byte2cache[byte], 
+                            4);
+              x++;
+            }
+          else
 #endif
-          x++;
+            { 
+              stream_append(stream,op_table[LITERAL].code, 
+		        op_table[LITERAL].width);
+              stream_append(stream, byte, 8);
+#ifdef USE_4BIT_CODE
+              byte2cache[cache[lri]] = -1;
+	      cache[lri] =  byte;
+	      byte2cache[byte] = lri;
+              lri = (lri + 1) & 0xf;
+#endif
+              x++;
+            }
         }
     }
   return stream->count ;
