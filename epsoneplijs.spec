@@ -14,7 +14,7 @@ Vendor: http://sourceforge.net/projects/epsonepl/
 Packager: Hin-Tak Leung, Roberto Ragusa
 Requires: ghostscript >= 6.53
 #Requires: ghostscript-fonts
-Conflicts: ghostscript = 8.00
+Conflicts: ghostscript = 8.00, ghostscript = 8.14
 BuildRoot: /var/tmp/epsonepl-root
 
 %description

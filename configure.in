@@ -59,7 +59,7 @@ LIBUSB_EXTRA_LDPATH=-L./libusb/.libs
 LIBUSB_EXTRA_LDLIBS=-lusb
 LIBUSB_EXTRA_DEPS=libusb/.libs/libusb.a 
 LIBUSB_EXTRA_OBJS=epl_utils_libusb.o
-LIBUSB_EXTRA_BINS="test5700lusb testlibusb" 
+LIBUSB_EXTRA_BINS=
 BID_EXTRA_OBJS=${BID_OBJS}
 AC_MSG_RESULT(yes)
 else
