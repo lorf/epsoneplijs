@@ -66,17 +66,19 @@ ijs_server_example$(EXE):	ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON
 ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) $(EPL_OBJS) $(EXTRA_DEPS)
 	$(CC) $(CFLAGS) $(FE)ijs_server_epsonepl$(EXE) ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(EPL_OBJS) $(IJS_COMMON_OBJ) $(LDPATH) $(LDLIBS)
 
-testlibusb$(EXE): libusb/tests/testlibusb$(OBJ) libusb/.libs/libusb.a
-	$(CC) -c -I./libusb -o libusb/tests/testlibusb$(OBJ) libusb/tests/testlibusb.c
-	$(CC) $(CFLAGS) $(FE)testlibusb$(EXE) libusb/tests/testlibusb$(OBJ) $(LDPATH) $(LDLIBS)
+testlibusb$(OBJ): libusb/tests/testlibusb.c
+	$(CC) $(CFLAGS) -c -I./libusb -o testlibusb$(OBJ) libusb/tests/testlibusb.c
 
+testlibusb$(EXE): testlibusb$(OBJ) libusb/.libs/libusb.a
+	$(CC) $(CFLAGS) $(FE)testlibusb$(EXE) testlibusb$(OBJ) $(LDPATH) $(LDLIBS)
+
+#test5700lusb doesn't need a .o.c target as the source is in the same directory.
 test5700lusb$(EXE): test5700lusb$(OBJ) libusb/.libs/libusb.a
-	$(CC) -c -I./libusb -o test5700lusb$(OBJ) test5700lusb.c
 	$(CC) $(CFLAGS) $(FE)test5700lusb$(EXE) test5700lusb$(OBJ) $(LDPATH) $(LDLIBS)
 
+# libusb.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 
 libusb/.libs/libusb.a:
 	(cd libusb ; ./autogen.sh ; ./configure --disable-shared ; make)
-	# libusb.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 
 	$(RM) libusb/libusb.spec
 
 common_clean:
