@@ -115,3 +115,6 @@
 
 /* This 1024 comes from the kernel header */
 #define MAX_DEVICE_ID_SIZE 1024
+
+/* Use for the bidirectional routines for read size */
+#define MAX_READ_SIZE 255

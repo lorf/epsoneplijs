@@ -58,7 +58,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
   int ret_write;
   
   /* use a different buffer to read, to be safe; probably not necessary */
-  char in_buf[256]; 
+  char in_buf[MAX_READ_SIZE]; 
 
 #ifdef EPL_DEBUG
   hex_dump("We said", "->", buffer, length, 5);
@@ -81,12 +81,15 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
       code = *buffer;
       /* skip encapsulation */
       /* this is a little hackish, but it's ok for now  --  rora */
-      if (*buffer == 0x1d)
+      /* 5700L doesn't need skipping, and it may interfer with probing -- HTL */
+      if ((*buffer == 0x1d) && (epl_job_info->model != MODEL_EPL5700L))
         {
           int i;
           for (i = 0 ;  i < length - 1 ; i++)
             {
+#ifdef EPL_DEBUG
               fprintf(stderr,"skip-");
+#endif
 	      if (buffer[i] == 0x49)
                 {
 	          code = buffer[i+1];
@@ -102,7 +105,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
         {
           fprintf(stderr, "We don't know the reply size for the code %2.2x, but we try to go on (crossed fingers)\n", 
                   code);
-          reply_size = 100; /* if we don't know, we try to read a lot */
+          reply_size = MAX_READ_SIZE; /* if we don't know, we try to read a lot */
         }
 
       if (reply_size != 0) /* we have to read something */

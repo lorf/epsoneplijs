@@ -53,7 +53,7 @@ install ps2epl.pl $RPM_BUILD_ROOT/usr/bin
 ## should be removed eventually, when we don't need debug info too often...
 
 #[ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin
-strip $RPM_BUILD_ROOT/usr/bin/*
+file $RPM_BUILD_ROOT/usr/bin/* | grep ELF | cut -d':' -f1 | xargs strip 
 
 %clean
 
