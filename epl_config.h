@@ -90,7 +90,7 @@
  *************************************************************
 **/
 
-#ifdef STRICT_WIN32_COMPATIBILITY
+#ifdef __unix__
 #undef STRIPE_OVERFLOW_WORKAROUND_HEADER
 #undef STRIPE_OVERFLOW_WORKAROUND_STRIPE_PAD
 #define USE_DELTA_STRATEGY 

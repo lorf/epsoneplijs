@@ -26,6 +26,7 @@
 **/
 
 #include <stdlib.h>
+#include <string.h>
 
 /* read() and write() */
 #if defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_KERNEL_1284) 
@@ -57,7 +58,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
   
   /* use a different buffer to read, to be safe; probably not necessary */
   char in_buf[MAX_READ_SIZE]; 
-
+  memset(in_buf, 0x00, MAX_READ_SIZE);
 #ifdef EPL_DEBUG
   hex_dump("We said", "->", buffer, length, 5);
 #endif
@@ -114,6 +115,10 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
         {
           switch(epl_job_info->connectivity) 
 	    {
+		case VIA_NOWHERE:
+			ret = epl_null_read(in_buf, reply_size);
+			break;
+
 #ifdef HAVE_LIBUSB
 	    case VIA_LIBUSB: 
 	      ret = usb_bulk_read(epl_job_info->usb_dev_hd,
@@ -149,14 +154,25 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	    }
 	}
 
-      if (ret >= 0 && ret == reply_size)
+      if ((ret >= 0) && (ret == reply_size))
 	{
-	  /* everything as expected */
-	  if (ret > 0)
+	  /* size is as expected */
+		if (ret > 0)
 	    {
-	      /* interprete it */
-              epl_interpret_reply(epl_job_info, in_buf, ret, code);
+			if (code != in_buf[0])
+			{
+				/* printer's respond did not start with the command code we send, something is wrong */
+				fprintf(stderr, "Driver's interpretation of the reply from the printer is suspect.\n");
+				fprintf(stderr, "Please send the hex dump below to the developers:\n");
+				hex_dump("Printer replied", "<-", in_buf, ret, 5);				
+			}
+			else
+			{
+				/* everything is as expected */
+				/* interprete it */
+				epl_interpret_reply(epl_job_info, in_buf, ret, code);
             }
+		}
 	}
       else 
 	{
@@ -197,6 +213,9 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
     {
       switch (epl_job_info->connectivity)
 	{
+	case VIA_NOWHERE:
+		ret = epl_null_write(buffer, length);
+		break;
 #ifdef HAVE_LIBUSB
 	case VIA_LIBUSB:
 	  ret = usb_bulk_write (epl_job_info->usb_dev_hd, 
@@ -363,7 +382,7 @@ void do_free_mem_slowdown(EPL_job_info *epl_job_info)
   static double seconds_to_wait = 0.001;
   EPL_job_info *e = epl_job_info; /* for brevity */ 
   double time_now;
-  int estimated_free_mem;
+  int estimated_free_mem = 2000000;
 
   /*
   If our estimated free mem is too low, we check the real
@@ -403,7 +422,9 @@ void do_free_mem_slowdown(EPL_job_info *epl_job_info)
   do
     {
       time_now = get_time_now();
-fprintf(stderr, "time_now=%f, time_last_write_stripe=%f\n",time_now,e->time_last_write_stripe);
+#ifdef EPL_DEBUG
+	  fprintf(stderr, "time_now=%f, time_last_write_stripe=%f\n",time_now,e->time_last_write_stripe);
+#endif
       estimated_free_mem = e->free_mem_last_update    /* read on! */
          /* bytes we sent + 12.5% safety */
          - e->bytes_sent_after_last_update - e->bytes_sent_after_last_update / 8

@@ -90,6 +90,7 @@ struct parport_list *port_list;
 #define VIA_KERNEL_USB   2
 #define VIA_LIBIEEE1284  3
 #define VIA_KERNEL_1284  4
+#define VIA_NOWHERE      5
 
 #define EPL_JOB_STARTED_YES 1
 #define EPL_JOB_STARTED_NO  2
