@@ -89,7 +89,7 @@ echo
 echo -e "***** using parameters: \"$IJSPARMS\" *****"
 echo
 
-exec gs -sPAPERSIZE=$PAPERSIZE \
+exec gs -sPAPERSIZE=$PAPERSIZE -dFIXEDMEDIA \
 -sProcessColorModel=DeviceGray -dBitsPerSample=1 \
 -sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
 -sDeviceManufacturer=Epson -sDeviceModel=$MODEL \
