@@ -66,6 +66,7 @@ struct parport_list *port_list;
 #ifdef USE_FLOW_CONTROL
   struct timeval time_last_write;
   int estimated_free_mem;
+#define FREE_MEM_DEFAULT_VALUE (2*1048576)
 #define FREE_MEM_LOW_LEVEL 0x20000
 #endif
 };

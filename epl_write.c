@@ -82,7 +82,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
       /* skip encapsulation */
       /* this is a little hackish, but it's ok for now  --  rora */
       /* 5700L doesn't need skipping, and it may interfer with probing -- HTL */
-      if ((*buffer == 0x1d) && (epl_job_info->model != MODEL_EPL5700L))
+      if ((*buffer == 0x1d) && (epl_job_info->model != MODEL_5700L))
         {
           int i;
           for (i = 0 ;  i < length - 1 ; i++)
@@ -103,7 +103,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 
       if (reply_size == -1) /* something is wrong */
         {
-          fprintf(stderr, "We don't know the reply size for the code %2.2x, but we try to go on (crossed fingers)\n", 
+          fprintf(stderr, "We don't know the reply size for the code %2.2x, but we try to go on "
+	          "and read a lot (crossed fingers)\n", 
                   code);
           reply_size = MAX_READ_SIZE; /* if we don't know, we try to read a lot */
         }
@@ -141,14 +142,20 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	      break;
 #endif
 	    default:
+              /* We're changing idea, there is nothing to read */
+	      reply_size = 0;
 	      ret = 0;
 	    }
 	}
 
-      if (ret > 0 && ret == reply_size)
+      if (ret >= 0 && ret == reply_size)
 	{
-	  /* everything is expected, interprete it */
-          epl_interpret_reply(epl_job_info, in_buf, ret, code);
+	  /* everything as expected */
+	  if (ret > 0)
+	    {
+	      /* interprete it */
+              epl_interpret_reply(epl_job_info, in_buf, ret, code);
+            }
 	}
       else 
 	{
@@ -341,7 +348,7 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
     {
 #ifdef USE_FLOW_CONTROL
     case MODEL_5700L:
-      epl_job_info->estimated_free_mem = 2*1048576; /* fake */
+      epl_job_info->estimated_free_mem = FREE_MEM_DEFAULT_VALUE; /* fake */
       epl_57interpret(p, len);
       break;
 
@@ -355,7 +362,7 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
       break;
 
     case MODEL_6100L:
-      epl_job_info->estimated_free_mem = 2*1048576; /* fake */
+      epl_job_info->estimated_free_mem = FREE_MEM_DEFAULT_VALUE; /* fake */
       break;
 #endif
     default:

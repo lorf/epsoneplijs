@@ -1,3 +1,6 @@
+2003-05-07: cvs - Roberto Ragusa
+   . Small fixes.
+
 2003-05-04: cvs - Roberto Ragusa
    . Misc fixes to epl_59interpret.c, epl_bid_replies.c and docs.
    . Added README.FlowControl.
@@ -106,7 +109,7 @@
         ps2epl now has "TonerSave=on", and also "USB=on" for 5700L.  
         All users should try to use CUPS/etc, while the script should be 
         reserved for testing purposes. Edit to get old behaviour. 
-   
+
 2003-01-28: 0.2 - misc fixes - Roberto Ragusa
    . Foomatic .xml files now compatible with cups.
    . 5800L footers fixed.

@@ -156,6 +156,7 @@ int epl_status(int argc, char **argv)
   /* should not have to do this - except the sleep routine needs dpi_v... */
   epl_job_info->dpi_v = 600;
 
+/* FIXME: FLOW_CONTROL? or connectivity!=VIA_STDOUT_PIPE? */
 #ifdef USE_FLOW_CONTROL
   epl_bid_init(epl_job_info);
 #endif

@@ -987,7 +987,11 @@ main (int argc, char **argv)
       
       if (epl_job_started == EPL_JOB_STARTED_NO) /* only do one job header per job */
 	{
-	  /* init USB if needed */
+#ifdef USE_FLOW_CONTROL
+          /* initialize estimated_freemem to default value */
+	  epl_job_info->estimated_free_mem = FREE_MEM_DEFAULT_VALUE; /* fake */
+#endif
+	  /* init bid if needed */
           if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
               epl_bid_init(epl_job_info);
@@ -1003,12 +1007,9 @@ main (int argc, char **argv)
 #ifdef USE_FLOW_CONTROL
           /* initialize time_last_write */
           gettimeofday(&(epl_job_info->time_last_write), NULL);
-#endif
-#ifdef USE_FLOW_CONTROL
           if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
-              /* initialize estimated_freemem */
-	      epl_job_info->estimated_free_mem = 2*1048576; /* fake */
+              /* try to get estimated_freemem */
               epl_poll(epl_job_info, 0);
               epl_poll(epl_job_info, 1); /* just for fun */
             }
@@ -1033,7 +1034,7 @@ main (int argc, char **argv)
       bytes_per_row = (ph.n_chan * ph.bps * ph.width + 8 - 1) / 8 ;
       total_bytes = bytes_per_row * ph.height;
 
-      bytes_per_row_padded = (bytes_per_row + 3) & ~003;
+      bytes_per_row_padded = (bytes_per_row + 3) & ~0x03;
       
 #ifdef STRIPE_OVERFLOW_WORKAROUND_STRIPE_PAD
       bytes_per_row_padded += 2 ;
@@ -1044,7 +1045,7 @@ main (int argc, char **argv)
       
       stream = (typ_stream *)malloc(sizeof(typ_stream)); 
       /* 25% + 2, + 1 for rounding error */
-      stream->start = (char *)malloc(bytes_per_row_padded * 64 * 1.25 + 2 + 1);
+      stream->start = (char *)malloc(bytes_per_row_padded * 64 * 5 / 4 + 2 + 1);
 
       ptr_row_prev = (char *)malloc(bytes_per_row_padded);
       ptr_row_current = (char *)malloc(bytes_per_row_padded);
@@ -1116,17 +1117,25 @@ main (int argc, char **argv)
                  here until (maybe hours later) someone adds more
                  paper.
                  This also means we've no way of exit if a page needs
-                 more memory than physically installed. So what? We're
-                 hopeless anyway.
+                 more memory than physically installed in the printer.
+                 So what? We're hopeless anyway.
                  NOTE: this doesn't use 100% CPU because epl_poll
-                 sleeps for some time (adaptively chosen) if memory is low.
+                 sleeps for some (adaptively chosen) time if memory is low.
 
                  We're overestimating the amount of memory we're consuming.
                  This is not a problem, it simply triggers the above
                  verification earlier.
                  A factor of 2 could be enough, according to my logs.
                    --  rora
-	      */          
+                 Further analisys of 5900L logs suggest a factor of 1
+                 and an offset of 64 (the factor is maybe a little
+                 higher than 1).
+                 But there is some noise in a short time interval
+                 (a couple of stripes), maybe related to buffering
+                 and timing issues, so we stay on the safe side as
+                 this is not critical.
+                   --  rora
+              */          
           if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
 /* This unindented part has only a research purpose */

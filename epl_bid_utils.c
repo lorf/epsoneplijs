@@ -56,7 +56,6 @@ void epl_bid_init(EPL_job_info *epl_job_info)
       epl_libieee1284_init(epl_job_info);
       break;
 #endif 
-
     default:
       fprintf(stderr,"Unknown transport method: %d\n", epl_job_info->connectivity);
       exit(1);

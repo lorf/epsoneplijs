@@ -62,11 +62,11 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
       fprintf(stderr, "**Reply size inconsistent - This condition should never happen.");
     }
   
-  fprintf(stderr, "Printer tells:\n");
+  fprintf(stderr, "Printer says:\n");
   free_memory = (p[0x04] << 16) | (p[0x05] << 8) | p[0x06];
-  fprintf(stderr, "  free memory      = 0x%8.8x\n", free_memory);
+  fprintf(stderr, "  free memory        = 0x%8.8x\n", free_memory);
   
-  fprintf(stderr, "  status(0x07)     = 0x%2.2x:",p[0x07]);
+  fprintf(stderr, "  status(0x07)       = 0x%2.2x:",p[0x07]);
   if (p[0x07] & 0x80) fprintf(stderr, " UNKNOWN_80");
   if (p[0x07] & 0x40) fprintf(stderr, " UNKNOWN_40");
   if (p[0x07] & 0x20) fprintf(stderr, " UNKNOWN_20");
@@ -77,18 +77,18 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   if (p[0x07] & 0x01) fprintf(stderr, " JOB_FINISHED?");
   fprintf(stderr, "\n");
   
-  fprintf(stderr, "  status(0x09)     = 0x%2.2x:",p[0x09]);
-  if (p[0x09]&0x80) fprintf(stderr, " UNKNOWN_80");
-  if (p[0x09]&0x40) fprintf(stderr, " UNKNOWN_40");
-  if (p[0x09]&0x20) fprintf(stderr, " UNKNOWN_20");
-  if (p[0x09]&0x10) fprintf(stderr, " UNKNOWN_10");
-  if (p[0x09]&0x08) fprintf(stderr, " UNKNOWN_08");
-  if (p[0x09]&0x04) fprintf(stderr, " OPEN_COVER");
-  if (p[0x09]&0x02) fprintf(stderr, " NO_PAPER");
-  if (p[0x09]&0x01) fprintf(stderr, " UNKNOWN_01");
+  fprintf(stderr, "  status(0x09)       = 0x%2.2x:",p[0x09]);
+  if (p[0x09] & 0x80) fprintf(stderr, " UNKNOWN_80");
+  if (p[0x09] & 0x40) fprintf(stderr, " UNKNOWN_40");
+  if (p[0x09] & 0x20) fprintf(stderr, " UNKNOWN_20");
+  if (p[0x09] & 0x10) fprintf(stderr, " UNKNOWN_10");
+  if (p[0x09] & 0x08) fprintf(stderr, " UNKNOWN_08");
+  if (p[0x09] & 0x04) fprintf(stderr, " OPEN_COVER");
+  if (p[0x09] & 0x02) fprintf(stderr, " NO_PAPER");
+  if (p[0x09] & 0x01) fprintf(stderr, " UNKNOWN_01");
   fprintf(stderr, "\n");
   
-  fprintf(stderr, "  pages just print = %i\n", (p[0x0d] << 8) | p[0x0e]);
+  fprintf(stderr, "  pages just printed = %i\n", (p[0x0d] << 8) | p[0x0e]);
   
   if (p[0x11] == 0)
     {
@@ -104,14 +104,16 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
       switch(p[0])
 	{
 	case 0x10: /* 5800L, 5900L */
-	  fprintf(stderr, "  connection by    = %s\n", p[0x1b] & 0x02 ? "USB" : "PARPORT");
-	  fprintf(stderr, "  installed memory = %iMiB\n", p[0x1c]);
+          fprintf(stderr, "(of 0x10 type)\n");
+	  fprintf(stderr, "  connection by      = %s\n", p[0x1b] & 0x02 ? "USB" : "PARPORT");
+	  fprintf(stderr, "  installed memory   = %iMiB\n", p[0x1c]);
 	  break;
 	case 0x11: /* 5800L only */
-	  fprintf(stderr, "  printed pages    = %i\n", (p[0x19] << 8) | p[0x1a]);
-	  fprintf(stderr, "  toner supply     = %i%%\n", p[0x1b]);
-	  fprintf(stderr, "  imaging supply   = %i%%\n", p[0x1c]);
-	  fprintf(stderr, "  paper supply     = %i%%\n", p[0x1d]);
+          fprintf(stderr, "(of 0x11 type)\n");
+	  fprintf(stderr, "  printed pages      = %i\n", (p[0x19] << 8) | p[0x1a]);
+	  fprintf(stderr, "  toner supply       = %i%%\n", p[0x1b]);
+	  fprintf(stderr, "  imaging supply     = %i%%\n", p[0x1c]);
+	  fprintf(stderr, "  paper supply       = %i%%\n", p[0x1d]);
 	  break;
 	default:
 	  break;
@@ -120,12 +122,12 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   else if (p[0x11] == 0x11) /* 5900L only */
     {
       fprintf(stderr, "0x11 extension:\n");
-      fprintf(stderr, "  standby          = %i (%s)\n", p[0x12], p[0x12] ? "enabled" : "disabled");
-      fprintf(stderr, "  printed pages    = %i\n", (p[0x19] << 8) | p[0x1a]);
-      fprintf(stderr, "  toner supply     = %i%%\n", p[0x1b]);
-      fprintf(stderr, "  imaging supply   = %i%%\n", p[0x1c]);
-      fprintf(stderr, "  paper supply     = %i%%\n", p[0x1d]);
-      fprintf(stderr, "  low toner behav. = %i (%s)\n", p[0x22], p[0x22] ? "stop" : "go on");
+      fprintf(stderr, "  standby            = %i (%s)\n", p[0x12], p[0x12] ? "enabled" : "disabled");
+      fprintf(stderr, "  printed pages      = %i\n", (p[0x19] << 8) | p[0x1a]);
+      fprintf(stderr, "  toner supply       = %i%%\n", p[0x1b]);
+      fprintf(stderr, "  imaging supply     = %i%%\n", p[0x1c]);
+      fprintf(stderr, "  paper supply       = %i%%\n", p[0x1d]);
+      fprintf(stderr, "  low toner behav.   = %i (%s)\n", p[0x22], p[0x22] ? "stop" : "go on");
     }
   else
     {
@@ -135,7 +137,8 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   fprintf(stderr, "updating freemem estimate from 0x%8.8x",
 	  epl_job_info->estimated_free_mem);
   epl_job_info->estimated_free_mem = free_memory;
-  fprintf(stderr, " to 0x%8.8x\n", epl_job_info->estimated_free_mem);
+  fprintf(stderr, " to 0x%8.8x\n",
+          epl_job_info->estimated_free_mem);
   
   /* If the buffer is almost full, go to sleep.
      Increase sleeping time if this condition persists.

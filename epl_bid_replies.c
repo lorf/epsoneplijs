@@ -36,7 +36,9 @@
  Mythical replies from 5700l that needs to be dealt with 
  for USB printing on 5700L to work.
  5800L, 5900L, 6100L can print even if we don't read
- back the reply. Anyway, we do.
+ back the reply. Anyway, we do because there are some
+ advantages (smart flow control and status feedback are
+ possible).
 
  The reply size seems to be simply related to the first
  byte of a 2-byte command. The caller passes the value
@@ -117,15 +119,15 @@ int epl_bid_reply_len(int model, unsigned char code)
       switch (code)
         {
 	  /* big numbers for the time being */
-	case '@': result = 16; break; /* 0x40 - job header */ 
-	case 'A': result = 16; break; /* 0x41 - job footer */
-	case 'B': result = 16; break; /* 0x42 - 1st level encapsulation */
-	case 'C': result = 16; break; /* 0x43 - 1st level decapsulation */
-	case 'F': result = 16; break; /* 0x46 - page header */
-	case 'G': result = 16; break; /* 0x47 - page footer */
-	case 'L': result = 0;  break; /* 0x4C - strip */
-        case 'P': result = 126;  break; /* 0x50 - */
-        case 'Q': result = 120;  break; /* 0x51 - */
+	case '@': result = 16;  break; /* 0x40 - job header */ 
+	case 'A': result = 16;  break; /* 0x41 - job footer */
+	case 'B': result = 16;  break; /* 0x42 - 1st level encapsulation */
+	case 'C': result = 16;  break; /* 0x43 - 1st level decapsulation */
+	case 'F': result = 16;  break; /* 0x46 - page header */
+	case 'G': result = 16;  break; /* 0x47 - page footer */
+	case 'L': result = 0;   break; /* 0x4C - strip */
+        case 'P': result = 126; break; /* 0x50 - */
+        case 'Q': result = 120; break; /* 0x51 - */
         case 'R': result = 18;  break; /* 0x52 - */
         }
     }

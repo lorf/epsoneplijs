@@ -27,7 +27,7 @@
 
 /*
   Type is 0, 1 or 2. This is mapped to hex codes in a printer specific way.
-  Look at epl_usb_replies.h.
+  Look at epl_bid_replies.c.
 */
 int epl_poll(EPL_job_info *epl_job_info, int type)
 {
