@@ -1,3 +1,11 @@
+What is this?
+===========
+  This project is named "epsonepl".
+  It is a printer driver which gives ghostscript the ability
+  to print to Epson EPL-5700L, EPL-5800L, EPL-5900L laser printers.
+  EPL-6100L could work too (maybe with little modifications), but nobody
+  tested it yet (volunteers wanted!).
+
 Requirement
 ===========
   Type "gs -h" to get your ghostscript version and device list. You need 
@@ -42,7 +50,7 @@ Usage
   or in one step: "./ps2epl myfile.ps /dev/lp0"
   
   Alternatively, if your system is based on foomatic, have a look at the 
-  foomatic dir.
+  README.foomatic file and foomatic dir.
 
 License
 =======
@@ -66,7 +74,7 @@ Notes
     ChangeLog
     LIMITATIONS
     Makefile.in
-    README  
+    README*
     epl_*
     ijs_server_epsonepl.c
     ps2epl

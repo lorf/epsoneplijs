@@ -1,4 +1,7 @@
-2003-02-28: 0.2.3 - Hin-Tak Leung
+2003-03-10: 0.2.3 - Roberto Ragusa
+   . Modifications to the foomatic stuff and spec file.
+
+2003-02-28: 0.2.3cvs - Hin-Tak Leung
    . Merged in USB-related code, 
         configure now accepts --with-kerneldevice,--with-libusb
    . documentation update regarding USB and the 4-bit code.

@@ -11,7 +11,6 @@ URL: http://sourceforge.net/projects/epsonepl/
 Vendor: http://sourceforge.net/projects/epsonepl/
 Packager: Hin-Tak Leung, Roberto Ragusa
 Requires: ghostscript >= 6.53
-Requires: ghostscript-fonts
 Conflicts: ghostscript = 8.00
 BuildRoot: /var/tmp/epsonepl-root
 
@@ -54,10 +53,15 @@ exit 0
 
 %files
 %defattr(-, root, root)
-%doc ChangeLog FAQ LIMITATIONS README ps2epl epl_test.ps cups epl_docs foomatic 
+%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test.ps cups epl_docs foomatic 
 /usr/bin/*
 
 %changelog
+* Wed Feb  5 2003 Roberto Ragusa <rora@users.sourceforge.net> v0.2.3
+- Eliminated dependency on ghostscript-fonts (some distributions have
+  a different spelling of the name of the package and we should not worry
+  about fonts directly, just ask to have ghostscript).
+
 * Wed Feb  5 2003 Hin-Tak Leung <htl10@users.sourceforge.net> v0.2.3
 - Merged USB-related changes
 

@@ -1,7 +1,20 @@
-#!/bin/bash
+# This file is a shell script, but it's not a good idea to run it without
+# reading and understanding all the comments below.
+
+# The "foomatic" directory contains files which can enable user
+# friendly printing if the printing system used in your
+# distribution is based on foomatic.
+
+# The installation is not automatic yet, please read the following
+# instructions and contact the epsonepl-devel@sourceforge.net
+# mailing list if you want to ask for help, report success/failure
+# or suggest improvements. 
+
 
 # WARNING: check the correctness of the path and backup
 #          files we are going to ovewrwrite!
+# Please cd to the foomatic directory before running the
+# commands.
 
 # After copying the files, try using the printer
 # configurator of your system and see if your
