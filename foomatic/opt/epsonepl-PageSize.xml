@@ -15,7 +15,7 @@
   </arg_execution>
   <constraints>
      <constraint sense="true">
-      <driver>epl5900l</driver>
+      <driver>epl5700l</driver>
       <arg_defval>ev/epsonepl-PageSize-Letter</arg_defval>
      </constraint>
      <constraint sense="true">
@@ -23,7 +23,11 @@
       <arg_defval>ev/epsonepl-PageSize-Letter</arg_defval>
      </constraint>
      <constraint sense="true">
-      <driver>epl5700l</driver>
+      <driver>epl5900l</driver>
+      <arg_defval>ev/epsonepl-PageSize-Letter</arg_defval>
+     </constraint>
+     <constraint sense="true">
+      <driver>epl6100l</driver>
       <arg_defval>ev/epsonepl-PageSize-Letter</arg_defval>
      </constraint>
   </constraints>

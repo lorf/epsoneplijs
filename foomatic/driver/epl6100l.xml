@@ -1,9 +1,9 @@
-<driver id="driver/epl5900l">
- <name>epl5900l</name>
+<driver id="driver/epl6100l">
+ <name>epl6100l</name>
  <url>http://sourceforge.net/projects/epsonepl/</url>
  <execution>
   <ghostscript />
-  <prototype>gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessColorModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ijs_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDeviceModel=EPL5900L -sIjsParams=&quot;%B&quot; -sOutputFile=- -</prototype>
+  <prototype>gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessColorModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ijs_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDeviceModel=EPL6100L -sIjsParams=&quot;%B&quot; -sOutputFile=- -</prototype>
   <ppdentry>
    *DefaultResolution: 1200x600dpi
    *Resolution 1200x600dpi/1200x600 dpi: &quot;&quot;
@@ -43,7 +43,7 @@
  </comments>
  <printers>
   <printer>
-   <id>printer/Epson-EPL-5900L</id>
+   <id>printer/Epson-EPL-6100L</id>
   </printer>
  </printers>
 </driver>

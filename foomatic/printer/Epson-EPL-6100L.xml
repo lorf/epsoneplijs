@@ -23,14 +23,14 @@
   <autodetect>
   <!--no known parport probe information--></autodetect>
   <functionality>B</functionality>
-  <driver>epl5900l</driver>
+  <driver>epl6100l</driver>
   <!--verified--><!--no "contrib_url"-->
   <comments>
     <en>
 
     Known not to use a standard protocol as PostScript or PCL; not to
     be confused with the &lt;a
-    href=&quot;show_printer.cgi?recnum=Epson-EPL-5900&quot;&gt;EPL-5900&lt;/a&gt;.
+    href=&quot;show_printer.cgi?recnum=Epson-EPL-6100&quot;&gt;EPL-6100&lt;/a&gt;.
     &lt;p&gt;
 
     Dr H. T. Leung and Roberto Ragusa have developed a &lt;a
