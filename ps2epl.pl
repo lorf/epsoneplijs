@@ -73,7 +73,7 @@ while(my $pairs = shift @ARGV) {
 	    $model = $value;
 	} else {
 	    foreach my $key (keys %IJSPARAMS) {
-		if (($key =~ /${option}$/i) && ((length $option) > 3)) {
+		if (($key =~ /${option}$/i) && ((length $option) >= 3)) {
 		    $IJSPARAMS{$key} = $value ;
 		}
 	    }

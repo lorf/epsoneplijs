@@ -18,6 +18,7 @@
 
 #include "epl_config.h"
 #include "epl_compress.h"
+#include "epl_lowmem_msg.h"
 
 struct proto {
     int code;    /* bit-code */
@@ -292,6 +293,17 @@ void make_blank(typ_stream *stream)
   for (idx = 0 ; idx < 104; idx++)
     {
       *(stream->start + idx) = blank_stripe[idx];
+    }
+  return;
+}
+
+void make_lowmem_msg(typ_stream *stream)
+{
+  int idx = 0; 
+  stream->count = LOWMEM_MSG_SIZE;
+  for (idx = 0 ; idx < stream->count; idx++)
+    {
+      *(stream->start + idx) = lowmem_msg[idx];
     }
   return;
 }
