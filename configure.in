@@ -8,13 +8,31 @@ AC_PROG_CC
 # Check for OS USB support
 os=`uname -s`
 AC_MSG_CHECKING(for OS USB support)
-AC_ARG_WITH(kerneldevice, [  --without-kerneldevice  disable kernel USB device support (default)
+AC_ARG_WITH(kerneldevice, [  --without-kerneldevice  disable kernel USB device support
   --with-kerneldevice     enable  kernel USB device support])
-if test "$with_kerneldevice"  = yes -a "$os" = Linux ; then
-HAVE_KERNEL_DEVICE=-DHAVE_KERNEL_DEVICE
-AC_MSG_RESULT(yes)
-else
-AC_MSG_RESULT(no)
+if test "$with_kerneldevice"  != no ; then
+   if test "$os" = Linux ; then
+      uname=`uname -r`
+      major=${uname%%.*}
+      last=${uname##*.}
+      minor=${uname#$major.}
+      minor=${minor%.$last}
+      patch=${last%%-*}
+      #only accepts 3.x+, 2.6.x+, 2.5.7+ , 2.4.19+
+      if test "$major" -ge 3 \
+           -o "$major" -eq 2 -a "$minor" -ge 6 \
+           -o "$major" -eq 2 -a "$minor" -eq 5 -a "$patch" -ge 7 \
+           -o "$major" -eq 2 -a "$minor" -eq 4 -a "$patch" -ge 19 ; then
+         HAVE_KERNEL_DEVICE=-DHAVE_KERNEL_DEVICE
+         AC_MSG_RESULT(Linux ${major}.${minor}.${patch} ... seems good.)
+      else
+         AC_MSG_RESULT(Linux ${major}.${minor}.${patch} ... incompatible - too old?)
+      fi
+   else
+      AC_MSG_RESULT(Not Linux. Disabling option.)
+   fi
+else 
+   AC_MSG_RESULT(Not checked.)
 fi
 
 # Check for libusb support (needed for composite USB support
