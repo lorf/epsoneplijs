@@ -26,7 +26,7 @@
 **/
 
 #include "epl_job.h"
-#include "epl_usb.h"
+#include "epl_bid.h"
 
 /* the following two defines are not used (so, why are they here?) */
 #define EPL_5700L_USB_EP_OUTBOUND  0x01
@@ -46,12 +46,12 @@
  0 just means no reply is expected.
 */
 
-int epl_usb_reply_len(EPL_job_info *epl_job_info, unsigned char code)
+int epl_bid_reply_len(int model, unsigned char code)
 {
   int result;
   
   result = -1; /* unknown, this can be returned if not overwritten */
-  if (epl_job_info->model == MODEL_5700L)
+  if (model == MODEL_5700L)
     {
       switch (code)
         {
@@ -66,7 +66,7 @@ int epl_usb_reply_len(EPL_job_info *epl_job_info, unsigned char code)
           case 0x08: result = 17; break; /* some kind of polling, sent when the printer is idle */
         }
     }
-  else if (epl_job_info->model == MODEL_5800L)
+  else if (model == MODEL_5800L)
     {
       switch (code)
         {
@@ -83,7 +83,7 @@ int epl_usb_reply_len(EPL_job_info *epl_job_info, unsigned char code)
           case 0x13: result = 20; break; /* 2nd command of job */
         }
     }
-  else if (epl_job_info->model == MODEL_5900L)
+  else if (model == MODEL_5900L)
     {
       switch (code)
         {
@@ -100,11 +100,19 @@ int epl_usb_reply_len(EPL_job_info *epl_job_info, unsigned char code)
           case 0x13: result = 20; break; /* 2nd command of job */
         }
     }
-  else if (epl_job_info->model == MODEL_6100L)
+  else if (model == MODEL_6100L)
     {
       switch (code)
         {
-          /* to be added */
+	  /* big numbers for the time being */
+	case 'B': result = 100; break; /* job header */
+	case 'A': result = 100; break; /* job footer */
+	case 'D': result = 100; break; /* 1st level encapsulation */
+	case 'C': result = 100; break; /* 1st level decapsulation */
+	case 'F': result = 100; break; /* page header */
+	case 'E': result = 100; break; /* page footer */
+	case 'I': result = 0;  break;  /* strip */
+	case '@': result = 100; break; /* pre header */ 
         }
     }
   return result;
