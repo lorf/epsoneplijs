@@ -76,7 +76,7 @@ static int epl_usb_reply_size[MODEL_USEDSLOTS][KNOWN_REPLY_CODES] =
       -1, /* 0x07, not used */
       -1, -1, -1, -1, -1, -1, -1, -1, /* 0x08 - 0x0f, not used */
       33, /* 0x10, beginning of job */
-      33, /* 0x11, middle of polling */ 
+      35, /* 0x11, middle of polling */ 
       19, /* 0x12, polling */
       20  /* 0x13, 2nd command of job */   
     },
@@ -92,7 +92,7 @@ static int epl_usb_reply_size[MODEL_USEDSLOTS][KNOWN_REPLY_CODES] =
       -1,  /* 0x07, not used */
       -1, -1, -1, -1, -1, -1, -1, -1, /* 0x08 - 0x0f, not used */
       33, /* 0x10, beginning of job */
-      33, /* 0x11, middle of polling */ 
+      35, /* 0x11, middle of polling */ 
       19, /* 0x12, polling */
       20  /* 0x13, 2nd command of job */   
     },
@@ -105,20 +105,3 @@ static int epl_usb_reply_size[MODEL_USEDSLOTS][KNOWN_REPLY_CODES] =
       -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 /* 0x00 - 0x13, unknown */
     }
   };
-
-/* 
-   Flow control parameter:
-   According to the spec, the 5700L can do 8 pages per minutes; i.e. 
-   7 seconds per page; the max page length is about 14in, containing about 
-   140 stripes at max resolution. So the printer must be able to process
-   a stripe within 0.05 seconds, or 50,000 micro-seconds. Hence this 
-   number. One may need to increase or look for problems elsewhere
-   if a value of 50,000 doesn't work reliably.
-
-   The smallest value chosen so there is no unnecessary waits.
-   The wait route will use this value for high resolution, and
-   double it when the vertical resolution is only 300dpi. 
-   (only 300 or 600 are valid values)  
-*/
-   
-#define USEC_BETWEEN_WRITES_5700L 50000

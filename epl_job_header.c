@@ -26,7 +26,7 @@
 #include <string.h>
 #include "epl_job.h"
 
-int epl_job_header(EPL_job_info *epl_job_info) 
+int epl_job_header(EPL_job_info *epl_job_info)
 {
   char temp_string[256];
   char *ts;
@@ -130,8 +130,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
   if (epl_job_info->model == MODEL_5700L)
     {
       ts += sprintf(ts, "%c%c",0x00, 0x00);
-      memcpy(ts, data_block, 6);
-      ts += 6;
+      memcpy(ts, data_block, 6); ts += 6;
       ts_beg[ts_count++] = ts;
     }
   else if (epl_job_info->model == MODEL_5800L
@@ -166,8 +165,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
           ts_beg[ts_count++] = ts;
 	  ts += epl_sprintf_wrap(ts,9);
 	  ts += sprintf(ts, "%c%c", 0x02, 0x00);
-	  memcpy(ts, data_block, 6);
-	  ts += 6;
+	  memcpy(ts, data_block, 6); ts += 6;
 	  ts += sprintf(ts, "%c", 0x00);
           ts_beg[ts_count++] = ts;
 	}
@@ -180,10 +178,8 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	  ts += sprintf(ts, "                  ");
 	  ts += epl_sprintf_wrap(ts, 16);
 	  ts += sprintf(ts, "B%c", 0x00);
-	  memcpy(ts, data_block, 6);
-	  ts += 6;
-	  memcpy(ts, data_block_6xL, 8);
-	  ts += 8;
+	  memcpy(ts, data_block, 6); ts += 6;
+	  memcpy(ts, data_block_6xL, 8); ts += 8;
           ts_beg[ts_count++] = ts;
 	}      
     }

@@ -33,11 +33,11 @@
 #include "libusb/usb.h"
 #endif
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "epl_job.h"
 #include "epl_usb.h"
-#include "epl_usb_replies.h"
 
 #ifdef HAVE_KERNEL_DEVICE
 /* Copied somewhat from /usr/src/linux/drivers/usb/printer.c: */     

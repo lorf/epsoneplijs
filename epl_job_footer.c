@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include "epl_job.h"
 
-int epl_job_footer(EPL_job_info *epl_job_info) 
+int epl_job_footer(EPL_job_info *epl_job_info)
 {
   char temp_string[256];
   char *ts;

@@ -901,10 +901,6 @@ main (int argc, char **argv)
   epl_job_info->connectivity = PRE_INIT;
   epl_job_info->outfile = NULL;
 
-#ifdef USE_FLOW_CONTROL
-  gettimeofday(&(epl_job_info->time_last_write),NULL);
-#endif
-  
   do 
     {
       int total_bytes, bytes_left;
@@ -970,17 +966,35 @@ main (int argc, char **argv)
             {
               epl_usb_init(epl_job_info);
             }
+
           status = epl_job_header (epl_job_info);      
           if (status != 0)
             {
               fprintf (stderr, "output error\n");
 	      exit (1);
             }
+#ifdef USE_FLOW_CONTROL
+          /* initialize time_last_write */
+          gettimeofday(&(epl_job_info->time_last_write), NULL);
+#endif
+#ifdef USE_FLOW_CONTROL
+          if ((epl_job_info->connectivity != VIA_PPORT))
+            {
+              /* initialize estimated_freemem */
+              epl_poll(epl_job_info, 0);
+              epl_poll(epl_job_info, 1); /* just for fun */
+            }
+#endif
 	  epl_job_started = EPL_JOB_STARTED_YES ;	
         }
       
       /* Page header */
       
+      if ((epl_job_info->connectivity != VIA_PPORT))
+        {
+          epl_usb_mid(epl_job_info);
+        }
+
       status = epl_page_header(epl_job_info);
       if (status != 0)
         {
@@ -1031,23 +1045,23 @@ main (int argc, char **argv)
 	      if (bytes_left > 0)		/* no padding situation */
 	        {
 #ifdef EPL_DEBUG
-	      fprintf (stderr, "stripe %d, row %d\n", i_stripe, i_row);
+	          fprintf (stderr, "stripe %d, row %d\n", i_stripe, i_row);
 #endif	      
 
 #ifdef VERBOSE
-	      fprintf (stderr, "%d bytes left, reading %d\n", bytes_left, bytes_per_row);
+	          fprintf (stderr, "%d bytes left, reading %d\n", bytes_left, bytes_per_row);
 #endif	      
-	      status = ijs_server_get_data (ctx, ptr_row_current, bytes_per_row);
-	      bytes_left -= bytes_per_row;
+	          status = ijs_server_get_data (ctx, ptr_row_current, bytes_per_row);
+	          bytes_left -= bytes_per_row;
 
-	      if (status)
-		{
-		  fprintf (stderr, "page aborted!\n");
-		  break;
-		}
-            }
+	          if (status)
+		    {
+		      fprintf (stderr, "page aborted!\n");
+		      break;
+		    }
+                }
 	      else
-	    {
+	        {
 #ifdef EPL_DEBUG
 	          fprintf (stderr, "stripe %d, row %d (padding)\n", i_stripe, i_row);
 #endif	      
@@ -1063,6 +1077,41 @@ main (int argc, char **argv)
 	    }
 	  stream_pad16bit(stream);
 
+#ifdef USE_FLOW_CONTROL
+          if ((epl_job_info->connectivity != VIA_PPORT))
+            {
+              /*
+                 If our estimated free mem is too low, we check the real
+                 value and refuse to go ahead if it is really low.
+                  We indefinitely wait for some memory to be freed.
+                 So, yes, we can get stuck here for ever; and this is
+                 right, because if the printer goes out of paper on
+                 a 200 page job, the buffer fills up and we loop
+                 here until (maybe hours later) someone adds more
+                 paper.
+                 This also means we've no way of exit if a page needs
+                 more memory than physically installed. So what? We're
+                 hopeless anyway.
+                 NOTE: this doesn't use 100% CPU because epl_poll
+                 sleeps for some time (adaptively chosen) if memory is low.
+                    --  rora
+               */
+              while (epl_job_info->estimated_free_mem < FREE_MEM_LOW_LEVEL)
+	        {
+	          fprintf(stderr, "low free memory 0x%8.8x, going to poll\n",
+	                  epl_job_info->estimated_free_mem);
+                  epl_poll(epl_job_info, 2); /* we just need the memory value */
+	        }
+              /*
+                 We're overestimating the amount of memory we're consuming.
+                 This is not a problem, it simply triggers the above
+                 verification earlier.
+                 A factor of 2 could be enough, according to my logs.
+                   --  rora
+	      */          
+              epl_job_info->estimated_free_mem -= 3 * stream->count + 64;
+            }
+#endif
 	  epl_print_stripe(epl_job_info, stream, i_stripe);
 	}
 	

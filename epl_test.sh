@@ -4,7 +4,7 @@ PAPERSIZE=a4
 
 gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 -sProcessColorModel=DeviceGray -dBitsPerSample=1 \
--sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
+-sDEVICE=ijs -sIjsServer=./ijs_server_epsonepl \
 -sDeviceManufacturer=Epson -sDeviceModel=EPL5700L \
 -sIjsParams="" \
 -dIjsUseOutputFD \
@@ -13,7 +13,7 @@ gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 
 gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 -sProcessColorModel=DeviceGray -dBitsPerSample=1 \
--sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
+-sDEVICE=ijs -sIjsServer=./ijs_server_epsonepl \
 -sDeviceManufacturer=Epson -sDeviceModel=EPL5800L \
 -sIjsParams="" \
 -dIjsUseOutputFD \
@@ -22,7 +22,7 @@ gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 
 gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 -sProcessColorModel=DeviceGray -dBitsPerSample=1 \
--sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
+-sDEVICE=ijs -sIjsServer=./ijs_server_epsonepl \
 -sDeviceManufacturer=Epson -sDeviceModel=EPL5900L \
 -sIjsParams="" \
 -dIjsUseOutputFD \
@@ -31,7 +31,7 @@ gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 
 gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 -sProcessColorModel=DeviceGray -dBitsPerSample=1 \
--sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
+-sDEVICE=ijs -sIjsServer=./ijs_server_epsonepl \
 -sDeviceManufacturer=Epson -sDeviceModel=EPL6100L \
 -sIjsParams="" \
 -dIjsUseOutputFD \

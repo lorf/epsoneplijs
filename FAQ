@@ -21,7 +21,7 @@ USB on 5700L
 
   The kernel device code is probably best trouble-shoot through syslogs, etc.
 
-  As for the libusb code, f you see "can't claim USB device" and got 
+  As for the libusb code, if you see "can't claim USB device" and got 
   directed here, you need to check a few things concerning permissions:
 
   (1) /proc/bus/usb is mounted, 
@@ -45,9 +45,9 @@ USB on 5700L
 
 USB on 5800L, 5900L, 6100L
 ==========================
-  USB support has been recently extended to all printers. IF you want to try
+  USB support has been recently extended to all printers. If you want to try
   it, just follow the same instructions given for 5700L.
-  This is experimental, at the moment.
+  This is experimental, at the moment. Untested on 6100L.
 
 Usage Problems
 ==============
@@ -70,6 +70,9 @@ Usage Problems
   The binary 'ijs_server_epsonepl' needs to be in your $PATH. Check your 
   $PATH variable with "echo $PATH", and/or verify with 
   'which ijs_server_epsonepl'. Copy the binary into /usr/bin as last resort. 
+
+  In most cases the problem is that ijs_server_epsonepl is in /usr/local/bin
+  and /usr/local/bin is not in your $PATH.
 
 *) "Unknown device: ijs"
    
@@ -106,3 +109,16 @@ Usage Problems
    (612, 792) is letter. (595, 842) is A4. These numbers are in pt's 
    (= 1/72 inch, a traditional type-setter's measure).
 
+*) The printer crashes during operation.
+
+   There are a few known reasons for this to happen. Almost all of
+   them are properly avoided by the code, with a few exceptions:
+   - Printing very complex pages (full size dithered photos) at
+     high resolution, because the memory in the printer is not enough.
+     Only solution is add a SIMM to the printer or use a lower resolution.
+     Automatic decreasing of resolution is theorically possible, but
+     not implemented.
+   - Internal buffer overflow. Flow control (only available with USB)
+     avoids this problem on 5800L/5900L (and on 5700L in most cases).
+
+     

@@ -1,3 +1,12 @@
+2003-04-11: cvs - Roberto Ragusa
+   . Added adaptive flow control algorithm for 5800L/5900L/6100L
+     (5700L unchanged). It appears to be rock solid, according to
+     first tests.
+   . Printer replies are now interpreted and logged (if debug is on) for
+     5800L/5900L. 5700L and 6100L need some work to implement that.
+   . epl_test.sh can be run without having to "make install".
+   . Misc fixes and moved some code around.
+
 2003-04-10: cvs - Roberto Ragusa
    . Direct USB ("FlowControl") is now available for all printers.
    . Better detection of USB printers.

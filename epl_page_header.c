@@ -26,9 +26,8 @@
 #include <unistd.h>
 #include <string.h>
 #include "epl_job.h"
-#include "epl_usb.h"
 
-int epl_page_header(EPL_job_info *epl_job_info) 
+int epl_page_header(EPL_job_info *epl_job_info)
 {
   char temp_string[256];
   char *ts;
@@ -58,7 +57,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
   hor_pixels = epl_job_info->pixel_h;
   ver_pixels = epl_job_info->pixel_v;
   stripes_per_page = (epl_job_info->pixel_v + stripe_size - 1) / stripe_size;
-  copies=1;
+  copies = 1;
   cust_paper_hor = epl_job_info->paper_size_mm_h;
   cust_paper_ver = epl_job_info->paper_size_mm_v;
 
@@ -125,25 +124,25 @@ int epl_page_header(EPL_job_info *epl_job_info)
   if(epl_job_info->model == MODEL_5700L)
     {
       ts += sprintf(ts, "%c%c",0x02, 0x00);
-      memcpy(ts, data_block_5xL, 23);
-      sprintf(ts + 14, "%c", 0xff); /* 5700L has an auto tray setting */
-      ts += 23;
+        {
+          memcpy(ts, data_block_5xL, 23);
+          sprintf(ts + 14, "%c", 0xff); /* 5700L has an auto tray setting */
+          ts += 23;
+        }
     }
   else if(epl_job_info->model == MODEL_5800L
           || epl_job_info->model == MODEL_5900L)
     {
       ts += epl_sprintf_wrap(ts, 26);
       ts += sprintf(ts, "%c%c", 0x04, 0x00);
-      memcpy(ts, data_block_5xL, 23);
-      ts += 23;
+      memcpy(ts, data_block_5xL, 23); ts += 23;
       ts += sprintf(ts, "%c", 0x01);
     }
   else if(epl_job_info->model == MODEL_6100L)
     {
       ts += epl_sprintf_wrap(ts, 36);
       ts += sprintf(ts, "F%c", 0x00);
-      memcpy(ts, data_block_6xL, 34);
-      ts += 34;
+      memcpy(ts, data_block_6xL, 34); ts += 34;
     }
 
 #ifdef EPL_DEBUG
@@ -154,10 +153,5 @@ int epl_page_header(EPL_job_info *epl_job_info)
   e = epl_write_bid(epl_job_info, temp_string, ts - temp_string);
   if(e != ts - temp_string) return -1;
 
-  if ((epl_job_info->connectivity != VIA_PPORT))
-    {
-      epl_usb_mid(epl_job_info);
-    }
-  
   return 0;
 } 

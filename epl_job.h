@@ -60,6 +60,8 @@ struct _EPL_job_info {
   
 #ifdef USE_FLOW_CONTROL
   struct timeval time_last_write;
+  int estimated_free_mem;
+#define FREE_MEM_LOW_LEVEL 0x20000
 #endif
 };
 
@@ -83,6 +85,8 @@ int epl_job_header(EPL_job_info *epl_job_info);
 
 int epl_page_header(EPL_job_info *epl_job_info);
 
+int epl_poll(EPL_job_info *epl_job_info, int type);
+
 int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_number);
 
 int epl_page_footer(EPL_job_info *epl_job_info);
@@ -100,7 +104,7 @@ static char *printername[]={
   "EPL-5700L",
   "EPL-5800L",
   "EPL-5900L",
-  "",              /* placeholder for future 6000L */
+  "<ghost>",              /* placeholder for future 6000L */
   "EPL-6100L"
 };
 
