@@ -37,11 +37,24 @@
  *             * Added debug features (stderr).
  *             * Improved C89 compliance.
  *
+ *    2003-01-07 Roberto Ragusa <r.ragusa@libero.it>
+ *
+ *             * Memory allocations.
+ *             * Eliminated some hard coded values,
+ *             better cropping of the bitmap.
+ *             * Tests on error conditions.
+ *
+ *    2003-01-08 Roberto Ragusa <r.ragusa@libero.it>
+ *
+ *             * More tests on error conditions.
+ *
+ *    2003-02-02 Roberto Ragusa <r.ragusa@libero.it>
+ *
+ *             * 4-bit code now implemented! Added
+ *               explanation in the protocol description.
+ *
  * ToDo:
- *             * Dimensions of bitmap are not perfect. 6796 isn't
- *             even divisible by 64, we're faking a few lines
- *	       on the bottom of the page.
- *             * We don't even check if file I/O is failing. Wow.
+ *             * Many things.
  *
  */
 
@@ -159,6 +172,8 @@
  * 
  *     10 xxxxxxxx     The bitmap data is the byte xxxxxxxx
  *     00 xxxx         (this is not completely understood and is not used)
+ *                     (UPDATE: this 4-bit code is now understood,
+ *                     explanation at the end of this section)
  * 
  *   COPY
  * 
@@ -179,8 +194,8 @@
  *                       value containing the number of repetitions.
  * 		         This number can be:
  * 		         - 0       special case: copy until end of row
- * 		         - 1..7    probably accepted, but why not use
- * 		                     the short form?
+ * 		         - 1..7    not accepted (crash on 5900L),
+ * 		                     you have to use the short form
  * 		         - 8..126  repeat said times
  * 		         - 127     repeat 127 times, and immediately
  * 		                     read another 7 bit yyyyyyy value
@@ -275,15 +290,57 @@
  * If we had used "copy current-3 repeating until end"
  * in the last example we wouldn't have had a white
  * sequence but a repeated pattern of 0x00 0x01 0xf8.
+ *
+ *
+ * --- UPDATE: 4 bit code not a mistery anymore. ---
+ *
+ * After much experimentation (including high-res scanning
+ * of printings from manually generated spool files), the
+ * meaning of the 4 bit code has been discovered.
+ *
+ * It's a cache.
  * 
+ * The printer has 16 bytes of cache and a register with
+ * 4 bits which we will call "lri".
+ * When a stripe begins, the cache is initialized to
+ * 0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,
+ * 0x0b,0x0c,0x0d,0x0e,0x0f and the lri is set to 0.
+ * If we use the 4-bit code number i (0<=i<=15) while encoding
+ * a stripe, we will print the byte at cache position i.
+ * Until now, it's a simple lookup table.
+ * But the table is updated every time we use an 8-bit literal;
+ * the byte is placed at cache position lri and lri is
+ * incremented by one (modulo 16).
+ *
+ * So, this a cache with a LRI replace policy; yes, not LRU
+ * (Least Recently Used), but LRI (Least Recently Inserted).
+ * This is why we call the additional register "lri".
+ *
+ * While the implementation of this algorithm on the printer
+ * is really simple, the driver has to check the cache
+ * content every time a literal byte is going out.
+ * An efficient implementation can be obtained by means of
+ * an additional lookup-table (reversed cache).
+ *
+ * The data size reduction is moderate for text pages (about 15%)
+ * and minimal for complex graphics; the encoding process
+ * is a little slower because of the additional work.
+ *
+ * But, after so much work to discovery the logic (the
+ * replacement policy in particular way), this can't
+ * be left out of the driver. :-)
+ *
+ *
  *   Roberto Ragusa
- * 
+ *
  */
 
 /* INCLUDE */
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 /* DEBUG */
@@ -307,7 +364,9 @@ void debug(int flag,...){
 }
 #endif
 
+#define DGENERIC 1
 #define DSTREAM 1
+#define DFILEIO 1
 
 
 /* STREAM HANDLING */
@@ -315,18 +374,18 @@ void debug(int flag,...){
 unsigned char *stream_ptr;
 int stream_temp,stream_bits;
     
-void stream_begin(unsigned char *outbuffer){
+inline void stream_begin(unsigned char *outbuffer){
   stream_ptr=outbuffer;
   stream_temp=0;
   stream_bits=0;
 }
 
-void stream_emit_nocheck(int d, int l){
+inline void stream_emit_nocheck(int d, int l){
   stream_temp|=(d)<<stream_bits;
   stream_bits+=(l);
 }
 
-void stream_check(){
+inline void stream_check(){
   if(stream_bits>=16){
     *(stream_ptr++)=(stream_temp>>8)&0xff;
     *(stream_ptr++)=stream_temp&0xff;
@@ -335,12 +394,12 @@ void stream_check(){
   }
 }
 
-void stream_emit(int d, int l){
+inline void stream_emit(int d, int l){
   stream_emit_nocheck(d,l);
   stream_check();
 }
 
-unsigned char *stream_end(){
+inline unsigned char *stream_end(){
   stream_emit(0,(16-stream_bits)%16);
   return stream_ptr;
 }
@@ -349,7 +408,7 @@ unsigned char *stream_end(){
 
 /* RUN LENGTH */
 
-int run_length_find(unsigned char *b1, unsigned char *b2, int maxl){
+inline int run_length_find(unsigned char *b1, unsigned char *b2, int maxl){
   int run_length_table_d[]={/**/0,/*0*/0,/*01*/1,/*0011*/3,/*1011*/0xb,/*01111*/0xf,/*011111*/0x1f,/*111111*/0x3f};
   int run_length_table_l[]={    0,     1,      2,        4,          4,           5,             6,             6};
   int l;
@@ -383,19 +442,36 @@ int run_length_find(unsigned char *b1, unsigned char *b2, int maxl){
 /* STRIPE PROCESSING */
 
 int process_stripe(unsigned char *inbuffer, unsigned char *outbuffer, int s, int wbytes, int stripe_size){
-  unsigned char whiterow[0x300 /* wbytes*/ ];
+  char cache[16];
+  char byte2cache[256];
+  int lri; /* least recently inserted */
+  unsigned char *whiterow;
   unsigned char *thisrow, *rowabove;
   int x,y;
   int len;
   int i;
 
+  whiterow=(unsigned char *)malloc(wbytes);
+  if(whiterow==NULL) return -1;
+
   for(i=0;i<wbytes;i++) whiterow[i]=0;
+
+  /* cache initialization */
+  for(i=0;i<16;i++){
+    cache[i]=i;
+    byte2cache[i]=i;
+  }
+  for(i=16;i<256;i++){
+    byte2cache[i]=-1;
+  }
+  lri=0;
+
   rowabove=&whiterow[0];			/* special case */
   thisrow=&inbuffer[0];
-  debug(DSTREAM,"s=%i\n",s);
+  debug(DSTREAM,"s=%05i\n",s);
   stream_begin(outbuffer);
   for(y=0;y<stripe_size;y++){
-    debug(DSTREAM,"y=%i: ",y);
+    debug(DSTREAM,"y=%05i: ",y);
     for(x=0;x<wbytes;){
       if(thisrow[x]==rowabove[x]){
         stream_emit(/*01*/0x1,2);
@@ -417,12 +493,11 @@ int process_stripe(unsigned char *inbuffer, unsigned char *outbuffer, int s, int
         debug(DSTREAM,"C-3 ");
         x+=run_length_find(&thisrow[x],&thisrow[x-3],wbytes-x);
       }
-      else if(0/*because_it_is_not_reliable*/){					/* currently not enabled */
+      else if(byte2cache[thisrow[x]]>=0){ /* cache hit */
         stream_emit(/*00*/0x0,2);
-        debug(DSTREAM,"LIT4 ");
-        /*
-	stream_emit(i_dont_know_exactly_what,4);
-        */
+        debug(DSTREAM,"LIT4CACHE");
+	stream_emit(byte2cache[thisrow[x]],4);
+        debug(DSTREAM,"pos_%01x %02x ",byte2cache[thisrow[x]],thisrow[x]);
         x++;
       }
       else{
@@ -430,74 +505,127 @@ int process_stripe(unsigned char *inbuffer, unsigned char *outbuffer, int s, int
         debug(DSTREAM,"LIT8 ");
         stream_emit(thisrow[x],8);
         debug(DSTREAM,"%02x ",thisrow[x]);
+        debug(DSTREAM,"to_pos_%01x ",lri);
+        byte2cache[(unsigned char)cache[lri]]=-1;
+        cache[lri]=thisrow[x];
+        byte2cache[thisrow[x]]=lri;
+        lri=(lri+1)&0xf;
         x++;
       }
     }
+    stream_emit(1,2);
+    stream_emit(7,11);
     debug(DSTREAM,"\n",y);
     rowabove=thisrow;
     thisrow+=wbytes;
   }
   len=stream_end()-outbuffer;
   debug(DSTREAM,"\n",y);
+
+  free(whiterow);
+
   return len;
 }
 
 
 /* MAIN */
 
-#define STRIPE_SIZE 64
-
 int main(void){
+  int dpi_x,dpi_y;
   int wpix,hpix;
+  int stripe_size;
   int wbytes,hstripes;
-
-  unsigned char inbuffer[0x300*STRIPE_SIZE /* wbytes*STRIPE_SIZE */];
-  unsigned char outbuffer[0x300*STRIPE_SIZE*2 /* wbytes*STRIPE_SIZE*safety factor */];
+  int pbm_wpix,pbm_hpix;
+  int pbm_wbytes;
+  unsigned char *bitmap;
+  unsigned char *outbuffer;
+  char temp_string[256];	/* temp string buffer */
+  char *ts;
   int s;
+  int y;
   int slen;
+  int e;
+  unsigned char dpi_code1,dpi_code2;
 
-  wpix=4768;
-  hpix=6796;
 
-  wbytes=wpix/8;
-  hstripes=(hpix+STRIPE_SIZE-1)/STRIPE_SIZE; /* +STRIPE_SIZE-1 is a ugly hack, we don't know what we're printing */
+  dpi_x=600;
+  dpi_y=600;
 
-  fread(inbuffer,1,0xd,stdin);			/* skip 13 bytes (horror!)*/
+  /* A4 paper 210x297mm */
+  wpix=(210-4-4)/25.4*dpi_x; /* 4771 @ 600 dpi */
+  hpix=(297-4-4)/25.4*dpi_y; /* 6826 @ 600 dpi */
+  debug(DGENERIC,"wpix=%i,hpix=%i (calculated)",wpix,hpix);
+  /* manual override */wpix=4768;hpix=6796;
+  stripe_size=64;
 
-  fprintf(stdout,"\x01b\x001");
-  fprintf(stdout,"@EJL \x00a");
-  fprintf(stdout,"@EJL STARTJOB MACHINE=\"experiment\" USER=\"epl5x00l_driver\"\x00a");
-  fprintf(stdout,"@EJL EN LA=ESC/PAGE\x00a");
-  fprintf(stdout,"\x01d");
-  fprintf(stdout,"4eps{I");
-  fprintf(stdout,"%c%c%c%c",0x00,0x00,0x00,0x00);
-  fprintf(stdout,"\x01d");
-  fprintf(stdout,"9eps{I");
-  fprintf(stdout,"%c%c%c%c%c%c%c%c%c",
+  pbm_wpix=4768;
+  pbm_hpix=6796;
+
+  wbytes=wpix/8;wbytes=(wbytes+4-1)/4*4;
+  hstripes=(hpix+stripe_size-1)/stripe_size;
+
+  pbm_wbytes=(pbm_wpix+8-1)/8;
+
+  bitmap=(unsigned char *)malloc(wbytes*stripe_size*hstripes);
+  if(bitmap==NULL) return 10;
+  outbuffer=(unsigned char *)malloc(wbytes*stripe_size+wbytes*stripe_size/2); /* 50% safety margin */
+  if(outbuffer==NULL) return 10;
+
+  /* start job */
+  ts=temp_string;
+  ts+=sprintf(ts,"\x01b\x001");
+  ts+=sprintf(ts,"@EJL \x00a");
+  ts+=sprintf(ts,"@EJL STARTJOB MACHINE=\"experiment\" USER=\"epl5x00l_driver\"\x00a");
+  ts+=sprintf(ts,"@EJL EN LA=ESC/PAGE\x00a");
+  ts+=sprintf(ts,"\x01d");
+  ts+=sprintf(ts,"4eps{I");
+  ts+=sprintf(ts,"%c%c%c%c",0x00,0x00,0x00,0x00);
+  ts+=sprintf(ts,"\x01d");
+  ts+=sprintf(ts,"9eps{I");
+  if(dpi_x==300&&dpi_y==300){
+    dpi_code1=0;dpi_code2=0;
+  }
+  else if(dpi_x==600&&dpi_y==300){
+    dpi_code1=0;dpi_code2=1;
+  }
+  else if(dpi_x==600&&dpi_y==600){
+    dpi_code1=1;dpi_code2=0;
+  }
+  else if(dpi_x==1200&&dpi_y==600){
+    dpi_code1=1;dpi_code2=1;
+  }
+  else{
+    return 10;
+  }
+  ts+=sprintf(ts,"%c%c%c%c%c%c%c%c%c",
     0x02,
     0x00,
-    0x01, 0x00, /* resolution 00 300x300  01 600x300  10 600x600  11 1200x600 */
+    dpi_code1,dpi_code2,
     0x01, /* RITech */
     0x00, /* Toner save */
     0x00, /* Paper type? */
     0x03, /* density */
     0x00  
     );
-  fprintf(stdout,"\x01d");
-  fprintf(stdout,"26eps{I");
-  fprintf(stdout,"%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",
+  ts+=sprintf(ts,"\x01d");
+  e=fwrite(temp_string,1,ts-temp_string,stdout);
+  if(e!=ts-temp_string) return 10;
+
+  /* start page */
+  ts=temp_string;
+  ts+=sprintf(ts,"26eps{I");
+  ts+=sprintf(ts,"%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",
     0x04,0x00,
     0x0e, /* paper code */
-    0x40/*0x20*/, /* stripe height */
-    0x02,0x54, /* bytes per row (multiple of 4) */
+    stripe_size/*0x40*//*0x20*/, /* stripe height */
+    ((wbytes)>>8)&0xff/*0x02*/,(wbytes)&0xff/*0x54*/, /* bytes per row (multiple of 4) */
     0x00,
     0x00,
     0x00,
     0x00,
-    0x1a,0x8c, /* vertical pixels */
-    0x12,/*0x84*/0xa0, /* horizontal pixels */
-    0x00,
-    0x6b/*0xd5*/, /* stripe per page */
+    (hpix>>8)&0xff/*0x1a*/,hpix&0xff/*0x8c*/, /* vertical pixels */
+    (wpix>>8)&0xff/*0x12*/,wpix&0xff/*0x84*//*0xa0*/, /* horizontal pixels */
+    (hstripes>>8)&0xff/*0x00*/,hstripes&0xff/*0x6b*//*0xd5*/, /* stripe per page */
     0x00, /* tray */
     0x00,
     0x01, /* copies */
@@ -508,39 +636,67 @@ int main(void){
     0x00,
     0x00,
     0x01);
+  e=fwrite(temp_string,1,ts-temp_string,stdout);
+  if(e!=ts-temp_string) return 10;
 
-  for(s=0;s<hstripes;s++){
-    fread(inbuffer,1,wbytes*STRIPE_SIZE,stdin);
-
-    slen=process_stripe(inbuffer,outbuffer,s,wbytes,STRIPE_SIZE);
-
-    fprintf(stdout,"\x1d%deps{I%c%c%c%c%c%c%c",slen+7,6,0,1,(slen>>24)&0xff,(slen>>16)&0xff,(slen>>8)&0xff,slen&0xff);
-    fwrite(outbuffer,1,slen,stdout);
+  memset(bitmap,0,wbytes*stripe_size*hstripes);
+  e=fread(bitmap,1,0xd,stdin);			/* skip 13 bytes (horror!)*/
+  if(e!=0xd) return 10;
+  for(y=0;y<pbm_hpix;y++){
+    debug(DFILEIO,"%i\n",y);
+    e=fread(bitmap+wbytes*y,1,pbm_wbytes,stdin);
+    if(e!=pbm_wbytes) return 10;
   }
 
-  fprintf(stdout,"\x01d");
-  fprintf(stdout,"2eps{I");
-  fprintf(stdout,"%c%c",
+  for(s=0;s<hstripes;s++){
+
+    slen=process_stripe(bitmap+wbytes*stripe_size*s,outbuffer,s,wbytes,stripe_size);
+    if(slen==-1) return 10;
+
+    ts=temp_string;
+    ts+=sprintf(ts,"\x1d%deps{I%c%c%c%c%c%c%c",slen+7,6,0,1,(slen>>24)&0xff,(slen>>16)&0xff,(slen>>8)&0xff,slen&0xff);
+    e=fwrite(temp_string,1,ts-temp_string,stdout);
+    if(e!=ts-temp_string) return 10;
+
+    e=fwrite(outbuffer,1,slen,stdout);
+    if(e!=slen) return 10;
+  }
+
+  /* end page */
+  ts=temp_string;
+  ts+=sprintf(ts,"\x01d");
+  ts+=sprintf(ts,"2eps{I");
+  ts+=sprintf(ts,"%c%c",
     0x05,
     0x00
     );
+  e=fwrite(temp_string,1,ts-temp_string,stdout);
+  if(e!=ts-temp_string) return 10;
 
-  fprintf(stdout,"\x01d");
-  fprintf(stdout,"2eps{I");
-  fprintf(stdout,"%c%c",
+  /* end job */
+  ts=temp_string;
+  ts+=sprintf(ts,"\x01d");
+  ts+=sprintf(ts,"2eps{I");
+  ts+=sprintf(ts,"%c%c",
     0x03,
     0x00
     );
-  fprintf(stdout,"\x01d");
-  fprintf(stdout,"2eps{I");
-  fprintf(stdout,"%c%c",
-    0x01, /* 1=last page 2=next page*/
+  ts+=sprintf(ts,"\x01d");
+  ts+=sprintf(ts,"2eps{I");
+  ts+=sprintf(ts,"%c%c",
+    0x01, /* 1=last page 2=next page??? maybe not */
     0x00
     );
-  fprintf(stdout,"\x01b\x001");
-  fprintf(stdout,"@EJL \x00a");
-  fprintf(stdout,"@EJL EJ \x00a");
-  fprintf(stdout,"\x01b\x001");
-  fprintf(stdout,"@EJL \x00a");
+  ts+=sprintf(ts,"\x01b\x001");
+  ts+=sprintf(ts,"@EJL \x00a");
+  ts+=sprintf(ts,"@EJL EJ \x00a");
+  ts+=sprintf(ts,"\x01b\x001");
+  ts+=sprintf(ts,"@EJL \x00a");
+  e=fwrite(temp_string,1,ts-temp_string,stdout);
+  if(e!=ts-temp_string) return 10;
+
+  free(outbuffer);
+  free(bitmap);
+
   return 0;
 }

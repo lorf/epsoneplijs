@@ -5,6 +5,8 @@ OPEN  . Installation not user friendly.
 
 ----- OBSOLETE ENTRIES -----
 
+FIXED . The 4 bit codes are now implemented.
+
 FIXED . Printing process not user friendly.
 
 FIXED . Can only do A4, 600dpi at the moment

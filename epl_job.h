@@ -22,7 +22,10 @@
  * SOFTWARE.
 **/
 
-#define EPL_VERSION "0.2"
+#define EPL_VERSION "0.2cvs"
+
+#undef EPL_DEBUG
+
 
 #include <stdio.h>
 #include "epl_compress.h" 
@@ -72,8 +75,6 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream);
 int epl_page_footer(EPL_job_info *epl_job_info);
 
 int epl_job_footer(EPL_job_info *epl_job_info);
-
-#undef EPL_DEBUG
 
 #ifdef EPL_DEBUG
 #define VERBOSE

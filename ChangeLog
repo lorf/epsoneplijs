@@ -1,3 +1,7 @@
+2003-01-28: 4-bit codes - Roberto Ragusa
+         . Meaning of the 4 bit codes finally discovered.
+         . The 4 bit codes are now used.
+
 2003-01-28: 0.2 - misc fixes - Roberto Ragusa
          . Foomatic .xml files now compatible with cups.
          . 5800L footers fixed.

@@ -51,5 +51,5 @@ void stream_init(typ_stream *stream);
 
 void stream_pad16bit(typ_stream *stream);
 
-long epl_compress_row(typ_stream *stream, char *ptr_current, 
+int epl_compress_row(typ_stream *stream, char *ptr_current, 
 			 char *ptr_row_prev, int wbytes);

@@ -14,6 +14,8 @@
  * SOFTWARE.
 **/
 
+#define USE_4BIT_CODE
+
 #include "epl_compress.h"
 
 struct proto {
@@ -62,6 +64,25 @@ static struct proto op_table[] =
     {0x0f, 4}, /* Copy 3rd byte left - 1111 */
   };
 
+
+#ifdef USE_4BIT_CODE
+static char cache[16];
+static char byte2cache[256];
+static int lri;
+
+void stripe_init(void){
+  int i;
+  for( i = 0 ; i < 16 ; i++){
+    cache[i] = i;
+    byte2cache[i] = i;
+  }
+  for(i = 16 ; i < 256 ; i++){
+    byte2cache[i] = -1;
+  }
+  lri = 0;
+}
+#endif
+
 void stream_append(typ_stream *stream, int d, int l); 
 void stream_pad16bit(typ_stream *stream); 
 int run_length_find(typ_stream *stream, char *new,char *old, int remain) ;
@@ -72,6 +93,9 @@ void stream_init(typ_stream *stream)
   stream->count = 0 ;
   stream->temp = 0;
   stream->bits = 0;
+#ifdef USE_4BIT_CODE
+  stripe_init();  /* doing it here is a ugly hack (but correct) */
+#endif
 }
 
 void stream_append(typ_stream *stream, int d, int l) 
@@ -151,7 +175,7 @@ int run_length_find(typ_stream *stream,
 
 
 
-long epl_compress_row(typ_stream *stream, 
+int epl_compress_row(typ_stream *stream, 
 			 char *ptr_row_current, 
 			 char *ptr_row_prev, int wbytes)
 {
@@ -198,12 +222,18 @@ long epl_compress_row(typ_stream *stream,
 			       ptr_row_current + x - 3,
 			       wbytes - x);
         }
-      else if (0)  /* currently not enabled */
+#ifdef USE_4BIT_CODE
+      else if (byte2cache[(unsigned char)*(ptr_row_current + x)] >= 0)
         { 
-          stream_append(stream,op_table[UNKNOWN].code, 
+          stream_append(stream,
+	                op_table[UNKNOWN].code, 
 		        op_table[UNKNOWN].width);
+          stream_append(stream,
+	                byte2cache[(unsigned char)*(ptr_row_current + x)], 
+		        4);
           x++;
         }
+#endif
       else 
         { 
           stream_append(stream,op_table[LITERAL].code, 
@@ -213,6 +243,12 @@ long epl_compress_row(typ_stream *stream,
              hence literal requires bit-reversing.
           */ 
           stream_append(stream, (*(ptr_row_current + x) ^ 0xff) & 0xff, 8);
+#ifdef USE_4BIT_CODE
+          byte2cache[(unsigned char)cache[lri]] = -1;
+	  cache[lri] = *(ptr_row_current + x);
+	  byte2cache[(unsigned char)*(ptr_row_current + x)] = lri;
+          lri = (lri + 1) & 0xf;
+#endif
           x++;
         }
     }
