@@ -147,7 +147,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
       if (epl_job_info->model == MODEL_6100L)  
 	{
 	  /* probably the same as 5900L, just being conservative */
-	  ts += sprintf(ts, " MACHINE=\"test_box \" USER=\"epl\"");
+	  ts += sprintf(ts, " MACHINE=\"test_box \" USER=\"EG\"");
 	}
 
       ts += sprintf(ts, "\x00a");
@@ -167,7 +167,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
       else if (epl_job_info->model == MODEL_6100L)
 	{
 	  ts += epl_sprintf_wrap(ts,68);
-	  ts += sprintf(ts, "@%c%c%ctest_box ", 0x00, 0x00, 0x00);
+	  ts += sprintf(ts, "@%c%c%ctest_box  ", 0x00, 0x00, 0x00);
 	  ts += sprintf(ts, "                  ");      /* Don't touch these! */
 	  ts += sprintf(ts, "                  ");      /* The padding is significant! */
 	  ts += sprintf(ts, "                  ");

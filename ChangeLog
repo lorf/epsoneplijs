@@ -1,3 +1,6 @@
+2003-04-03: 0.3.0 - Hin-Tak Leung
+   . Minor change to overflow work around, and bumped version up to 0.3.0.
+	
 2003-04-02: cvs - Hin-Tak Leung
    . Header/footer re-organization to add preliminary 6100L support. 
        Regression-tested 57/58/59 spool file generation.

@@ -12,9 +12,12 @@ Requirement
   GNU ghostscript 6.53+ or AFPL Ghostscript 7.04+, and the "ijs" device 
   listed among the device list to use this plugin.
 
-  AFPL ghostscript 8.0 has some yet unidentified issues, and known not 
-  to work. Avoid it for the time being (and all devel versions of gs 
-  between v. 7.22 - 8.0).
+  The ijs part in AFPL ghostscript 8.00 (and all devel versions of gs 
+  between v. 7.22 - 8.00) has a bug which has been reported.
+  The fix is in our mailing list archive and requires recompiling ghostscript
+  itself. Please wait for the fix to be officially incorporated into ghostscript,
+  and avoid using unmodified stock gs v. 7.22 -8.00, and any newer versions, 
+  until further notice. 
 
   The kernel device code (./configure --with-kerneldevice) switches on code 
   portions which depends on features of the linux kernel only found in 2.4.19+ 

@@ -48,17 +48,17 @@ int epl_job_footer(EPL_job_info *epl_job_info)
       ts += sprintf(ts, "%c%c", 0x03, 0x00);
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "%c%c", 0x01, 0x00);
-
+      
       ts += sprintf(ts, "\x1b\x01");
       ts += sprintf(ts, "@EJL \x0a");
- 
+      
       if(epl_job_info->model == MODEL_5900L)
         {
 	  ts += sprintf(ts, "@EJL EJ \x0a");
           ts += sprintf(ts, "\x1b\x01");
           ts += sprintf(ts, "@EJL \x0a");
 	}
-	}
+    }
   else if(epl_job_info->model == MODEL_6100L)
     {
       ts += epl_sprintf_wrap(ts, 2);

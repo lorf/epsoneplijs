@@ -791,24 +791,6 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 	  (double)epl_job_info->pixel_h / epl_job_info->dpi_h,
 	  (double)epl_job_info->pixel_v / epl_job_info->dpi_v);
 
-  epl_job_info->bytes_per_row = (ph.n_chan * ph.bps * ph.width + 8 - 1) / 8 ;
-#ifdef STRIPE_OVERFLOW_WORKAROUND
-  /*
-   * We increase bytes_per_row.
-   * This trick apparently works around a suspected bug in the printer
-   * firmware.
-   */
-  epl_job_info->bytes_per_row_2 = epl_job_info->bytes_per_row * 5 / 4 + 1;
-#else
-  epl_job_info->bytes_per_row_2 = epl_job_info->bytes_per_row;
-#endif
-  epl_job_info->bytes_per_row_2 = (epl_job_info->bytes_per_row_2 + 4 - 1) / 4 * 4; 
-      fprintf(stderr, "  Byte_per_row %i, byte_per_row_2 %i\n",
-              epl_job_info->bytes_per_row,
-              epl_job_info->bytes_per_row_2);
-  /* last one may have to be padded */
-  epl_job_info->total_stripes = (ph.height + 64 - 1) / 64;
-
   /* Dpi of the bitmap */
   if (ph.xres != (double)epl_job_info->dpi_h
       || ph.yres != (double)epl_job_info->dpi_v)
@@ -930,7 +912,11 @@ main (int argc, char **argv)
       char *ptr_row_prev;
       char *ptr_row_current;
       
+      int bytes_per_row;
+      int bytes_per_row_padded;
+      int total_stripes;
       int i_stripe;
+
       typ_stream *stream;
       
       fprintf (stderr, "getting page header\n");
@@ -997,25 +983,35 @@ main (int argc, char **argv)
           exit (1);
         }
       
-      total_bytes = epl_job_info->bytes_per_row * ph.height;
+      bytes_per_row = (ph.n_chan * ph.bps * ph.width + 8 - 1) / 8 ;
+      total_bytes = bytes_per_row * ph.height;
+
+      bytes_per_row_padded = bytes_per_row;
+      
+#ifdef STRIPE_OVERFLOW_WORKAROUND
+      bytes_per_row_padded += 2 ;
+#endif
+
+      /* last one may have to be padded */
+      total_stripes = (ph.height + 64 - 1) / 64;
       
       stream = (typ_stream *)malloc(sizeof(typ_stream)); 
       /* 25% + 2, + 1 for rounding error */
-      stream->start = (char *)malloc(epl_job_info->bytes_per_row_2 * 64 * 5 / 4 + 2 + 1);
+      stream->start = (char *)malloc(bytes_per_row_padded * 64 * 1.25 + 2 + 1);
 
-      ptr_row_prev = (char *)malloc(epl_job_info->bytes_per_row_2);
-      ptr_row_current = (char *)malloc(epl_job_info->bytes_per_row_2);
-      
+      ptr_row_prev = (char *)malloc(bytes_per_row_padded);
+      ptr_row_current = (char *)malloc(bytes_per_row_padded);
+
       bytes_left = total_bytes;
       
-      for (i_stripe = 0 ; i_stripe < epl_job_info->total_stripes ; i_stripe++)
+      for (i_stripe = 0 ; i_stripe < total_stripes ; i_stripe++)
 	{
 	  int i, i_row;
 
 	  stream_init(stream);
 	  
 	  /* clear both rows at stripe start */
-	  for (i = 0 ; i < epl_job_info->bytes_per_row_2 ; i++)
+	  for (i = 0 ; i < bytes_per_row_padded ; i++)
 	    {
 	      *(ptr_row_current + i) = (char) 0xff;
 	      *(ptr_row_prev + i) = (char) 0xff;
@@ -1034,14 +1030,10 @@ main (int argc, char **argv)
 #endif	      
 
 #ifdef VERBOSE
-	      fprintf (stderr, "%d bytes left, reading %d\n",
-	               bytes_left,
-		       epl_job_info->bytes_per_row);
+	      fprintf (stderr, "%d bytes left, reading %d\n", bytes_left, bytes_per_row);
 #endif	      
-	      status = ijs_server_get_data (ctx,
-	                                    ptr_row_current,
-	                                    epl_job_info->bytes_per_row);
-	      bytes_left -= epl_job_info->bytes_per_row;
+	      status = ijs_server_get_data (ctx, ptr_row_current, bytes_per_row);
+	      bytes_left -= bytes_per_row;
 
 	      if (status)
 		{
@@ -1054,15 +1046,12 @@ main (int argc, char **argv)
 #ifdef EPL_DEBUG
 	          fprintf (stderr, "stripe %d, row %d (padding)\n", i_stripe, i_row);
 #endif	      
-		  memcpy (ptr_row_current,
-		          ptr_row_prev,
-			  epl_job_info->bytes_per_row_2); /* repeat last line */
+		  memcpy (ptr_row_current, ptr_row_prev, bytes_per_row_padded); /* repeat last line */
 		}
 	      
-	      epl_compress_row(stream,
-			       ptr_row_current,
-			       ptr_row_prev,
-			       epl_job_info->bytes_per_row_2);	      
+	      epl_compress_row(stream, 
+			       ptr_row_current, 
+			       ptr_row_prev, bytes_per_row_padded);	      
 	      ptr_temp = ptr_row_current;
 	      ptr_row_current = ptr_row_prev;
 	      ptr_row_prev = ptr_temp;

@@ -22,21 +22,12 @@
  * SOFTWARE.
 **/
 
-#define EPL_VERSION "0.2.3cvs"
+#define EPL_VERSION "0.3.0cvs"
 
 #include <stdio.h>
 #include <sys/time.h>
 #include "epl_config.h"
 #include "epl_compress.h"
-
-#ifdef HAVE_LIBUSB
-#define _SVID_SOURCE 1
-#include "libusb/usb.h"
-#endif 
-
-#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_DEVICE) 
-#define USE_FLOW_CONTROL
-#endif
 
 /* job_info is created as a simplier version of
    ParamList which can be used by the header/etc routes
@@ -56,9 +47,6 @@ struct _EPL_job_info {
   int density;
   int pixel_h;
   int pixel_v;
-  int bytes_per_row;
-  int bytes_per_row_2;
-  int total_stripes;
   int connectivity;  /* via USB or Pport - only 5700L needs this */
 #ifdef HAVE_KERNEL_DEVICE
   int kernel_fd;
@@ -104,9 +92,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length);
 
 int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length); 
 
-#undef EPL_DEBUG
-
 #ifdef EPL_DEBUG
+
 static char *printername[]={
   "<unknown>",
   "EPL-5700L",
@@ -121,4 +108,3 @@ static char *printername[]={
 
 #define epl_sprintf_wrap(str,length) \
             sprintf((str), "%c%deps{I",0x1d, (length))
-

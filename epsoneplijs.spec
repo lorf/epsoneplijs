@@ -1,6 +1,6 @@
 Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L printers
 Name: epsoneplijs
-Version: 0.2.3
+Version: 0.3.0
 %define LIBUSB_VERSION 0.1.7
 Release: 1
 Copyright: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
@@ -11,14 +11,16 @@ URL: http://sourceforge.net/projects/epsonepl/
 Vendor: http://sourceforge.net/projects/epsonepl/
 Packager: Hin-Tak Leung, Roberto Ragusa
 Requires: ghostscript >= 6.53
+#Requires: ghostscript-fonts
 Conflicts: ghostscript = 8.00
 BuildRoot: /var/tmp/epsonepl-root
 
 %description
-Support for the Epson EPL-5700L/5800L/5900L printer family under linux and 
+Support for the Epson EPL-5700L/5800L/5900L/6100L printer family under linux and 
 other unix-like systems. This effort is not edorsed by nor affliated with 
 Epson. It is known to work for at least one user for each of 5700L, 5800L 
-and 5900L. YMMV.
+and 5900L. YMMV. 6100L tester needed.
+
 %prep
 
 %setup -a 1
@@ -26,6 +28,7 @@ and 5900L. YMMV.
 %build
 
 ln -s libusb-%{LIBUSB_VERSION} libusb 
+perl -pi -e "s/STRICT_WIN32_COMPATIBILITY/__unix__/;" epl_config.h
 ./configure --with-kerneldevice --with-libusb
 make
 
@@ -45,7 +48,7 @@ echo "Attempting to remove older installs in /usr/local/bin."
 echo "Done."
 echo ""
 echo -n "Please check /usr/doc/epsoneplijs-" 
-echo -n 0.2.3
+echo -n 0.3.0
 echo " for tips on CUPS, foomatic, etc."
 echo "Happy printing! Bye for now."
 echo ""
@@ -53,16 +56,16 @@ exit 0
 
 %files
 %defattr(-, root, root)
-%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test.ps apsfilter cups epl_docs foomatic 
+%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test* apsfilter cups epl_docs foomatic 
 /usr/bin/*
 
 %changelog
-* Wed Feb  5 2003 Roberto Ragusa <rora@users.sourceforge.net> v0.2.3
+* Wed Feb  5 2003 Roberto Ragusa <rora@users.sourceforge.net> 
 - Eliminated dependency on ghostscript-fonts (some distributions have
   a different spelling of the name of the package and we should not worry
   about fonts directly, just ask to have ghostscript).
 
-* Wed Feb  5 2003 Hin-Tak Leung <htl10@users.sourceforge.net> v0.2.3
+* Wed Feb  5 2003 Hin-Tak Leung <htl10@users.sourceforge.net> 
 - Merged USB-related changes
 
 * Wed Feb  5 2003 Hin-Tak Leung <htl10@users.sourceforge.net> v0.2.2
