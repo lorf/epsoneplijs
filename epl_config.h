@@ -38,7 +38,7 @@
  * This options activates debug output to stderr.
  *
 **/
-#define EPL_DEBUG
+#undef EPL_DEBUG
 
 
 /**
@@ -49,7 +49,6 @@
  * larger than 80% of the paper size can crash the printer). There are
  * no particular disadvantages in having this enabled. Epson drivers for
  * Windows/Mac have no such option (yes, they may crash the printer).
- * (NOTE: this is currently disabled)
 **/
 #define STRIPE_OVERFLOW_WORKAROUND
 

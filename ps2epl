@@ -5,7 +5,7 @@ IJSPARMS=""
 
 # Start of printer selection part #########################################
 
-MODEL=EPL5700L
+MODEL=EPL5900L
   # possible values: EPL5700L, EPL5800L, EPL5900L
   # default: none, you have to specify a printer!
 
@@ -45,12 +45,12 @@ TONERSAVE=on
   # default: off
   IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
 
-USB=off
-  # either on(=use libusb), off, or device name(e.g. "/dev/usb/lp0"). 
+FLOWCONTROL=off
+  # either off, libusb, or kernel lp device name(e.g. "/dev/usb/lp0"). 
   # default: off
-  # the "on" and device name option is only available if compiled --with-libusb, 
+  # the "libusb" and device name option is only available if compiled --with-libusb, 
   #                                        and --with-kerneldevice respectively.
-  IJSPARMS="$IJSPARMS,USB=$USB"
+  IJSPARMS="$IJSPARMS,EplFlowControl=$FLOWCONTROL"
 
 ##################################################### End of options part #
 

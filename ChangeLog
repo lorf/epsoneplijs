@@ -1,3 +1,9 @@
+2003-03-21: cvs - Roberto Ragusa
+   . !!Changed parameter name!!:
+        The "USB" parameter is now called "FlowControl".
+   . FlowControl option added to foomatic (5700L only).
+   . Fixed Density default (now 3 for 5700L/5800L too).
+
 2003-03-18: cvs - Hin-Tak Leung
    . Updated flow-control timing code. Can do 20 pages via libusb now.
    . removed some over-verbose debug outputs, added page number output.

@@ -817,8 +817,8 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
        return 1;
     }
 
-  s = find_param(pl, "USB");
-
+  /* Flow Control */
+  s = find_param(pl, "EplFlowControl");
   if (s == NULL)
     {
       epl_job_info->connectivity = VIA_PPORT;
@@ -828,14 +828,15 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       epl_job_info->connectivity = VIA_PPORT;
     }
 #ifdef HAVE_LIBUSB
-  else if (strcmp(s, "on") == 0)
+  else if (strcmp(s, "libusb") == 0)
     {
       fprintf(stderr, "Using libusb\n");
       epl_job_info->connectivity = VIA_LIBUSB;
     }
 #endif
 #ifdef HAVE_KERNEL_DEVICE
-  else if (strncmp(s, "/dev/usb/lp[0-9] or /dev/usblp[0-9]",8) == 0)   
+  /* We catch both /dev/usb/lp[0-9] and /dev/usblp[0-9] */
+  else if (strncmp(s, "/dev/usb",8) == 0)   
     {
       fprintf(stderr, "Using kernel usb device\n");
       if (epl_job_info->connectivity != VIA_KERNEL_USB) 
@@ -853,7 +854,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 #endif
   else 
     {
-      fprintf(stderr, "Unknown USB option %s, aborting!\n", s);
+      fprintf(stderr, "Unknown FlowControl option %s, aborting!\n", s);
       return 1;
     }
 
