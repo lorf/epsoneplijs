@@ -1,0 +1,69 @@
+X-UIDL: 2ccd38cda0f9aef5f935506333a8a9da
+X-Mozilla-Status: 0003
+X-Mozilla-Status2: 00000000
+X-Apparently-To: hintak_leung@yahoo.co.uk via 66.218.78.108; 30 Jan 2003 03:29:07 -0800 (PST)
+X-Track: 1: 100
+Return-Path: <epsonepl-devel-admin@lists.sourceforge.net>
+Received: from 66.35.250.206  (EHLO sc8-sf-list2.sourceforge.net) (66.35.250.206)
+  by mta425.mail.yahoo.com with SMTP; 30 Jan 2003 03:29:07 -0800 (PST)
+Received: from sc8-sf-list1-b.sourceforge.net ([10.3.1.13] helo=sc8-sf-list1.sourceforge.net)
+	by sc8-sf-list2.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18eCsZ-0000pg-00; Thu, 30 Jan 2003 03:29:11 -0800
+Received: from mailout05.sul.t-online.com ([194.25.134.82])
+	by sc8-sf-list1.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18eCsA-0000YU-00
+	for <epsonepl-devel@lists.sourceforge.net>; Thu, 30 Jan 2003 03:28:46 -0800
+Received: from fwd02.sul.t-online.de 
+	by mailout05.sul.t-online.com with smtp 
+	id 18eCs7-0004K7-01; Thu, 30 Jan 2003 12:28:43 +0100
+Received: from gmx.net (520094649249-0001@[217.236.23.185]) by fmrl02.sul.t-online.com
+	with esmtp id 18eCrt-0ct2oqC; Thu, 30 Jan 2003 12:28:29 +0100
+Message-ID: <3E390C5C.6060300@gmx.net>
+From: Henning Schnoor <henning.schnoor@gmx.net>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3a) Gecko/20021212
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To:  epsonepl-devel@lists.sourceforge.net
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Sender: 520094649249-0001@t-dialin.net
+Subject: [Epsonepl-devel] epsonepl 0.2 with epl-5700l and cups working
+Sender: epsonepl-devel-admin@lists.sourceforge.net
+Errors-To: epsonepl-devel-admin@lists.sourceforge.net
+X-BeenThere: epsonepl-devel@lists.sourceforge.net
+X-Mailman-Version: 2.0.9-sf.net
+Precedence: bulk
+Reply-To: epsonepl-devel@lists.sourceforge.net
+List-Help: <mailto:epsonepl-devel-request@lists.sourceforge.net?subject=help>
+List-Post: <mailto:epsonepl-devel@lists.sourceforge.net>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=subscribe>
+List-Id: <epsonepl-devel.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum=epsonepl-devel>
+Date: Thu, 30 Jan 2003 12:28:28 +0100
+
+Hi,
+
+subject says it all: I've got the driver working with full CUPS 
+integration, including network printing, using a Epson EPL-5700L. All I 
+had to do was adjusting the paths in copy_to_foomatic, and the printer 
+showed up in my yast printer setup - I'm using SuSE Linux 8.0 here.
+
+So, a big THANK YOU for the developers!
+
+All the best,
+    Henning
+
+
+
+-------------------------------------------------------
+This SF.NET email is sponsored by:
+SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+http://www.vasoftware.com
+_______________________________________________
+Epsonepl-devel mailing list
+Epsonepl-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+

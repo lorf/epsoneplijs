@@ -1,0 +1,161 @@
+X-UIDL: a6564f1b10dbe33b2617d13c892c4604
+X-Mozilla-Status: 0013
+X-Mozilla-Status2: 10000000
+X-Apparently-To: hintak_leung@yahoo.co.uk via 66.218.78.103; 01 Feb 2003 02:31:02 -0800 (PST)
+X-Track: 1: 100
+Return-Path: <epsonepl-devel-admin@lists.sourceforge.net>
+Received: from 66.35.250.206  (EHLO sc8-sf-list2.sourceforge.net) (66.35.250.206)
+  by mta570.mail.yahoo.com with SMTP; 01 Feb 2003 02:31:02 -0800 (PST)
+Received: from sc8-sf-list1-b.sourceforge.net ([10.3.1.13] helo=sc8-sf-list1.sourceforge.net)
+	by sc8-sf-list2.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18euvT-0003b1-00; Sat, 01 Feb 2003 02:31:07 -0800
+Received: from mailout04.sul.t-online.com ([194.25.134.18])
+	by sc8-sf-list1.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18euuu-00026r-00
+	for <epsonepl-devel@lists.sourceforge.net>; Sat, 01 Feb 2003 02:30:32 -0800
+Received: from fwd07.sul.t-online.de 
+	by mailout04.sul.t-online.com with smtp 
+	id 18euur-00079e-08; Sat, 01 Feb 2003 11:30:29 +0100
+Received: from gmx.net (520094649249-0001@[217.236.30.24]) by fmrl07.sul.t-online.com
+	with esmtp id 18euuj-1yhf4SC; Sat, 1 Feb 2003 11:30:21 +0100
+Message-ID: <3E3BA1BC.9030602@gmx.net>
+From: Henning Schnoor <henning.schnoor@gmx.net>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3a) Gecko/20021212
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To:  epsonepl-devel@lists.sourceforge.net
+Subject: Re: [Epsonepl-devel] epsonepl 0.2 with epl-5700l and cups working
+References: <3E390C5C.6060300@gmx.net> <3E394B07.8050407@yahoo.co.uk>
+In-Reply-To: <3E394B07.8050407@yahoo.co.uk>
+Content-Type: multipart/mixed;
+ boundary="------------040109040204090900050205"
+X-Sender: 520094649249-0001@t-dialin.net
+Sender: epsonepl-devel-admin@lists.sourceforge.net
+Errors-To: epsonepl-devel-admin@lists.sourceforge.net
+X-BeenThere: epsonepl-devel@lists.sourceforge.net
+X-Mailman-Version: 2.0.9-sf.net
+Precedence: bulk
+Reply-To: epsonepl-devel@lists.sourceforge.net
+List-Help: <mailto:epsonepl-devel-request@lists.sourceforge.net?subject=help>
+List-Post: <mailto:epsonepl-devel@lists.sourceforge.net>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=subscribe>
+List-Id: <epsonepl-devel.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum=epsonepl-devel>
+Date: Sat, 01 Feb 2003 11:30:20 +0100
+
+This is a multi-part message in MIME format.
+--------------040109040204090900050205
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hin-Tak Leung wrote:
+
+> Hey, can we know what kind of adjustment you needed to make?
+> We only had redhat and Mandrake settings there. Details, details please...
+
+I use SuSE 8, and couldn't find foomatic on the distribution discs, so I 
+downloaded and installed from
+
+http://www.linuxprinting.org/foomatic.html
+
+This installed foomatic in /usr/local/share/foomatic, so I had to adjust 
+the paths in copy_to_foomatic to:
+
+rm -f /usr/local/share/foomatic/db/source/opt/epsonepl-Tonersave.xml # OLD.
+
+cp driver/*  /usr/local/share/foomatic/db/source/driver/
+cp opt/*     /usr/local/share/foomatic/db/source/opt/
+cp printer/* /usr/local/share/foomatic/db/source/printer/
+
+The foomatic-datafile calls didn't need to be changed, but for some 
+reason on my system the program foomatic-datafile wasn't in the path, so 
+I changed the calls to include the absolute path to the 
+foomatic-datafile bin. I don't think other users will need to do this, 
+however. For completeness: I used the calls for RedHat from the original 
+copy_to_foomatic, but I don't think this is important, since te only 
+difference seems to be the output file name.
+
+The last thing I needed to adjust was the target directory for the ppd 
+files:
+
+cp -av Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/
+
+(I guess it would be OK and make more sense to add an "Epson" at the end 
+of that path)
+
+Then the printer showed up in Yast2. AFter that, I had some trouble with 
+my parralel port, but I think this is more due to the fact I never used 
+it with Linux before, and had some resource conflicts with my soundcard, 
+so this won't bother other users either.
+
+I've attached the new copy_to_foomatic file. If anyone is interedted in 
+the .ppd files generated, let me know and I'll send them as well.
+
+A warning: I only tried this on my system, so please backup anything 
+before you try my changes!
+
+Hope this helps a few people.
+
+See you,
+    Henning
+
+--------------040109040204090900050205
+Content-Type: text/plain;
+ name="copy_to_foomatic"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="copy_to_foomatic"
+
+#!/bin/bash
+
+# WARNING: check the correctness of the path and backup
+#          files we are going to ovewrwrite!
+
+# After copying the files, try using the printer
+# configurator of your system and see if your
+# printer is now available.
+
+rm -f /usr/local/share/foomatic/db/source/opt/epsonepl-Tonersave.xml # OLD.
+
+cp driver/*  /usr/local/share/foomatic/db/source/driver/
+cp opt/*     /usr/local/share/foomatic/db/source/opt/
+cp printer/* /usr/local/share/foomatic/db/source/printer/
+
+# If the printer is not available and you're using CUPS,
+# activate this part to copy PPDs to the cups database.
+# Then restart cups ("/etc/rc.d/init.d/cups restart"
+# or similar) and retry.
+
+##### PPDs generation, RedHat paths
+
+/usr/local/bin/foomatic-datafile -t cups -d epl5700l -p Epson-EPL-5700L >Epson-EPL-5700L-epl5700l-cups.ppd
+/usr/local/bin/foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >Epson-EPL-5800L-epl5800l-cups.ppd
+/usr/local/bin/foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >Epson-EPL-5900L-epl5900l-cups.ppd
+gzip -9 Epson-EPL-*-cups.ppd
+cp -av Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/
+
+##### PPDs generation, Mandrake paths
+
+#foomatic-datafile -t cups -d epl5700l -p Epson-EPL-5700L >epl5700l.ppd
+#foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >epl5800l.ppd
+#foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >epl5900l.ppd
+#gzip -9 epl*.ppd
+#cp -av epl*.ppd.gz /usr/share/cups/model/epson/
+
+
+--------------040109040204090900050205--
+
+
+
+-------------------------------------------------------
+This SF.NET email is sponsored by:
+SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+http://www.vasoftware.com
+_______________________________________________
+Epsonepl-devel mailing list
+Epsonepl-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+

@@ -1,0 +1,36 @@
+The location of the cups files varies. The ppd file needs to be located inside 
+the CUPS ppd directory for them to work. Basically, copy them in, restart 
+CUPS, and go into CUPS's web interface to configure the printer.
+
+There are some contributed e-mails from selected users of their experience 
+in this directory, and 8 PPD files; the PPD files should be left gziped 
+when copied into the CUPS directory - there is no need to expand them.
+
+CUPS < v1.1.13 and XPP = v.1.0, KDE 2.x, foomatic < 1.9 should use the 
+*-cups.ppd's (the deciding factor is XPP version). Newer CUPS, XPP=v.1.1 
+and KDE 3.0 should use the ones without *-cups*. 
+(See http://www.linuxprinting.org/cups-doc.html for explanations).
+
+The *usb* ones have 5700L USB printing turned on. The normal one
+for 5700L only do parallel port. (These should be merged eventually).
+The 5800L/5900L ones can do both. It is safe to have both (normal and +usb) 
+of the 5700L PPDs simultanesously to the extent I understand it.
+
+==========
+Redhat 8.0:
+    /usr/share/cups/model/
+
+Mandrake 9.0, foomatic 2.02, 5700L (CS):
+    /usr/share/cups/model/epson/   epl5x00l.ppd.gz
+
+Debian 3.0:
+    /usr/share/cups/model/Epson/ (Note the capital "E")
+    (More info at: http://www.weejoker.demon.co.uk/epsonepl.html)
+
+foomatic (downloaded directly from linuxprinting.org):
+    /usr/local/share/foomatic
+
+    cp driver/*  /usr/local/share/foomatic/db/source/driver/
+    cp opt/*     /usr/local/share/foomatic/db/source/opt/
+    cp printer/* /usr/local/share/foomatic/db/source/printer/
+    cp -av Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/

@@ -1,0 +1,129 @@
+X-UIDL: 913643f978002de0b45bad9498252a0f
+X-Mozilla-Status: 0013
+X-Mozilla-Status2: 00000000
+X-Apparently-To: hintak_leung@yahoo.co.uk via 66.218.78.111; 30 Jan 2003 10:54:06 -0800 (PST)
+X-Track: 1: 100
+Return-Path: <epsonepl-devel-admin@lists.sourceforge.net>
+Received: from 66.35.250.206  (EHLO sc8-sf-list2.sourceforge.net) (66.35.250.206)
+  by mta198.mail.scd.yahoo.com with SMTP; 30 Jan 2003 10:54:06 -0800 (PST)
+Received: from sc8-sf-list1-b.sourceforge.net ([10.3.1.13] helo=sc8-sf-list1.sourceforge.net)
+	by sc8-sf-list2.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18eJpA-0005gh-00; Thu, 30 Jan 2003 10:54:08 -0800
+Received: from panoramix.vasoftware.com ([198.186.202.147] ident=mail)
+	by sc8-sf-list1.sourceforge.net with esmtp 
+	(Cipher TLSv1:DES-CBC3-SHA:168) (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18eJnb-0004Lg-00
+	for <epsonepl-devel@lists.sourceforge.net>; Thu, 30 Jan 2003 10:52:31 -0800
+Received: from anchor-post-39.mail.demon.net ([194.217.242.80]:48010)
+	by panoramix.vasoftware.com with esmtp (Exim 4.05-VA-mm1 #1 (Debian))
+	id 18eJkL-0006Hl-00
+	for <epsonepl-devel@lists.sourceforge.net>; Thu, 30 Jan 2003 10:49:09 -0800
+Received: from weejoker.demon.co.uk ([193.237.58.212] helo=twitchy.localnet)
+	by anchor-post-39.mail.demon.net with esmtp (Exim 3.36 #2)
+	id 18eJag-0004bi-0d
+	for epsonepl-devel@lists.sourceforge.net; Thu, 30 Jan 2003 18:39:10 +0000
+Received: from weejoker by twitchy.localnet with local (Exim 3.35 #1 (Debian))
+	id 18eJae-0000Bo-00
+	for <epsonepl-devel@lists.sourceforge.net>; Thu, 30 Jan 2003 18:39:08 +0000
+From: John Murdoch <John.Murdoch@weejoker.demon.co.uk>
+To: epsonepl-devel@lists.sourceforge.net
+Message-ID: <20030130183908.GA667@weejoker.demon.co.uk>
+References: <3E390C5C.6060300@gmx.net> <3E394B07.8050407@yahoo.co.uk>
+Mime-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <3E394B07.8050407@yahoo.co.uk>
+User-Agent: Mutt/1.3.28i
+Subject: Re: [Epsonepl-devel] epsonepl 0.2 with epl-5700l and cups working
+Content-Type: text/plain; charset=us-ascii
+X-Spam-Status: No, hits=-4.3 required=7.0
+	tests=IN_REP_TO,X_NOT_PRESENT,SUPERLONG_LINE
+	version=2.21
+X-Spam-Level: 
+Sender: epsonepl-devel-admin@lists.sourceforge.net
+Errors-To: epsonepl-devel-admin@lists.sourceforge.net
+X-BeenThere: epsonepl-devel@lists.sourceforge.net
+X-Mailman-Version: 2.0.9-sf.net
+Precedence: bulk
+Reply-To: epsonepl-devel@lists.sourceforge.net
+X-Reply-To: John.Murdoch@weejoker.demon.co.uk
+List-Help: <mailto:epsonepl-devel-request@lists.sourceforge.net?subject=help>
+List-Post: <mailto:epsonepl-devel@lists.sourceforge.net>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=subscribe>
+List-Id: <epsonepl-devel.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum=epsonepl-devel>
+Date: Thu, 30 Jan 2003 18:39:08 +0000
+
+Hi,
+
+This seems like an opportunity for me to chip in. :)
+I have my setup working under Debian 3.0 (Woody), having to change the path in copy_to_foomatic (using the Mandrake setup):
+
+from:	/usr/share/cups/model/epson
+to:	/usr/share/cups/model/Epson 
+
+This is to ensure that the paths match those set by the 'cupsomatic-ppd' package. If this package is not installed (if the user does not require other printer ppd's), then the 'Epson' directory must be created by hand too.
+
+Besides this, all is working great in CUPS. Even got Samba working too!
+
+Cheers,
+
+John Murdoch
+
+On Thu, Jan 30, 2003 at 03:55:51PM +0000, Hin-Tak Leung wrote:
+> Hey, can we know what kind of adjustment you needed to make?
+> We only had redhat and Mandrake settings there. Details, details please...
+> 
+> (I would really appreciate a step-by-step guide to include into the next
+> release and/or FAQ....)
+> 
+> Henning Schnoor wrote:
+> 
+> >Hi,
+> >
+> >subject says it all: I've got the driver working with full CUPS 
+> >integration, including network printing, using a Epson EPL-5700L. All 
+> >I had to do was adjusting the paths in copy_to_foomatic, and the 
+> >printer showed up in my yast printer setup - I'm using SuSE Linux 8.0 
+> >here.
+> >
+> >So, a big THANK YOU for the developers!
+> >
+> >All the best,
+> >   Henning
+> >
+> >
+> >
+> >-------------------------------------------------------
+> >This SF.NET email is sponsored by:
+> >SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+> >http://www.vasoftware.com
+> >_______________________________________________
+> >Epsonepl-devel mailing list
+> >Epsonepl-devel@lists.sourceforge.net
+> >https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+> >
+> 
+> 
+> 
+> -------------------------------------------------------
+> This SF.NET email is sponsored by:
+> SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+> http://www.vasoftware.com
+> _______________________________________________
+> Epsonepl-devel mailing list
+> Epsonepl-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+
+
+-------------------------------------------------------
+This SF.NET email is sponsored by:
+SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+http://www.vasoftware.com
+_______________________________________________
+Epsonepl-devel mailing list
+Epsonepl-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+

@@ -1,0 +1,122 @@
+X-UIDL: 5f787ba5f5a372607c15058209a09375
+X-Mozilla-Status: 0011
+X-Mozilla-Status2: 00000000
+X-Apparently-To: hintak_leung@yahoo.co.uk via 66.218.78.106; 24 Jan 2003 09:38:02 -0800 (PST)
+X-Track: 1: 100
+Return-Path: <epsonepl-devel-admin@lists.sourceforge.net>
+Received: from 66.35.250.206  (EHLO sc8-sf-list2.sourceforge.net) (66.35.250.206)
+  by mta565.mail.yahoo.com with SMTP; 24 Jan 2003 09:38:02 -0800 (PST)
+Received: from sc8-sf-list1-b.sourceforge.net ([10.3.1.13] helo=sc8-sf-list1.sourceforge.net)
+	by sc8-sf-list2.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18c7mH-0005Nv-00; Fri, 24 Jan 2003 09:38:05 -0800
+Received: from mx01.nexgo.de ([151.189.8.96])
+	by sc8-sf-list1.sourceforge.net with esmtp 
+	(Cipher TLSv1:DES-CBC3-SHA:168) (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18c7lG-0007q3-00
+	for <epsonepl-devel@lists.sourceforge.net>; Fri, 24 Jan 2003 09:37:02 -0800
+Received: from sartre (dsl-213-023-001-173.arcor-ip.net [213.23.1.173])
+	by mx01.nexgo.de (Postfix) with ESMTP id CE9843C47E
+	for <epsonepl-devel@lists.sourceforge.net>; Fri, 24 Jan 2003 18:36:58 +0100 (CET)
+From: Christian Schaefer <christian-schaefer@arcor.de>
+To: epsonepl-devel@lists.sourceforge.net
+Subject: Re: [Epsonepl-devel] Re: 0.1e foomatic fix (was: Version 0.1e (now with foomatic!))
+User-Agent: KMail/1.5
+References: <20030123011551.4806fe79.r.ragusa@libero.it> <200301240939.54802.christian-schaefer@arcor.de> <3E31776F.20103@yahoo.co.uk>
+In-Reply-To: <3E31776F.20103@yahoo.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain;
+  charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <200301241836.50681.christian-schaefer@arcor.de>
+Sender: epsonepl-devel-admin@lists.sourceforge.net
+Errors-To: epsonepl-devel-admin@lists.sourceforge.net
+X-BeenThere: epsonepl-devel@lists.sourceforge.net
+X-Mailman-Version: 2.0.9-sf.net
+Precedence: bulk
+Reply-To: epsonepl-devel@lists.sourceforge.net
+List-Help: <mailto:epsonepl-devel-request@lists.sourceforge.net?subject=help>
+List-Post: <mailto:epsonepl-devel@lists.sourceforge.net>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=subscribe>
+List-Id: <epsonepl-devel.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/epsonepl-devel>,
+	<mailto:epsonepl-devel-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum=epsonepl-devel>
+Date: Fri, 24 Jan 2003 18:36:50 +0100
+
+For Mandrake the directory for the ppd-files is:
+/usr/share/cups/model/epson/
+I guess it doesn't matter but I changed the name of the files to 
+epl5x00l.ppd.gz to have a more consistent look.
+The foomatic directory itself is the same, but it uses foomatic 2.02.
+
+Yes the default in cups after adding the right model manually was "letter". I 
+don't know how foomatic and cups are working together, so I guess foomatic 
+didn't "give" cups the right parameters during configuration.
+Right now it seems the best way for Mandrake to copy the foomatic and cups 
+files in the right directories and configure the printer via printerdrake. I 
+can check next week on another PC if this is working. If not you probably 
+have to use the cups administration tool to use the correct printerdriver.
+
+Am Freitag, 24. Januar 2003 18:27 schrieb Hin-Tak Leung:
+> Can we have the details please (e.g. what's the correct location for
+> Mandrake versus RH)?
+> We'll stick the info into an FAQ somewhere.
+>
+> As for the default paper size for cups - it is "letter" (a lot of US-based
+> print-related software, including ghostscript itself, and e.g. most M$
+> windows
+> driver for HP printers, defaults to "letter"). We can also make it an
+> FAQ somewhere.
+> a4 is 17pt narrower (about 1/4 inch or 6mm), and 50 pt  longer (17mm).
+> In fact it was clearly written at the top of the test postscript file
+> you send earlier:
+> ===========
+> %!PS-Adobe-3.0
+> %%BoundingBox: 0 0 612 792
+> ===========
+>
+> These paper size numbers are the internal knowledge of gs (in
+> "/usr/share/ghostscript/<version>/lib/gs_statd.ps") :
+>
+> ===========
+>      /a4 {595 842 //.setpagesize exec} bind def
+>      /letter {612 792 //.setpagesize exec} bind def
+> ===========
+>
+> Christian Schaefer wrote:
+> >Hi,
+> >
+> >I solved the problem with cups and the options. It seems as if the
+> >printerconfguration tool of Mandrake didn't configure cups correctly. I
+> >manually configured cups (after the ppds were copied into the right
+> > directory which is a little bit different to redhat) and chose the
+> > correct driver for the printer.
+> >Now I can choose the options for tonersave, etc. with the kde-printing
+> > dialog. The text-output has the correct size now, too. It seems as cups
+> > didn't use A4. Choosing the resolution seems to work, too.
+> >
+> >Cheers,
+> >Christian
+>
+> -------------------------------------------------------
+> This SF.NET email is sponsored by:
+> SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+> http://www.vasoftware.com
+> _______________________________________________
+> Epsonepl-devel mailing list
+> Epsonepl-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+
+
+
+-------------------------------------------------------
+This SF.NET email is sponsored by:
+SourceForge Enterprise Edition + IBM + LinuxWorld = Something 2 See!
+http://www.vasoftware.com
+_______________________________________________
+Epsonepl-devel mailing list
+Epsonepl-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/epsonepl-devel
+
