@@ -91,7 +91,7 @@ libieee1284/.libs/libieee1284.a:
 	$(RM) libieee1284/libieee1284.spec
 
 common_clean:
-	$(RM) *$(OBJ) ijs_client_example$(EXE) ijs_server_example$(EXE) ijs_server_epsonepl$(EXE)
+	$(RM) *$(OBJ) ijs_client_example$(EXE) ijs_server_example$(EXE) ijs_server_epsonepl$(EXE) *.epl
 
 clean: common_clean
 	$(RM) *~ gmon.out core ijs_spec.log ijs_spec.tex ijs_spec.aux libijs.a libijs$(SHARED_OBJ) config.cache config.log config.status ijs-config testlibusb$(EXE) test5700lusb$(EXE) libieee1284/lib1284.spec 

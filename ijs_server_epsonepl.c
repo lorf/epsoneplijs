@@ -775,17 +775,17 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 #endif
 
   /* Number of channels */
-  if (ph.bps != 1)
+  if ((ph.n_chan != 1) && (ph.n_chan != 3))
     {
-      fprintf(stderr, "Number of channels is %i (not 1), aborting!\n",
+      fprintf(stderr, "Number of channels is %i (unsupported), aborting!\n",
               ph.n_chan);
       return 1;
     }
 
   /* Bits per sample */
-  if (ph.bps != 1)
+  if ((ph.bps != 1) && (ph.bps != 8))
     {
-      fprintf(stderr, "Bit per sample is %i (not 1), aborting!\n",
+      fprintf(stderr, "Bit per sample is %i (unsupported), aborting!\n",
               ph.bps);
       return 1;
     }

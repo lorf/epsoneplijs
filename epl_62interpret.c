@@ -166,10 +166,6 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
 	{
 	  epl_job_info->printer_total_mem = free_memory;
 	}
-      
-      /* finally, reset the *_after_last_update counters */
-      epl_job_info->bytes_sent_after_last_update = 0;
-      epl_job_info->stripes_sent_after_last_update = 0;
     }
   switch(reply[0])
     {

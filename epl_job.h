@@ -111,6 +111,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length);
 
 int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length); 
 
+int epl_read_uni(EPL_job_info *epl_job_info, char *in_buf, int reply_size);
+
 void epl_permission_to_write_stripe(EPL_job_info *epl_job_info);
 
 int epl_status(int argc, char **argv);

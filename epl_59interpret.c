@@ -146,10 +146,5 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len)
       fprintf(stderr, " to 0x%8.8x\n",
               epl_job_info->printer_total_mem);
     }
-  
-  /* finally, reset the *_after_last_update counters */
-  epl_job_info->bytes_sent_after_last_update = 0;
-  epl_job_info->stripes_sent_after_last_update = 0;
-  
   return;
 }

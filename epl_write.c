@@ -38,7 +38,7 @@
 #include "epl_time.h"
 
 /* generic hex dump routine, prints to stderr */
-void hex_dump(char *title, char *prefix, char *buffer, int len, int maxrows);
+static void hex_dump(char *title, char *prefix, char *buffer, int len, int maxrows);
 
 /* this interprets the replies from the printer */
 void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsigned char code);
@@ -113,45 +113,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 
       if (reply_size != 0) /* we have to read something */
         {
-          switch(epl_job_info->connectivity) 
-	    {
-		case VIA_NOWHERE:
-			ret = epl_null_read(in_buf, reply_size);
-			break;
-
-#ifdef HAVE_LIBUSB
-	    case VIA_LIBUSB: 
-	      ret = usb_bulk_read(epl_job_info->usb_dev_hd,
-			          epl_job_info->usb_in_ep,
-			          in_buf,
-			          reply_size,
-			          EPL_USB_READ_TIMEOUT);
-	      break;
-#endif
-#ifdef HAVE_KERNEL_USB_DEVICE
-	    case VIA_KERNEL_USB: 
-	      ret = read(epl_job_info->kernel_fd,
-		         in_buf,
-		         reply_size);
-	      break;
-#endif
-#ifdef HAVE_KERNEL_1284
-	    case VIA_KERNEL_1284: 
-	      ret = read(epl_job_info->kernel_fd,
-		         in_buf,
-		         reply_size);
-	      break;
-#endif
-#ifdef HAVE_LIBIEEE1284
-	    case VIA_LIBIEEE1284:
-	      ret = epl_libieee1284_read(epl_job_info->port, in_buf, reply_size);
-	      break;
-#endif
-	    default:
-              /* We're changing idea, there is nothing to read */
-	      reply_size = 0;
-	      ret = 0;
-	    }
+	  ret = epl_read_uni(epl_job_info, in_buf, reply_size);
 	}
 
       if ((ret >= 0) && (ret == reply_size))
@@ -242,6 +204,7 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
 #endif
 	default:
 	  ret = 0;
+	  break;
 	}
     }
   else  
@@ -250,6 +213,55 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
     }
   return ret;
 }
+
+int epl_read_uni(EPL_job_info *epl_job_info, char *in_buf, int reply_size)
+{
+  int ret = 0;
+  /* reset last free mem, in case something go wrong with the read and it doesn't get updated */
+  epl_job_info->free_mem_last_update = TOTAL_MEM_DEFAULT_VALUE;
+  switch(epl_job_info->connectivity) 
+    {
+    case VIA_NOWHERE:
+      ret = epl_null_read(in_buf, reply_size);
+      break;
+      
+#ifdef HAVE_LIBUSB
+    case VIA_LIBUSB: 
+      ret = usb_bulk_read(epl_job_info->usb_dev_hd,
+			  epl_job_info->usb_in_ep,
+			  in_buf,
+			  reply_size,
+			  EPL_USB_READ_TIMEOUT);
+      break;
+#endif
+#ifdef HAVE_KERNEL_USB_DEVICE
+    case VIA_KERNEL_USB: 
+      ret = read(epl_job_info->kernel_fd,
+		 in_buf,
+		 reply_size);
+      break;
+#endif
+#ifdef HAVE_KERNEL_1284
+    case VIA_KERNEL_1284: 
+      ret = read(epl_job_info->kernel_fd,
+		 in_buf,
+		 reply_size);
+      break;
+#endif
+#ifdef HAVE_LIBIEEE1284
+    case VIA_LIBIEEE1284:
+      ret = epl_libieee1284_read(epl_job_info->port, in_buf, reply_size);
+      break;
+#endif
+    default:
+      ret = 0;
+      break;
+    }
+  epl_job_info->bytes_sent_after_last_update = 0;
+  epl_job_info->stripes_sent_after_last_update = 0;
+  return ret;
+}
+
 
 /*
    This routine dump hexadecimal data in a easily readable format.
@@ -296,12 +308,6 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
 #ifdef USE_FLOW_CONTROL
     case MODEL_5700L:
       epl_57interpret(p, len);
-      /*
-         we don't worry about these, always force them to 0 as if
-	 epl_57interpret() did it
-      */
-      epl_job_info->bytes_sent_after_last_update = 0;
-      epl_job_info->stripes_sent_after_last_update = 0;
       break;
 
     case MODEL_5800L:
@@ -483,4 +489,3 @@ void epl_permission_to_write_stripe(EPL_job_info *epl_job_info)
   /* Now we check how much free memory the printer has */
     do_free_mem_slowdown(epl_job_info);
 }
-
