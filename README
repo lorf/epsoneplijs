@@ -40,10 +40,13 @@ Installation
   a look at it.
 
   Check the content of the script "README.foomatic" in this source 
-  bundle for notes on foomatic and cups. Read the "FAQ" file, and so browse 
-  the mailing list archive (link at the bottom of 
-  http://sourceforge.net/projects/epsonepl/)  for frequently asked questions
-  that has been asked before.
+  bundle for notes on foomatic and cups. Check the "cups" directory for 
+  contributed cups ppd files. Check the "apsfilter" directory for 
+  apsfilter setup.
+
+  Read the "FAQ" file, and also browse the mailing list archive (link at 
+  the bottom of http://sourceforge.net/projects/epsonepl/)  for frequently 
+  asked questions that has been asked before.
 
 Usage
 =====
