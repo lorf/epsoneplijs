@@ -2,7 +2,7 @@
    . Added kernel mode and user mode bidirectional parallel port support,
         new configure option: --with-kernel1284,--with-libieee1284
    . Renamed files and variables from *usb* to *bid*.
-   . status/toner/etc info retrieval when the plugin in run standalone
+   . Experimental status/toner info retrieval when the plugin is run standalone
 
 2003-04-12: cvs - Roberto Ragusa
    . epl_usb_replies_size array switched to a function.
