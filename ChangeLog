@@ -1,3 +1,6 @@
+2003-09-10: cvs - Hin-Tak Leung
+   . Added prelimary null transport skeleton code to debug bid problems.
+
 2003-09-08: cvs - Roberto Ragusa
    . Added epl_61interpret.c.
    . First attempt to do (free mem) flow control on 6100L.

@@ -69,3 +69,9 @@ void epl_libieee1284_init(EPL_job_info *epl_job_info);
 void epl_libieee1284_end(EPL_job_info *epl_job_info);
 #endif
 
+#ifdef HAVE_NULLTRANS
+int epl_null_write(char *ts, int length);
+int epl_null_read(char *ts, int length);
+void epl_null_init(EPL_job_info *epl_job_info);
+void epl_null_end(EPL_job_info *epl_job_info);
+#endif

@@ -1,5 +1,12 @@
+/*
+  Copyright (c) 2003 Hin-Tak Leung
+*/  
+
+/*
+   skeleton transport code for debugging bid problems
+*/
+
 /**
- * Copyright (c) 2003 Roberto Ragusa
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -20,41 +27,39 @@
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
-**/
+ **/
 
-/* we need more than -ansi to use the nanosleep routine */
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 199309L
+/* strdup need this */
+#ifndef _SVID_SOURCE
+#define _SVID_SOURCE 1 
 #endif
 
 #include <stdio.h>
-#include <time.h>
-#include <sys/time.h>
+#include <string.h>
+#include <stdlib.h>
 
-#include "epl_time.h"
+#include <errno.h>
 
+#include "epl_job.h"
+#include "epl_bid.h"
 
-double get_time_now(void)
+int epl_null_write(char *ts, int length)
 {
-  struct timeval time_now;
-  gettimeofday(&time_now, NULL);
-  return time_now.tv_sec + 1e-6 * time_now.tv_usec;
+  return length;
 }
 
-void sleep_seconds(double secs)
-{
-  struct timespec ts;
-
-  if (secs < 0)
-    {
-      fprintf(stderr, "asked to sleep for %f seconds, IGNORED\n", secs);
-    }
-  else
-    {
-    fprintf(stderr, "sleeping for %f seconds\n", secs);
-    ts.tv_sec = (int)secs;
-    ts.tv_nsec = (int)((secs - (double)ts.tv_sec) * 1000 * 1000 * 1000);
-    nanosleep(&ts, NULL);
-    }
+int epl_null_read(char *inbuf, int length)
+{	
+  return length;
 }
 
+void epl_null_init(EPL_job_info *epl_job_info)
+{
+  return;
+}
+
+
+void epl_null_end(EPL_job_info *epl_job_info)
+{
+  return;
+}

@@ -1,13 +1,13 @@
 # Unix
 
 CC=@CC@
-CFLAGS_EXTRA_DEFS=@HAVE_KERNEL_USB_DEVICE@ @HAVE_LIBUSB@ @HAVE_KERNEL_1284@ @HAVE_LIBIEEE1284@
+CFLAGS_EXTRA_DEFS=@HAVE_KERNEL_USB_DEVICE@ @HAVE_LIBUSB@ @HAVE_KERNEL_1284@ @HAVE_LIBIEEE1284@ @HAVE_NULLTRANS@
 CFLAGS= $(CFLAGS_EXTRA_DEFS) -g -O2 -Wall -ansi -pedantic -Wmissing-prototypes
 LDPATH=@LIBUSB_EXTRA_LDPATH@ @LIBIEEE1284_EXTRA_LDPATH@ 
 LDLIBS=@LIBUSB_EXTRA_LDLIBS@ @LIBIEEE1284_EXTRA_LDLIBS@
 EXTRA_DEPS=@LIBUSB_EXTRA_DEPS@ @LIBIEEE1284_EXTRA_DEPS@ 
 EXTRA_BINS=@LIBUSB_EXTRA_BINS@ @LIBIEEE1284_EXTRA_BINS@ 
-EXTRA_OBJS=@KUSB_EXTRA_OBJS@ @LIBUSB_EXTRA_OBJS@ @LIBIEEE1284_EXTRA_OBJS@ @BID_EXTRA_OBJS@
+EXTRA_OBJS=@KUSB_EXTRA_OBJS@ @LIBUSB_EXTRA_OBJS@ @LIBIEEE1284_EXTRA_OBJS@ @BID_EXTRA_OBJS@ @NULLTRANS_EXTRA_OBJS@
 OBJ=.@OBJEXT@
 EXE=@EXEEXT@
 
@@ -47,6 +47,8 @@ EPL_OBJS=epl_job_header$(OBJ) epl_page_header$(OBJ) epl_page_footer$(OBJ) \
            epl_job_footer$(OBJ) epl_print_stripe$(OBJ) epl_poll$(OBJ) epl_compress$(OBJ) \
           $(EPL_BID_OBJS) $(EXTRA_OBJS)        
 
+EPL_HEADERS=epl_bid.h  epl_compress.h  epl_config.h  epl_job.h  epl_time.h 
+
 libijs.a:	$(LIB_OBJS)
 	rm -f $@
 	$(AR) $(ARFLAGS) $@ $^
@@ -64,7 +66,7 @@ ijs_client_example$(EXE):	ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON
 ijs_server_example$(EXE):	ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
 	$(CC) $(CFLAGS) $(FE)ijs_server_example$(EXE) ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
 
-ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) $(EPL_OBJS) $(EXTRA_DEPS)
+ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) $(EPL_OBJS) $(EXTRA_DEPS) $(EPL_HEADERS)
 	$(CC) $(CFLAGS) $(FE)ijs_server_epsonepl$(EXE) ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(EPL_OBJS) $(IJS_COMMON_OBJ) $(LDPATH) $(LDLIBS)
 
 testlibusb$(OBJ): libusb/tests/testlibusb.c

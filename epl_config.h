@@ -38,7 +38,7 @@
  * This options activates debug output to stderr.
  *
 **/
-#define EPL_DEBUG
+#define noEPL_DEBUG
 
 
 /**

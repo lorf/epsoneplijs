@@ -102,10 +102,25 @@ else
 AC_MSG_RESULT(no)
 fi
 
+# build dummy transport support 
+AC_ARG_WITH(nulltransport,[  --with-nulltransport      enable null transport debugging code
+  --without-nulltransport   disable null transport debugging code])
+
+AC_MSG_CHECKING(for null transport)
+if test "$with_nulltransport" != no; then
+HAVE_NULLTRANS="-DHAVE_NULLTRANS"
+NULLTRANS_EXTRA_OBJS=epl_utils_null.o
+BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o epl_61interpret.o"
+AC_MSG_RESULT(yes)
+else
+AC_MSG_RESULT(no)
+fi
+
 AC_SUBST(HAVE_KERNEL_USB_DEVICE)
 AC_SUBST(HAVE_KERNEL_1284)
 AC_SUBST(HAVE_LIBIEEE1284)
 AC_SUBST(HAVE_LIBUSB)
+AC_SUBST(HAVE_NULLTRANS)
 
 AC_SUBST(KUSB_EXTRA_OBJS)
 
@@ -120,6 +135,8 @@ AC_SUBST(LIBIEEE1284_EXTRA_LDLIBS)
 AC_SUBST(LIBIEEE1284_EXTRA_OBJS)
 AC_SUBST(LIBIEEE1284_EXTRA_DEPS)
 AC_SUBST(LIBIEEE1284_EXTRA_BINS)
+
+AC_SUBST(NULLTRANS_EXTRA_OBJS)
 
 AC_SUBST(BID_EXTRA_OBJS)
 
