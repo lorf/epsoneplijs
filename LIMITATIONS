@@ -1,0 +1,13 @@
+OPEN  . USB not supported.
+
+OPEN  . Installation not user friendly.
+
+
+----- OBSOLETE ENTRIES -----
+
+FIXED . Printing process not user friendly.
+
+FIXED . Can only do A4, 600dpi at the moment
+
+FIXED . Multiple-page print job currently broken. Only one-page
+        print job works.

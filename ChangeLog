@@ -1,0 +1,26 @@
+2003-01-28: 0.2 - misc fixes - Roberto Ragusa
+         . Foomatic .xml files now compatible with cups.
+         . 5800L footers fixed.
+
+2003-01-22: 0.1e - foomatic data - Roberto Ragusa
+         . Added foomatic .xml files.
+         . Makefile.in: reenabled example server/client compilation,
+           fixed install section.
+         . Simplified headers/footers handling.
+
+2003-01-16: 0.1d - papersize, dpi, options support - Roberto Ragusa
+         . Many printing parameters are now definable in ps2epl
+           (papersize, dpi, ritech, tonersave, density).
+         . Improved error checking.
+         . Misc fixes and clean up.
+         . Makefile.in: compiler optimizations turned on, only
+           compile ijs_server_epsonepl.
+
+2003-01-13: headers and footers reorg - Roberto Ragusa
+         . Fixes 5800L/5900L? Breaks 5700L? :-)
+
+2003-01-12: 5700L multi-page fix - Hin-Tak Leung  
+         . Breaks 5800L/5900L. Careful.
+
+2003-01-09: version 0.1 - Hin-Tak Leung
+         . Test Release
