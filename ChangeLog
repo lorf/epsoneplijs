@@ -1,3 +1,6 @@
+2003-05-02: cvs - Hin-Tak Leung
+   . fix libieee1284 memory allocation problem.
+
 2003-05-01: cvs - Roberto Ragusa
    . Foomatic fixes again, created installation scripts.
 

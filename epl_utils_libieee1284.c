@@ -118,7 +118,7 @@ static void test_deviceid (EPL_job_info *epl_job_info, struct parport_list *pl)
 	  if (model > 0)  
 	    {
 	      epl_job_info->model = model;
-	      epl_job_info->port = pl->portv[i];
+	      memcpy(epl_job_info->port, pl->portv[i], sizeof(struct parport));
 	    }
 	}
       else if (ieee1284_get_deviceid (pl->portv[i], -1, 0, id, 500) > -1)
@@ -129,7 +129,7 @@ static void test_deviceid (EPL_job_info *epl_job_info, struct parport_list *pl)
 	  if (model > 0)  
 	    {
 	      epl_job_info->model = model;
-	      epl_job_info->port = pl->portv[i];
+	      memcpy(epl_job_info->port, pl->portv[i], sizeof(struct parport));
 	    }
 	}
       printf ("\n");
@@ -143,7 +143,7 @@ static void test_deviceid (EPL_job_info *epl_job_info, struct parport_list *pl)
 	    if (model > 0)  
 	      {
 		epl_job_info->model = model;
-		epl_job_info->port = pl->portv[i];
+		memcpy(epl_job_info->port, pl->portv[i], sizeof(struct parport));
 	      }
 	  }
       putchar ('\n');
@@ -175,6 +175,13 @@ static int show_capabilities (unsigned int cap)
 
 int epl_libieee1284_write(struct parport *port, char *ts, int length)
 {
+  int r;
+  fprintf(stderr,"write %d\n", *ts);
+  r = ieee1284_negotiate (port, M1284_COMPAT);
+
+  if (r != E1284_OK)
+    printf ("Couldn't negotiate write: %d\n", r);
+
   return ieee1284_compat_write (port, 0, ts, length);
 }
 
@@ -184,10 +191,9 @@ int epl_libieee1284_read(struct parport *port, char *inbuf, int length)
   r = ieee1284_negotiate (port,M1284_NIBBLE);
   
   if (r != E1284_OK)
-    printf ("Couldn't negotiate %d\n", r);
+    printf ("Couldn't negotiate read: %d\n", r);
   
-  r = ieee1284_nibble_read (port,  F1284_NONBLOCK  , inbuf, length);
-  
+  r = ieee1284_nibble_read (port, F1284_NONBLOCK, inbuf, length);
   ieee1284_terminate (port);
   
   return r;
@@ -199,6 +205,7 @@ void epl_libieee1284_init(EPL_job_info *epl_job_info)
   struct parport *port;
   unsigned int cap;
 
+  epl_job_info->port = (struct partport *)malloc(sizeof(struct parport));
   ieee1284_find_ports (&pl, 0);
   test_deviceid (epl_job_info, &pl);
   ieee1284_free_ports (&pl);
@@ -232,7 +239,16 @@ void epl_libieee1284_init(EPL_job_info *epl_job_info)
       else
 	r = ieee1284_clear_irq (port, NULL);
       if (r != E1284_OK)
-	printf ("Couldn't clear IRQ: %d\n", r);
+	{
+	  if (r == E1284_NOTAVAIL) 
+	    {
+	      printf ("Clear IRQ: Not available on this system\n");
+	    }
+	  else 
+	    {
+	      printf ("Couldn't clear IRQ: %d\n", r);
+	    }
+	}
     }
 }
 
@@ -241,4 +257,5 @@ void epl_libieee1284_end(EPL_job_info *epl_job_info)
 {
   ieee1284_release (epl_job_info->port);
   ieee1284_close (epl_job_info->port);
+  free(epl_job_info->port);
 }

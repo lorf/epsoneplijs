@@ -3,7 +3,7 @@ Name: epsoneplijs
 Version: 0.4.0
 %define LIBUSB_VERSION 0.1.7
 %define LIBIEEE1284_VERSION 0.2.7
-Release: pre2
+Release: pre3
 Copyright: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
 Group: Applications/Graphics
 Source0:  http://osdn.dl.sourceforge.net/sourceforge/epsonepl/epsoneplijs-%{version}.tgz
@@ -31,6 +31,8 @@ and 6100L. YMMV.
 
 ln -s libusb-%{LIBUSB_VERSION} libusb 
 ln -s libieee1284-%{LIBIEEE1284_VERSION} libieee1284 
+#fixing ieee1284.h brokenness.
+perl -i -e 'undef $/;$_ = <>;s/,\n\};/\};/g;s/,\s*\/\*.*?\*\/\n\};/\};/g;print;' libieee1284/include/ieee1284.h
 perl -pi -e "s/STRICT_WIN32_COMPATIBILITY/__unix__/;" epl_config.h
 
 ## More flexible to just let it do its own job

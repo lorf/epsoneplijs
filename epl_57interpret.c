@@ -106,23 +106,33 @@ void epl_57interpret(unsigned char *buffer, int len)
       break;
 
     case 4:  /* 06: 02 03 FE 00 */
-      if ((buffer[15] != 0x02) ||
-	  (buffer[16] != 0x03) ||
-	  ((0xff & buffer[17]) != 0xFE) ||
+      if (((0xff & buffer[17]) != 0xFE) ||
 	  (buffer[18] != 0x00))
 	{
 	  epl_57_dump_extra(buffer[14], &buffer[15]);
 	}
-      if (buffer[16] == 0x00) 
+      switch (buffer[15])
 	{
-	  fprintf(stderr, "Standby Mode Disabled\n");
-	} 
-      else 
-	{
-	  /* 3 means 30 minutes */
-	  fprintf(stderr, "Standby Mode after idle for %d minutes\n", buffer[16] * 10);
+	case 0x00: 
+	  fprintf(stderr, "Connected: Paraport\n");
+	  break;
+	case 0x02: 
+	  fprintf(stderr, "Connected: USB\n");
+	  break;
+	default:
+	  fprintf(stderr, "Connected: Unknown %2.2X\n", (0xff & buffer[15]));
+	  break;
 	}
-      
+      break;
+      switch (buffer[16])
+	{
+	case 0x00: 
+	  fprintf(stderr, "Standby Mode Disabled\n");
+	  break;
+	default:
+	  fprintf(stderr, "Standby Mode after idle for %d minutes\n", buffer[16] * 10);
+	  break;
+	}
       break;
 
     case 13: /* 07: 01 31 08 B8 02 00 00 + 6 bytes */
@@ -160,7 +170,7 @@ void epl_57interpret(unsigned char *buffer, int len)
 	}
       break;
     default:
-      epl_57_dump_extra(buffer[14], &buffer[15]);
+      epl_57_dump_extra(len, buffer);
       break;
     }
 
