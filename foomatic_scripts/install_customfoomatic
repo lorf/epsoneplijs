@@ -1,0 +1,20 @@
+#!/bin/bash
+
+##### Custom foomatic install
+
+# Add the xml files to the foomatic database.
+
+cp ../foomatic/driver/*  /usr/local/share/foomatic/db/source/driver/
+cp ../foomatic/opt/*     /usr/local/share/foomatic/db/source/opt/
+cp ../foomatic/printer/* /usr/local/share/foomatic/db/source/printer/
+
+##### Generate PPDs and install them
+
+/usr/local/bin/foomatic-datafile -t cups -d epl5700l -p 312297          >../foomatic_PPDs/Epson-EPL-5700L-epl5700l-cups.ppd
+/usr/local/bin/foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >../foomatic_PPDs/Epson-EPL-5800L-epl5800l-cups.ppd
+/usr/local/bin/foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >../foomatic_PPDs/Epson-EPL-5900L-epl5900l-cups.ppd
+/usr/local/bin/foomatic-datafile -t cups -d epl6100l -p Epson-EPL-6100L >../foomatic_PPDs/Epson-EPL-6100L-epl6100l-cups.ppd
+
+gzip -9f ../foomatic_PPDs/Epson-EPL-*-cups.ppd
+
+cp -av ../foomatic_PPDs/Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/

@@ -90,7 +90,12 @@ Notes
     ps2epl
     epl_docs/*
     foomatic/*
+    foomatic_scripts/*
+    foomatic_PPDs/*
+    apsfilter/*
+    cups/*
     test5700lusb.c
+    epsoneplijs.spec
 
 "Makefile.in" has been mildly adapted from ijs-0.34, "ijs_server_epsonepl.c" 
  adapted from "ijs_server_example.c", "ps2epl" adapted from "ps2pdfwr" of 
