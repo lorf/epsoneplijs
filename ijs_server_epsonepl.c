@@ -120,7 +120,7 @@ epson_epl_enum_cb (void *enum_cb_data,
   else if (!strcmp (key, "DeviceManufacturer"))
     val = "Epson";
   else if (!strcmp (key, "DeviceModel"))
-    val = "EPL5700L,EPL5800L,EPL5900L,EPL6100L";
+    val = "EPL5700L,EPL5800L,EPL5900L,EPL6100L,EPL6200L";
   else if (!strcmp (key, "PageImageFormat"))
     val = "Raster";
   else if (!strcmp (key, "EplDpi"))
@@ -610,6 +610,10 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   else if (strcmp(s, "EPL6100L") == 0)
     {
       epl_job_info->model = MODEL_6100L ;
+    }
+  else if (strcmp(s, "EPL6200L") == 0)
+    {
+      epl_job_info->model = MODEL_6200L ;
     }
   else 
     {

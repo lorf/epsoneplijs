@@ -40,3 +40,12 @@ gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
 -dNOPAUSE -dSAFER -dBATCH \
 -sOutputFile=epl_test_6100L.epl epl_test.ps
 
+gs -sPAPERSIZE=a4 -dFIXEDMEDIA \
+-sProcessColorModel=DeviceGray -dBitsPerSample=1 \
+-sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
+-sDeviceManufacturer=Epson -sDeviceModel=EPL6200L \
+-sIjsParams="" \
+-dIjsUseOutputFD \
+-dNOPAUSE -dSAFER -dBATCH \
+-sOutputFile=epl_test_6200L.epl epl_test.ps
+

@@ -32,7 +32,7 @@
 
 
 /*
-   This routine interprets the reply for the 6100L.
+   This routine interprets the reply for the 6100L/6200L.
    We only understand a few parameters, but we can get the info we need
    to slow down data transfer to avoid printer congestion.
 */

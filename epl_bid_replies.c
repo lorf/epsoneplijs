@@ -32,7 +32,7 @@
 /* 
  Mythical replies from 5700l that needs to be dealt with 
  for USB printing on 5700L to work.
- 5800L, 5900L, 6100L can print even if we don't read
+ 5800L, 5900L, 6100L, 6200L can print even if we don't read
  back the reply. Anyway, we do because there are some
  advantages (smart flow control and status feedback are
  possible).
@@ -123,6 +123,25 @@ int epl_bid_reply_len(int model, unsigned char code)
 	case 0x46: result = 16;  break; /* 'F' - page header */
 	case 0x47: result = 16;  break; /* 'G' - page footer */
 	case 0x4C: result = 0;   break; /* 'L' - strip */
+        case 0x50: result = 126; break; /* 'P' - poll? */
+        case 0x51: result = 120; break; /* 'Q' - poll? */
+        case 0x52: result = 18;  break; /* 'R' - poll? */
+        case 0x7f: result = 16;  break; /*     - ? */
+        }
+    }
+  else if (model == MODEL_6200L) /* assume 6200L = 6100L, except the "O" entry */
+    {
+      switch (code)
+        {
+	  /* big numbers for the time being */
+	case 0x40: result = 16;  break; /* '@' - job header */ 
+	case 0x41: result = 16;  break; /* 'A' - job footer */
+	case 0x42: result = 16;  break; /* 'B' - 1st level encapsulation */
+	case 0x43: result = 16;  break; /* 'C' - 1st level decapsulation */
+	case 0x46: result = 16;  break; /* 'F' - page header */
+	case 0x47: result = 16;  break; /* 'G' - page footer */
+	case 0x4C: result = 0;   break; /* 'L' - strip */
+        case 0x4F: result = 200; break; /* 'O' - poll? */
         case 0x50: result = 126; break; /* 'P' - poll? */
         case 0x51: result = 120; break; /* 'Q' - poll? */
         case 0x52: result = 18;  break; /* 'R' - poll? */

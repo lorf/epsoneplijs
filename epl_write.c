@@ -98,7 +98,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	  fprintf(stderr, "\n");
 #endif
 	}
-      /* we could get here with code=0x1b (5900L) or other values (6100L) */
+      /* we could get here with code=0x1b (5900L) or other values (6100L/6200L) */
       /* the called function returns -1 for invalid values */
       reply_size = epl_bid_reply_len(epl_job_info->model, code);
 
@@ -295,6 +295,10 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
       break;
 
     case MODEL_6100L:
+      epl_61interpret(epl_job_info, p, len);
+      break;
+
+    case MODEL_6200L:
       epl_61interpret(epl_job_info, p, len);
       break;
 #endif

@@ -59,7 +59,7 @@ int epl_poll(EPL_job_info *epl_job_info, int type)
 	0x00
 	);
     }
-  else if(epl_job_info->model == MODEL_6100L) 
+  else if((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L)) 
     {
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "%c%c",

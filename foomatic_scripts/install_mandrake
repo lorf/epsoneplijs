@@ -14,6 +14,7 @@ foomatic-datafile -t cups -d epl5700l -p 312297          >../foomatic_PPDs/epl57
 foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >../foomatic_PPDs/epl5800l.ppd
 foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >../foomatic_PPDs/epl5900l.ppd
 foomatic-datafile -t cups -d epl6100l -p Epson-EPL-6100L >../foomatic_PPDs/epl6100l.ppd
+foomatic-datafile -t cups -d epl6200l -p Epson-EPL-6200L >../foomatic_PPDs/epl6200l.ppd
 
 gzip -9f ../foomatic_PPDs/epl*.ppd
 

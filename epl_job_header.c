@@ -73,25 +73,25 @@ int epl_job_header(EPL_job_info *epl_job_info)
   papertype = 0 ;  /* normal paper; other options are transparency, etc */
 
   /* 
-     Much of the 6100L options are less inflexible - emit warning, and possibly
+     Much of the 6100L/6200L options are less inflexible - emit warning, and possibly
      change to abort if the hardware really does not support it.
   */  
 
-  if (epl_job_info->model == MODEL_6100L)
+  if ((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L))
     {
       if(ritech != 0x00) 
 	{
-	  fprintf(stderr, "6100L: Hardware may not support RITech. Use at your own risk!\n");
+	  fprintf(stderr, "6100L/6200L: Hardware may not support RITech. Use at your own risk!\n");
 	}
 
       if(tonersave != 0x00) 
 	{
-	  fprintf(stderr, "6100L: Hardware-based Toner Save may not be supported. Use this option at your own risk!\n");
+	  fprintf(stderr, "6100L/6200L: Hardware-based Toner Save may not be supported. Use this option at your own risk!\n");
 	}
 
       if(epl_job_info->dpi_h != 600 || epl_job_info->dpi_v != 600) 
 	{
-	  fprintf(stderr, "6100L: Hardware may not support resolution %d x %d - Use this resolution at your own risk!\n", 
+	  fprintf(stderr, "6100L/6200L: Hardware may not support resolution %d x %d - Use this resolution at your own risk!\n", 
 		  epl_job_info->dpi_h, epl_job_info->dpi_v);
 	}
     }
@@ -135,7 +135,8 @@ int epl_job_header(EPL_job_info *epl_job_info)
     }
   else if (epl_job_info->model == MODEL_5800L
 	   || epl_job_info->model == MODEL_5900L
-	   || epl_job_info->model == MODEL_6100L)
+	   || epl_job_info->model == MODEL_6100L
+	   || epl_job_info->model == MODEL_6200L)
     {
       ts += sprintf(ts, "\x01b\x001");
       ts += sprintf(ts, "@EJL \x00a");
@@ -147,7 +148,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	    EPL_VERSION "\"");
         }
 
-      if (epl_job_info->model == MODEL_6100L)  
+      if ((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L))  
 	{
 	  /* probably the same as 5900L, just being conservative */
 	  ts += sprintf(ts, " MACHINE=\"test_box \" USER=\"EG\"");
@@ -169,7 +170,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	  ts += sprintf(ts, "%c", 0x00);
           ts_start_idx[ts_count++] = ts;
 	}
-      else if (epl_job_info->model == MODEL_6100L)
+      else if ((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L))
 	{
 	  ts += epl_sprintf_wrap(ts,68);
 	  ts += sprintf(ts, "@%c%c%ctest_box  ", 0x00, 0x00, 0x00);

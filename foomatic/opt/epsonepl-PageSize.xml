@@ -30,6 +30,10 @@
       <driver>epl6100l</driver>
       <arg_defval>ev/epsonepl-PageSize-Letter</arg_defval>
      </constraint>
+     <constraint sense="true">
+      <driver>epl6200l</driver>
+      <arg_defval>ev/epsonepl-PageSize-Letter</arg_defval>
+     </constraint>
   </constraints>
   <enum_vals>
    <enum_val id="ev/epsonepl-PageSize-Letter">

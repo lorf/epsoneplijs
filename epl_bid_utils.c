@@ -132,6 +132,11 @@ int epl_identify(char *string)
       fprintf(stderr, "Confirmed EPL-6100L\n");
       return MODEL_6100L;
     }
+  else if(strstr(string, "EPL-6200L"))
+    {
+      fprintf(stderr, "Confirmed EPL-6200L\n");
+      return MODEL_6200L;
+    }
 
   fprintf(stderr, "so, what printer is this?\n");
   return MODEL_UNKNOWN;

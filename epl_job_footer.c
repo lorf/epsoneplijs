@@ -67,7 +67,7 @@ int epl_job_footer(EPL_job_info *epl_job_info)
           ts_start_idx[ts_count++] = ts;
 	}
     }
-  else if(epl_job_info->model == MODEL_6100L)
+  else if((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L))
     {
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "C%c", 0x00);

@@ -91,29 +91,29 @@ int epl_page_header(EPL_job_info *epl_job_info)
 	  cust_paper_ver >> 8, cust_paper_ver
 	  );
   
-  /* model-indepenent part for 6100L*/
+  /* model-indepenent part for 6100L/6200L*/
   
   sprintf(data_block_6xL, 
 	  "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",
 	  paper_code,                                        /* \183      */
 	  stripe_size,
 	  bytes_per_row_padded >> 8, bytes_per_row_padded,                 /* \185 \186 */
-	  0x00,0x64,  /* 6100L -  top ofset in 1/10 pixels  = 4mm */
-	  0x00,0x64,  /* 6100L - left ofset in 1/10 pixels  = 4mm */
-	  0x00,0x00,0x00,0x00,  /* 6100L */
+	  0x00,0x64,  /* 6100L/6200L -  top ofset in 1/10 pixels  = 4mm */
+	  0x00,0x64,  /* 6100L/6200L - left ofset in 1/10 pixels  = 4mm */
+	  0x00,0x00,0x00,0x00,  /* 6100L/6200L */
 	  ver_pixels >> 8, ver_pixels,                       /* \195 \196 */
 	  hor_pixels >> 8, hor_pixels,                       /* \197 \198 */
 	  stripes_per_page >> 8, stripes_per_page,           /* \199 \200 */
-	  0x00, 0x00, 0x00, 0x00, 0x00, /* 6100L */
+	  0x00, 0x00, 0x00, 0x00, 0x00, /* 6100L/6200L */
 	  copies,                                            /* \206      */ 
-	  0x00, 0x00, 0x01,  /* 6100L */
-	  0x00, 0x00, 0x00,  /* 6100L */
+	  0x00, 0x00, 0x01,  /* 6100L/6200L */
+	  0x00, 0x00, 0x00,  /* 6100L/6200L */
 	  cust_paper_hor >> 8, cust_paper_hor,
 	  cust_paper_ver >> 8, cust_paper_ver
 	  );                                                  /* \214     */
 
   /* 
-     6100L:
+     6100L/6200L:
      avoid page error = 0x80 for at \182 (default 0x00)
      rather unusual.
   */
@@ -138,7 +138,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
       memcpy(ts, data_block_5xL, 23); ts += 23;
       ts += sprintf(ts, "%c", 0x01);
     }
-  else if(epl_job_info->model == MODEL_6100L)
+  else if((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L))
     {
       ts += epl_sprintf_wrap(ts, 36);
       ts += sprintf(ts, "F%c", 0x00);

@@ -68,8 +68,8 @@ void epl_libusb_init(EPL_job_info *epl_job_info)
 	found = 1;
       }
       if ((dev->descriptor.idVendor == USB_VENDOR_EPSON) 
-          && (dev->descriptor.idProduct == USB_PRODUCT_5800L)) { /* and 5900L, 6100L */
-	fprintf (stderr,"Found 5800L/5900L/6100L\n");
+          && (dev->descriptor.idProduct == USB_PRODUCT_5800L)) { /* and 5900L, 6100L, 6200L */
+	fprintf (stderr,"Found 5800L/5900L/6100L/6200L\n");
         found = 1;
       }
       if (found) {

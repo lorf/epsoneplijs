@@ -2,9 +2,9 @@ What is this?
 ===========
   This project is named "epsonepl".
   It is a printer driver which gives ghostscript the ability
-  to print to Epson EPL-5700L, EPL-5800L, EPL-5900L and
-  EPL-6100L laser printers. EPL-6100L support is not deeply
-  tested (volunteers wanted!).
+  to print to Epson EPL-5700L, EPL-5800L, EPL-5900L,
+  EPL-6100L and EPL-6200L laser printers. EPL-6100L and EPL-6200L 
+  support is not deeply tested (volunteers wanted!).
 
 
 Requirement
@@ -55,7 +55,7 @@ Installation
 Usage
 =====
   See ps2epl for selectable options. Change "EPL5700L" to "EPL5800L", 
-  "EPL5900L" or "EPL6100L" where appropriate.
+  "EPL5900L", "EPL6100L", "EPL6200L" where appropriate.
 
   Testing: print using "./ps2epl myfile.ps" and "cat myfile.epl >/dev/lp0",
   or in one step: "./ps2epl myfile.ps /dev/lp0". If you want to try the

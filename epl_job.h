@@ -81,7 +81,8 @@ struct parport_list *port_list;
 #define MODEL_5900L   3
 /* Just in case there is a 6000L. Probably not important. */
 #define MODEL_6100L   5
-#define MODEL_USEDSLOTS 6 /* this is the number of the first not used slot */
+#define MODEL_6200L   6
+#define MODEL_USEDSLOTS 7 /* this is the number of the first not used slot */
 
 #define PRE_INIT        -1
 #define VIA_STDOUT_PIPE        0
@@ -132,7 +133,8 @@ static char *printername[]={
   "EPL-5800L",
   "EPL-5900L",
   "<ghost>",              /* placeholder for future 6000L */
-  "EPL-6100L"
+  "EPL-6100L",
+  "EPL-6200L"
 };
 
 #define VERBOSE

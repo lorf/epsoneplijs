@@ -14,6 +14,7 @@ cp ../foomatic/printer/* /usr/local/share/foomatic/db/source/printer/
 /usr/local/bin/foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >../foomatic_PPDs/Epson-EPL-5800L-epl5800l-cups.ppd
 /usr/local/bin/foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >../foomatic_PPDs/Epson-EPL-5900L-epl5900l-cups.ppd
 /usr/local/bin/foomatic-datafile -t cups -d epl6100l -p Epson-EPL-6100L >../foomatic_PPDs/Epson-EPL-6100L-epl6100l-cups.ppd
+/usr/local/bin/foomatic-datafile -t cups -d epl6200l -p Epson-EPL-6200L >../foomatic_PPDs/Epson-EPL-6200L-epl6200l-cups.ppd
 
 gzip -9f ../foomatic_PPDs/Epson-EPL-*-cups.ppd
 

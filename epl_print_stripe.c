@@ -61,7 +61,7 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_
 	count >> 24, count >> 16, count >> 8, count
 	);
     }
-  else if(epl_job_info->model == MODEL_6100L) 
+  else if((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L)) 
     {
       ts += epl_sprintf_wrap(ts, count + 12);
       ts += sprintf(ts, "L%c%c%c%c%c%c%c%c%c%c%c",

@@ -46,11 +46,11 @@ USB on 5700L
    (it scans your USB and output every piece of info it finds)
    when you report problems.
 
-USB on 5800L, 5900L, 6100L
+USB on 5800L, 5900L, 6100L, 6200L
 ==========================
   USB support has been recently extended to all printers. If you want to try
   it, just follow the same instructions given for 5700L.
-  This is experimental, at the moment. Untested on 6100L.
+  This is experimental, at the moment. Untested on 6100L and 6200L.
 
 Usage Problems
 ==============

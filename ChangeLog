@@ -1,3 +1,6 @@
+2003-12-02: cvs - Hin-Tak Leung
+   . Adding 6200L - just making it do 6100L stuff for the time being.
+	
 2003-09-14: cvs - Roberto Ragusa
    . Ooops, forgot to activate the polling on 6100L.
 

@@ -58,9 +58,9 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
       fprintf (stderr,"Found 5700L\n");
     }
   else if ((ioctl_args[0] == USB_VENDOR_EPSON)
-           && (ioctl_args[1] == USB_PRODUCT_5800L)) /* and 5900L, 6100L */
+           && (ioctl_args[1] == USB_PRODUCT_5800L)) /* and 5900L, 6100L, 6200L */
     {
-      fprintf (stderr,"Found 5800L/5900L/6100L\n");
+      fprintf (stderr,"Found 5800L/5900L/6100L/6200L\n");
     }
   else
     {

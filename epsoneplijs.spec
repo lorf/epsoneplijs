@@ -1,4 +1,4 @@
-Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L/6100L printers
+Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L/6100L/6200L printers
 Name: epsoneplijs
 Version: 0.4.0
 %define LIBUSB_VERSION 0.1.7
@@ -18,10 +18,10 @@ Conflicts: ghostscript = 8.00
 BuildRoot: /var/tmp/epsonepl-root
 
 %description
-Support for the Epson EPL-5700L/5800L/5900L/6100L printer family under linux and 
+Support for the Epson EPL-5700L/5800L/5900L/6100L/6200L printer family under linux and 
 other unix-like systems. This effort is not edorsed by nor affiliated with 
 Epson. It is known to work for at least one user for each of 5700L, 5800L, 5900L,
-and 6100L. YMMV.
+and 6100L. 6100L and 6200L support is new. YMMV.
 
 %prep
 
