@@ -40,6 +40,10 @@ make install prefix=$RPM_BUILD_ROOT/usr
 [ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin 
 strip $RPM_BUILD_ROOT/usr/bin/*
 
+%clean
+
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+
 %post
 
 echo "Attempting to remove older installs in /usr/local/bin."
