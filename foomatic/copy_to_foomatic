@@ -34,3 +34,14 @@ cp printer/* /usr/share/foomatic/db/source/printer/
 #gzip -9 epl*.ppd
 #cp -av epl*.ppd.gz /usr/share/cups/model/epson/
 
+##### PPDs generation, custom foomatic install
+
+# cp driver/*  /usr/local/share/foomatic/db/source/driver/
+# cp opt/*     /usr/local/share/foomatic/db/source/opt/
+# cp printer/* /usr/local/share/foomatic/db/source/printer/
+
+# /usr/local/bin/foomatic-datafile -t cups -d epl5700l -p Epson-EPL-5700L >Epson-EPL-5700L-epl5700l-cups.ppd
+# /usr/local/bin/foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >Epson-EPL-5800L-epl5800l-cups.ppd
+# /usr/local/bin/foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >Epson-EPL-5900L-epl5900l-cups.ppd
+# gzip -9 Epson-EPL-*-cups.ppd
+# cp -av Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/
