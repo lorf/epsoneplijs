@@ -57,7 +57,7 @@ FLOWCONTROL=off
   #   lp device name(e.g. "/dev/lp0" or "/dev/usb/lp0"). 
   # default: off
   # the "libusb" and usb device name option is only available if compiled
-  #              --with-libusb and --with-kerneldevice respectively.
+  #              --with-libusb and --with-kernelusb respectively.
   # the "libieee1284" and lp device name option is only available if compiled 
   #              --with-libieee1284 and --with-kernel1284 respectively.
   IJSPARMS="$IJSPARMS,EplFlowControl=$FLOWCONTROL"
