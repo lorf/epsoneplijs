@@ -49,7 +49,7 @@ DENSITY=3
 TONERSAVE=on
   # possible values: on, off
   # default: off
-  # ** 6100L should set this to "on" for safety.
+  # ** 6100L should leave this to the default "off" for safety.
   IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
 
 FLOWCONTROL=off
