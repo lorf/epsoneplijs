@@ -1,0 +1,88 @@
+Requirement
+===========
+  Type "gs -h" to get your ghostscript version and device list. You need 
+  GNU ghostscript 6.53+ or AFPL Ghostscript 7.04+, and the "ijs" device 
+  listed among the device list to use this plugin.
+
+  AFPL ghostscript 8.0 has some yet unidentified issues, and known not to 
+  work. Avoid it for the time being.
+
+USB on 5700L
+============
+  if you see "can't claim USB device" and got directed here, you need to 
+  check a few things concerning permissions:
+
+  (1) /proc/bus/usb is mounted, 
+
+  (2) the person running the plugin has read/write privilege to most of the 
+      files under there. 
+
+  (3) the kernel printer class driver "printer" is NOT loaded (running 
+      "lsmod" does NOT list "printer"). The kernel driver does not provide 
+      access mechanism sophisticated enough for this printer to work,
+      so loading the driver only interferes with the plugin's operation.
+
+      Beware that some systems may autoload the kernel driver at boot-up 
+      time. 
+   
+   There is a test5700lusb binary in libusb/tests/ which would get the 5700L
+   connected via USB to spit out a blank page. Run it before reporting
+   any problems, and please attach the whole of testlibusb's output
+   (it scans your USB and output every piece of info it finds)
+   when you report problems.
+
+Usage Problems
+==============
+*) What linux distribution does it work on?
+
+  See ***Requirement*** above.
+
+  Failure (too old): RH 7.1 (gs 5.50), RH 7.2 (?), ASPLinux 7.2
+
+  Developer's choices: Slackware 8.1 (HTL), Redhat 8.0 (RR)
+ 
+  Reported Success: SuSE 7.3 (FE), Mandrake 9.0 (CS), Debian 3.0 (JM), 
+                    SuSE 8.0 (HS), Mandrake 8.2 (AC)
+
+*) "ijs_server_epsonepl: command not found"
+   "Can't start ijs server "ijs_server_epsonepl""
+
+  The binary 'ijs_server_epsonepl' needs to be in your $PATH. Check your 
+  $PATH variable with "echo $PATH", and/or verify with 
+  'which ijs_server_epsonepl'. Copy the binary into /usr/bin as last resort. 
+
+*) "Unknown device: ijs"
+   
+   See ***Requirement*** above.
+
+*) "I want CUPS support"
+   
+   There are some foomatic data in the foomatic sub-directory. If you have 
+   foomatic installed, you can generates PPD files for CUPS. Browse the
+   user mailing list archive for clues (link at the bottom of 
+   http://sourceforge.net/projects/epsonepl/).
+
+*) "I can't get this f#$%&ing thing to work"
+
+   Browse the user mailing list archive for clues (link at the bottom of 
+   http://sourceforge.net/projects/epsonepl/).
+   
+*) The print out is slight displaced.
+
+   The default paper size for CUPS is "letter" (a lot of US-based
+   print-related software, including ghostscript itself, and e.g. 
+   most M$ windows driver for HP printers, defaults to "letter"). 
+   Many things can happen if you have "letter" declared somewhere
+   and "A4" elsewhere, and vice versa.
+
+   A4 is 17pt narrower (about 1/4 inch or 6mm), and 50 pt longer (17mm).
+
+   Try to save the postscript file your application generates.
+   The top a postscript file contains these two lines:
+
+      %!PS-Adobe-3.0
+      %%BoundingBox: 0 0 612 792 
+
+   (612, 792) is letter. (595, 842) is A4. These numbers are in pt's 
+   (= 1/72 inch, a traditional type-setter's measure).
+
