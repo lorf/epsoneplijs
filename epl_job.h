@@ -90,6 +90,7 @@ struct parport_list *port_list;
 #define VIA_KERNEL_USB   2
 #define VIA_LIBIEEE1284  3
 #define VIA_KERNEL_1284  4
+#define VIA_NOWHERE      5
 
 #define EPL_JOB_STARTED_YES 1
 #define EPL_JOB_STARTED_NO  2
@@ -110,6 +111,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length);
 
 int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length); 
 
+int epl_read_uni(EPL_job_info *epl_job_info, char *in_buf, int reply_size);
+
 void epl_permission_to_write_stripe(EPL_job_info *epl_job_info);
 
 int epl_status(int argc, char **argv);
@@ -122,8 +125,7 @@ void epl_57interpret(unsigned char *buffer, int len);
 
 void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 
-void epl_61interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
-
+void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 
 #ifdef EPL_DEBUG
 

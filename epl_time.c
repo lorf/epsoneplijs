@@ -51,7 +51,9 @@ void sleep_seconds(double secs)
     }
   else
     {
+#ifdef EPL_DEBUG
     fprintf(stderr, "sleeping for %f seconds\n", secs);
+#endif
     ts.tv_sec = (int)secs;
     ts.tv_nsec = (int)((secs - (double)ts.tv_sec) * 1000 * 1000 * 1000);
     nanosleep(&ts, NULL);

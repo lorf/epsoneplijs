@@ -36,6 +36,9 @@ void epl_bid_init(EPL_job_info *epl_job_info)
 
   switch (epl_job_info->connectivity)
     {
+	case VIA_NOWHERE:
+		epl_null_init(epl_job_info);
+		break;
 #ifdef HAVE_LIBUSB
     case VIA_LIBUSB: 
       epl_libusb_init(epl_job_info);

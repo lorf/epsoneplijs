@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2001-2002 artofcode LLC.
+ * Copyright (c) 2001-2004 artofcode LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -553,7 +553,7 @@ ijs_server_set_param (IjsServerCtx *ctx, IjsJobId job_id, const char *key,
     {
       int size = value_size;
 
-      if (size < (int)sizeof(ctx->ph->cs) - 1)
+      if (size > (int)sizeof(ctx->ph->cs) - 1)
 	size = sizeof(ctx->ph->cs) - 1;
       memcpy (ctx->ph->cs, value, size);
       ctx->ph->cs[size] = 0;

@@ -775,17 +775,17 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 #endif
 
   /* Number of channels */
-  if (ph.bps != 1)
+  if ((ph.n_chan != 1) && (ph.n_chan != 3))
     {
-      fprintf(stderr, "Number of channels is %i (not 1), aborting!\n",
+      fprintf(stderr, "Number of channels is %i (unsupported), aborting!\n",
               ph.n_chan);
       return 1;
     }
 
   /* Bits per sample */
-  if (ph.bps != 1)
+  if ((ph.bps != 1) && (ph.bps != 8))
     {
-      fprintf(stderr, "Bit per sample is %i (not 1), aborting!\n",
+      fprintf(stderr, "Bit per sample is %i (unsupported), aborting!\n",
               ph.bps);
       return 1;
     }
@@ -820,6 +820,10 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   else if (strcmp(s, "off") == 0)
     {
       epl_job_info->connectivity = VIA_STDOUT_PIPE;
+    }
+  else if (strcmp(s, "nowhere") == 0)
+    {
+      epl_job_info->connectivity = VIA_NOWHERE;
     }
 #ifdef HAVE_LIBUSB
   else if (strcmp(s, "libusb") == 0)

@@ -1,8 +1,21 @@
+2004-09-16: cvs - Hin-Tak Leung
+   . A lot of 6200L-read interpretation updates; switch 6100L to use
+     6200L read interpretation.
+   . abort compilation on any warning.
+   . finish long-overdue nowhere-bid write functionality for
+     similating mis-understood/failed read.
+   . a lot of fixes with buggy read/polling.
+   . relaxed b/w restriction in preparation for future 
+     dithering improvements.
+
 2004-09-13: cvs - Hin-Tak Leung
    . x86_64 platform issue: shared libraries requires -fPIC
      to build. Removed libijs.so and the original ijs*example* targets
      from makefiles. We link statically with libieee1284 or libusb
      as always, so there is no need to do anything about these two.
+	
+2004-06-18: cvs - Hin-Tak Leung
+   . update IJS component to 0.35
 	
 2004-06-02: cvs - Hin-Tak Leung
    . ppc 'unsigned char'/x86 'signed char' fix in epl_compress.c

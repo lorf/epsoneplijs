@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2001-2002 artofcode LLC.
+ * Copyright (c) 2001-2004 artofcode LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,7 +25,7 @@
 /* This file contains common data types for IJS */
 
 /* IJS_VERSION is decimal version number times 100 */
-#define IJS_VERSION 34
+#define IJS_VERSION 35
 
 typedef int ijs_bool;
 

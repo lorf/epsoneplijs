@@ -175,7 +175,7 @@ int epl_status(int argc, char **argv)
   else if((epl_job_info->model == MODEL_6100L) || (epl_job_info->model == MODEL_6200L))
     {
       ts += epl_sprintf_wrap(ts, 2);
-      ts += sprintf(ts, "@%c",0x00);
+      ts += sprintf(ts, "P%c",0x00);
     }
 
   /* if there is more parameter at the end, we override the polling defaults */
