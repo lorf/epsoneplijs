@@ -28,10 +28,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef HAVE_KERNEL_USB_DEVICE
+#if defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_KERNEL_1284)
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <fcntl.h>
 #include <errno.h>
 #endif
@@ -170,7 +169,7 @@ int epl_status(int argc, char **argv)
           || epl_job_info->model == MODEL_5900L)
     {
       ts += epl_sprintf_wrap(ts, 2);
-      ts += sprintf(ts, "%c%c",0x10,0x00);
+      ts += sprintf(ts, "%c%c",0x11,0x00);
     }
   else if(epl_job_info->model == MODEL_6100L)
     {
@@ -187,7 +186,7 @@ int epl_status(int argc, char **argv)
      }
 
 #ifdef USE_FLOW_CONTROL
-  epl_write_bid(epl_job_info, temp_string, ts - temp_string);
+  e = epl_write_bid(epl_job_info, temp_string, ts - temp_string);
 #endif
 
   if (e < 0) 
@@ -195,5 +194,6 @@ int epl_status(int argc, char **argv)
       perror("status:");
     }
 
+  epl_bid_end(epl_job_info);
   exit(0);
 }

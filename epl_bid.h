@@ -51,6 +51,7 @@ void epl_kernel_init(EPL_job_info *epl_job_info);
 
 #ifdef HAVE_LIBUSB
 void epl_libusb_init(EPL_job_info *epl_job_info);
+void epl_libusb_end(EPL_job_info *epl_job_info);
 void find_endpoint(EPL_job_info *epl_job_info, 
 		   struct usb_endpoint_descriptor *endpoint);
 void find_altsetting(EPL_job_info *epl_job_info,

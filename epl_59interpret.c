@@ -26,7 +26,10 @@
 **/
 
 /* we need more than -ansi to use the nanosleep routine */
+#ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 199309L
+#endif
+
 #include <time.h>
 
 #include <stdlib.h>
@@ -98,10 +101,23 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   else if (p[0x11] == 0x0f)
     {
       fprintf(stderr, "0x0f extension:\n");
-      fprintf(stderr, "  connection by    = %s\n", p[0x1b] & 0x02 ? "USB" : "PARPORT");
-      fprintf(stderr, "  installed memory = %iMiB\n", p[0x1c]);
+      switch(p[0])
+	{
+	case 0x10: /* 5800L, 5900L */
+	  fprintf(stderr, "  connection by    = %s\n", p[0x1b] & 0x02 ? "USB" : "PARPORT");
+	  fprintf(stderr, "  installed memory = %iMiB\n", p[0x1c]);
+	  break;
+	case 0x11: /* 5800L only */
+	  fprintf(stderr, "  printed pages    = %i\n", (p[0x19] << 8) | p[0x1a]);
+	  fprintf(stderr, "  toner supply     = %i%%\n", p[0x1b]);
+	  fprintf(stderr, "  imaging supply   = %i%%\n", p[0x1c]);
+	  fprintf(stderr, "  paper supply     = %i%%\n", p[0x1d]);
+	  break;
+	default:
+	  break;
+	}
     }
-  else if (p[0x11] == 0x11)
+  else if (p[0x11] == 0x11) /* 5900L only */
     {
       fprintf(stderr, "0x11 extension:\n");
       fprintf(stderr, "  printed pages    = %i\n", (p[0x19] << 8) | p[0x1a]);

@@ -60,6 +60,7 @@ struct _EPL_job_info {
 
 #ifdef HAVE_LIBIEEE1284
 struct parport *port;
+struct parport_list *port_list;
 #endif
   
 #ifdef USE_FLOW_CONTROL

@@ -92,10 +92,12 @@ int epl_job_footer(EPL_job_info *epl_job_info)
 
   for (i = 0 ; i < ts_count - 1 ; i++)
     {
+#ifdef EPL_DEBUG
       fprintf(stderr,"string %i from %p to %p\n",
               i,
 	      ts_start_idx[i],
 	      ts_start_idx[i+1]);
+#endif
       e = epl_write_bid(epl_job_info,
                         ts_start_idx[i],
 			ts_start_idx[i+1] - ts_start_idx[i]);

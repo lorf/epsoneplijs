@@ -102,15 +102,16 @@
 
 
 #ifdef HAVE_LIBUSB
-#define _SVID_SOURCE 1
 #include "libusb/usb.h"
 #endif 
 
 #ifdef HAVE_LIBIEEE1284
-#define _POSIX_C_SOURCE 199309L
 #include "libieee1284/include/ieee1284.h"
 #endif 
 
-#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_LIBIEEE1284)
+#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_LIBIEEE1284) || defined(HAVE_KERNEL_1284)
 #define USE_FLOW_CONTROL
 #endif
+
+/* This 1024 comes from the kernel header */
+#define MAX_DEVICE_ID_SIZE 1024

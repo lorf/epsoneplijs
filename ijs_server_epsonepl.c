@@ -32,13 +32,15 @@
 **/
 
 /* fdopen requires this */
+#ifndef _POSIX_C_SOURCE 
 #define _POSIX_C_SOURCE  1
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef HAVE_KERNEL_USB_DEVICE
+#if defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_KERNEL_1284)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -1006,6 +1008,7 @@ main (int argc, char **argv)
           if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
               /* initialize estimated_freemem */
+	      epl_job_info->estimated_free_mem = 2*1048576; /* fake */
               epl_poll(epl_job_info, 0);
               epl_poll(epl_job_info, 1); /* just for fun */
             }

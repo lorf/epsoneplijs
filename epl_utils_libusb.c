@@ -33,11 +33,9 @@
 #include "epl_job.h"
 #include "epl_bid.h"
 
-#define MAX_DEVICE_ID_SIZE     1024
-
 void epl_libusb_init(EPL_job_info *epl_job_info)
 {
-  unsigned char device_id_string[MAX_DEVICE_ID_SIZE];  /* This 1024 comes from the kernel header */
+  char device_id_string[MAX_DEVICE_ID_SIZE];
   int err, length;
 
   struct usb_bus *bus;
@@ -95,10 +93,13 @@ void epl_libusb_init(EPL_job_info *epl_job_info)
 	  if ( err < 0 ) {
 	    fprintf (stderr,"Can't Get Device ID String: %d\n", err);  
 	  } else {
-	    length = (device_id_string[0] << 8) + device_id_string[1] - 2;
+	    length = (((unsigned)device_id_string[0]) << 8) + ((unsigned)device_id_string[1]) - 2;
+	    device_id_string[length+2] = 0;
 	    fprintf(stderr,"Device ID String: ");
+            
 	    fwrite (device_id_string + 2, 1, length, stderr);
 	    fprintf (stderr,"\n");
+	    epl_identify(device_id_string + 2);
 	  }
 
 	  epl_job_info->usb_in_ep = -1;

@@ -47,7 +47,7 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
   /* the kernel device doesn't need init, but we'll do some check anyway */
   int ioctl_args[2];
   int model;
-  unsigned char ioctl_string[MAX_DEVICE_ID_SIZE];  /* This 1024 comes from the kernel header */
+  unsigned char ioctl_string[MAX_DEVICE_ID_SIZE];
   unsigned char *ioctl_string_shifted_by_two;
   int length;
  
@@ -79,5 +79,5 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
   ioctl_string_shifted_by_two[length] = 0; /* string termination */
   fprintf (stderr,"IOC Device ID String: %s\n", ioctl_string_shifted_by_two);
 
-  model = epl_identify(ioctl_string_shifted_by_two);
+  model = epl_identify((char *)ioctl_string_shifted_by_two);
 }

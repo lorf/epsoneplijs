@@ -44,12 +44,15 @@ make
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/{bin,man,doc}
 make install prefix=$RPM_BUILD_ROOT/usr
-[ -f test5700lusb ] && install test5700lusb $RPM_BUILD_ROOT/usr/bin
+
+install ps2epl.pl $RPM_BUILD_ROOT/usr/bin
+
+#[ -f test5700lusb ] && install test5700lusb $RPM_BUILD_ROOT/usr/bin
 
 ## The testlibusb binary doesn't belong to us and its installation 
 ## should be removed eventually, when we don't need debug info too often...
 
-[ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin
+#[ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin
 strip $RPM_BUILD_ROOT/usr/bin/*
 
 %clean

@@ -23,7 +23,9 @@
 **/
 
 /* fdopen requires this */
+#ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE  1
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>

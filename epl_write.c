@@ -26,12 +26,16 @@
 **/
 
 /* we need more than -ansi to use the nanosleep routine */
+#ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 199309L
+#endif
+
 #include <time.h>
 
 #include <stdlib.h>
 
-#ifdef HAVE_KERNEL_USB_DEVICE
+/* read() and write() */
+#if defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_KERNEL_1284) 
 #include <unistd.h>
 #endif
 
