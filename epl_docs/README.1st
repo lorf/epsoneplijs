@@ -1,0 +1,12 @@
+Files in this directory (mostly for developers):
+
+README            - this document
+epl-5700.c        - pbm to 5700L filter
+epl-5800.c        - pbm to 5800L filter
+epl-protocol.pdf  - notes on the header fields, etc.
+epl5x00l.c        - later pbm to 5900L filter
+message.eml       - the original e-mail from Roberto. It 
+                      contains the first version of the 5900L
+                      filter, from which the 5700L/5800L filter
+                      derived.  
+		
