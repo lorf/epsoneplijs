@@ -138,23 +138,35 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	    }
 	}
 
-      if (ret > 0)
-        {
-	  hex_dump("Printer replied", "<-", in_buf, ret, 5);
-	}
-
-      if (ret != reply_size) 
-	{
-	  fprintf(stderr, "Reply: expected %d bytes, got %d bytes\n", 
-		  reply_size,
-		  ret);
-	  fprintf(stderr, "**USB reply from printer different size from expected: \n**If you don't see this message too often, it is probably OK\n**See FAQ.\n");
-
-	}
-
       if (ret > 0 && ret == reply_size)
 	{
+	  /* everything is expected, interprete it */
           epl_interpret_reply(epl_job_info, in_buf, ret, code);
+	}
+      else 
+	{
+	  if (ret > 0) 
+	    {
+	      /* unexpected size, but ret > 0 , we should hex dump */
+	      fprintf(stderr, "Reply: expected %d bytes, got %d bytes\n", 
+		      reply_size,
+		      ret);
+	      fprintf(stderr, "**Bidirectional reply from printer different size from expected: \n**If you don't see this message too often, it is probably OK\n**See FAQ.\n");
+	      
+	      hex_dump("Printer replied", "<-", in_buf, ret, 5);
+	    }
+	  else
+	    {
+	      /* if we got here, it means read didn't succeed and ret <= 0 */
+	      fprintf(stderr, "Reply: expected %d bytes, unsuccessful read status: %d\n", 
+		      reply_size,
+		      ret);
+	      /* 
+		 When this happens, it might be useful to know what recently happened at the OS level,
+		 although this is likely to be confusing...
+	      */
+	      perror("Bid read:");
+	    }
 	}
     } 
   return ret_write;
