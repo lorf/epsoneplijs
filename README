@@ -1,3 +1,12 @@
+Requirement:
+	Type "gs -h" to get your ghostscript version and
+	device list. You need GNU ghostscript 6.53+ or
+	AFPL Ghostscript 7.04+, and the "ijs" device listed
+	among the device list to use this plugin.
+
+	AFPL ghostscript 8.0 has some yet unidentified issues,
+	and known not to work. Avoid it for the time being.
+
 Installation:
 	./configure
 	make
@@ -5,8 +14,9 @@ Installation:
 
 	(be sure /usr/local/bin is in your path,
 	if it isn't, try with "./configure --prefix=/usr")
+
 	Check the content of the script "foomatic/copy_to_foomatic"
-	  for notes on foomatic and cups
+	  in this source bundle for notes on foomatic and cups
 
 Usage:
 	See ps2epl for selectable options.
