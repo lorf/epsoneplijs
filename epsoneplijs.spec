@@ -32,15 +32,19 @@ and 6100L. YMMV.
 ln -s libusb-%{LIBUSB_VERSION} libusb 
 ln -s libieee1284-%{LIBIEEE1284_VERSION} libieee1284 
 perl -pi -e "s/STRICT_WIN32_COMPATIBILITY/__unix__/;" epl_config.h
-./configure --with-kerneldevice --with-kernel1284 --with-libusb --with-libieee1284 
+./configure --with-kernelusb --with-kernel1284 --with-libusb --with-libieee1284 
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/{bin,man,doc}
 make install prefix=$RPM_BUILD_ROOT/usr
-[ -f test5700lusb ] && install test5700lusb $RPM_BUILD_ROOT/usr/bin 
-[ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin 
+[ -f test5700lusb ] && install test5700lusb $RPM_BUILD_ROOT/usr/bin
+
+# The testlibusb binary doesn't belong to us and its installation 
+# should be removed eventually, when we don't need debug info too often...
+
+[ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin
 strip $RPM_BUILD_ROOT/usr/bin/*
 
 %clean

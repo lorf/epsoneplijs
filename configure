@@ -798,8 +798,8 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --without-kerneldevice  disable kernel USB device support
-  --with-kerneldevice     enable  kernel USB device support
+  --without-kernelusb  disable kernel USB device support
+  --with-kernelusb     enable  kernel USB device support
   --with-libusb           enable  libusb support (requires libusb sub-directory)
   --without-libusb        disable libusb and full-feature USB support
   --without-kernel1284  disable kernel ieee1284 device support
@@ -2099,12 +2099,12 @@ os=`uname -s`
 echo "$as_me:$LINENO: checking for OS USB support" >&5
 echo $ECHO_N "checking for OS USB support... $ECHO_C" >&6
 
-# Check whether --with-kerneldevice or --without-kerneldevice was given.
-if test "${with_kerneldevice+set}" = set; then
-  withval="$with_kerneldevice"
+# Check whether --with-kernelusb or --without-kernelusb was given.
+if test "${with_kernelusb+set}" = set; then
+  withval="$with_kernelusb"
 
 fi;
-if test "$with_kerneldevice"  != no ; then
+if test "$with_kernelusb"  != no ; then
    if test "$os" = Linux ; then
       uname=`uname -r`
       major=${uname%%.*}
@@ -2165,9 +2165,9 @@ fi
 echo "$as_me:$LINENO: checking for OS 1284 support" >&5
 echo $ECHO_N "checking for OS 1284 support... $ECHO_C" >&6
 
-# Check whether --with-kerneldevice or --without-kerneldevice was given.
-if test "${with_kerneldevice+set}" = set; then
-  withval="$with_kerneldevice"
+# Check whether --with-kernel1284 or --without-kernel1284 was given.
+if test "${with_kernel1284+set}" = set; then
+  withval="$with_kernel1284"
 
 fi;
 if test "$with_kernel1284"  != no ; then

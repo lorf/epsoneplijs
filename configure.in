@@ -8,9 +8,9 @@ AC_PROG_CC
 # Check for OS USB support
 os=`uname -s`
 AC_MSG_CHECKING(for OS USB support)
-AC_ARG_WITH(kerneldevice, [  --without-kerneldevice  disable kernel USB device support
-  --with-kerneldevice     enable  kernel USB device support])
-if test "$with_kerneldevice"  != no ; then
+AC_ARG_WITH(kernelusb, [  --without-kernelusb  disable kernel USB device support
+  --with-kernelusb     enable  kernel USB device support])
+if test "$with_kernelusb"  != no ; then
    if test "$os" = Linux ; then
       uname=`uname -r`
       major=${uname%%.*}
@@ -58,7 +58,7 @@ fi
 
 # Check for OS IEEE1284 support
 AC_MSG_CHECKING(for OS 1284 support)
-AC_ARG_WITH(kerneldevice, [  --without-kernel1284  disable kernel ieee1284 device support
+AC_ARG_WITH(kernel1284, [  --without-kernel1284  disable kernel ieee1284 device support
   --with-kernel1284     enable  kernel ieee1284 device support])
 if test "$with_kernel1284"  != no ; then
 #the autoprobe file is a sign of os 1284 config. may be version dependent.
