@@ -1,3 +1,7 @@
+2003-04-12: cvs - Roberto Ragusa
+   . epl_usb_replies_size array switched to a function.
+   . Misc fixes and polishing.
+
 2003-04-11: cvs - Roberto Ragusa
    . Added adaptive flow control algorithm for 5800L/5900L/6100L
      (5700L unchanged). It appears to be rock solid, according to

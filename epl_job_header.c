@@ -31,7 +31,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
   char temp_string[256];
   char *ts;
   int ts_count; /* how many strings */
-  char *ts_beg[5]; /* where strings begin */
+  char *ts_start_idx[5]; /* where strings begin */
   char ritech;
   char tonersave;
   char density;
@@ -126,12 +126,12 @@ int epl_job_header(EPL_job_info *epl_job_info)
 
   ts = temp_string;
   ts_count = 0;
-  ts_beg[ts_count++] = ts;
+  ts_start_idx[ts_count++] = ts;
   if (epl_job_info->model == MODEL_5700L)
     {
       ts += sprintf(ts, "%c%c",0x00, 0x00);
       memcpy(ts, data_block, 6); ts += 6;
-      ts_beg[ts_count++] = ts;
+      ts_start_idx[ts_count++] = ts;
     }
   else if (epl_job_info->model == MODEL_5800L
 	   || epl_job_info->model == MODEL_5900L
@@ -155,19 +155,19 @@ int epl_job_header(EPL_job_info *epl_job_info)
 
       ts += sprintf(ts, "\x00a");
       ts += sprintf(ts, "@EJL EN LA=ESC/PAGE\x00a");
-      ts_beg[ts_count++] = ts;
+      ts_start_idx[ts_count++] = ts;
 
       if (epl_job_info->model == MODEL_5800L
 	  || epl_job_info->model == MODEL_5900L)
 	{
 	  ts += epl_sprintf_wrap(ts,4);
 	  ts += sprintf(ts, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
-          ts_beg[ts_count++] = ts;
+          ts_start_idx[ts_count++] = ts;
 	  ts += epl_sprintf_wrap(ts,9);
 	  ts += sprintf(ts, "%c%c", 0x02, 0x00);
 	  memcpy(ts, data_block, 6); ts += 6;
 	  ts += sprintf(ts, "%c", 0x00);
-          ts_beg[ts_count++] = ts;
+          ts_start_idx[ts_count++] = ts;
 	}
       else if (epl_job_info->model == MODEL_6100L)
 	{
@@ -180,7 +180,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	  ts += sprintf(ts, "B%c", 0x00);
 	  memcpy(ts, data_block, 6); ts += 6;
 	  memcpy(ts, data_block_6xL, 8); ts += 8;
-          ts_beg[ts_count++] = ts;
+          ts_start_idx[ts_count++] = ts;
 	}      
     }
 
@@ -191,9 +191,14 @@ int epl_job_header(EPL_job_info *epl_job_info)
 
   for (i = 0 ; i < ts_count - 1 ; i++)
     {
-      fprintf(stderr,"string %i from %p to %p\n", i, ts_beg[i], ts_beg[i+1]);
-      e = epl_write_bid(epl_job_info, ts_beg[i], ts_beg[i+1] - ts_beg[i]);
-      if(e != ts_beg[i+1] - ts_beg[i]) return -1;
+      fprintf(stderr,"string %i from %p to %p\n",
+              i,
+	      ts_start_idx[i],
+	      ts_start_idx[i+1]);
+      e = epl_write_bid(epl_job_info,
+                        ts_start_idx[i],
+			ts_start_idx[i+1] - ts_start_idx[i]);
+      if(e != ts_start_idx[i+1] - ts_start_idx[i]) return -1;
     }
   return 0;
 } 

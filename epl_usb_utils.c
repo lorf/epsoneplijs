@@ -126,6 +126,7 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
   /* the kernel device doesn't need init, but we'll do some check anyway */
   int ioctl_args[2];
   unsigned char ioctl_string[MAX_DEVICE_ID_SIZE+1];  /* This 1024 comes from the kernel header, we add 1 for null */
+  unsigned char *ioctl_string_2;
   int length;
  
   ioctl(epl_job_info->kernel_fd, LPIOC_GET_VID_PID, &ioctl_args);
@@ -153,25 +154,23 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
 
   ioctl(epl_job_info->kernel_fd, LPIOC_GET_DEVICE_ID, ioctl_string);
   length = (ioctl_string[0] << 8) + ioctl_string[1] - 2;
-  ioctl_string[2 + length] = 0; /* string termination */
-  fprintf (stderr,"IOC Device ID String: %s\n", &ioctl_string[2]);
-/*
-  fwrite (ioctl_string + 2, 1, length, stderr);
-  fprintf (stderr,"\n");
-*/
-  if(strstr((char *)&ioctl_string[2], "5700L"))
+  ioctl_string_2 = ioctl_string + 2; /* to the actual string */
+  ioctl_string_2[length] = 0; /* string termination */
+  fprintf (stderr,"IOC Device ID String: %s\n", ioctl_string_2);
+
+  if(strstr((char *)ioctl_string_2, "5700L"))
     {
       fprintf(stderr, "so this is a 5700L\n");
     }
-  else if(strstr((char *)&ioctl_string[2], "5800L"))
+  else if(strstr((char *)ioctl_string_2, "5800L"))
     {
       fprintf(stderr, "so this is a 5800L\n");
     }
-  else if(strstr((char *)&ioctl_string[2], "5900L"))
+  else if(strstr((char *)ioctl_string_2, "5900L"))
     {
       fprintf(stderr, "so this is a 5900L\n");
     }
-  else if(strstr((char *)&ioctl_string[2], "6100L"))
+  else if(strstr((char *)ioctl_string_2, "6100L"))
     {
       fprintf(stderr, "so this is a 6100L\n");
     }

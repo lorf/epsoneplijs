@@ -37,7 +37,6 @@
 
 #include "epl_job.h"
 #include "epl_usb.h"
-#include "epl_usb_replies.h"
 
 /* sleep routine only used here */
 void do_subsec_sleep(EPL_job_info *epl_job_info);
@@ -94,14 +93,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	    }
 	}
       /* we could get here with code=0x1b (5900L) or other values (6100L) */
-      if (code < KNOWN_REPLY_CODES) /* avoid out of bounds condition */
-        {
-          reply_size = epl_usb_reply_size[epl_job_info->model][code];
-	}
-      else
-        {
-          reply_size = -1;
-        }
+      /* the called function returns -1 for invalid values */
+      reply_size = epl_usb_reply_len(epl_job_info, code);
 
       if (reply_size == -1) /* something is wrong */
         {

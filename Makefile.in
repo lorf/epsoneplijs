@@ -40,7 +40,7 @@ all:	libijs.a libijs$(SHARED_OBJ) ijs_client_example$(EXE) ijs_server_example$(E
 
 LIB_OBJS=ijs$(OBJ) ijs_client$(OBJ) ijs_server$(OBJ) $(IJS_EXEC_SERVER)
 
-EPL_USB_OBJS=epl_write$(OBJ) epl_usb_utils$(OBJ)
+EPL_USB_OBJS=epl_write$(OBJ) epl_usb_utils$(OBJ) epl_usb_replies$(OBJ)
 
 EPL_OBJS=epl_job_header$(OBJ) epl_page_header$(OBJ) epl_page_footer$(OBJ) \
            epl_job_footer$(OBJ) epl_print_stripe$(OBJ) epl_poll$(OBJ) epl_compress$(OBJ) \

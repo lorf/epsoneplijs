@@ -40,3 +40,5 @@ void epl_usb_init(EPL_job_info *epl_job_info);
 void epl_usb_mid(EPL_job_info *epl_job_info);
 
 void epl_usb_end(EPL_job_info *epl_job_info);
+
+int epl_usb_reply_len(EPL_job_info *epl_job_info, unsigned char code);
