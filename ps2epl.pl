@@ -108,6 +108,10 @@ my @extra_gs_options = ();
 #to turn on wts
 if ($infile =~ /\.ps\s/) 
 {
+    # probably not necessary, as the ghostscript default is 10MB,
+    # which is more than enough for a B/W device.
+    # 5MB = A4 at 600x600 for 1-bit ; so 500MB = A4 at 1200x1200 at 24-bit
+    # but yes, 10MB is very low for a 24-bit device.
     push @extra_gs_options, ("-dMaxBitmap=500000000");
 }
 
