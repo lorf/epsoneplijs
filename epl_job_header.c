@@ -181,9 +181,9 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	  if (epl_job_info->model == MODEL_6200L)
 	    {
 	      ts += epl_sprintf_wrap(ts,10);
-	      ts += sprintf(ts, "O%c%c%c%c%c%c%c%c%c%c",
+	      ts += sprintf(ts, "O%c%c%c%c%c%c%c%c%c",
 			    0x00, 0x00, 0x00, 0x00,
-			    0x04, 0x01, 0x31, 0xa6, 0x9a, 0x1d); 
+			    0x04, 0x01, 0x31, 0xa6, 0x9a); 
 	      ts_start_idx[ts_count++] = ts;
 	    }
 	  ts += epl_sprintf_wrap(ts, 16);
