@@ -10,8 +10,12 @@ Requirement
 
   The kernel device code (./configure --with-kerneldevice) switches on code 
   portions which depends on features of the linux kernel only found in 2.4.19+ 
-  onwards, but the ./configure script only check the host is linux but 
-  can't auto-detect kernel version. Therefore the default is "--without".
+  or 2.5.7+ onwards. The default is auto (enables if the host is linux and 
+  the kernel suitably suitably recent).
+
+  The libusb USB code    (./configure --with-libusb) switches on code 
+  portions which depends on libusb. The default is auto (enables if "libusb"
+  is either a symbolic link to or an actual directory of the libusb source.) 
 
 Installation
 ============
