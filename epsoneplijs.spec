@@ -1,12 +1,14 @@
-Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L printers
+Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L/6100L printers
 Name: epsoneplijs
-Version: 0.3.0
+Version: 0.4.0
 %define LIBUSB_VERSION 0.1.7
+%define LIBIEEE1284_VERSION 0.2.7
 Release: 1
 Copyright: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
 Group: Applications/Graphics
 Source0:  http://osdn.dl.sourceforge.net/sourceforge/epsonepl/epsoneplijs-%{version}.tgz
 Source1:  http://osdn.dl.sourceforge.net/sourceforge/libusb/libusb-%{LIBUSB_VERSION}.tar.gz
+Source2:  http://osdn.dl.sourceforge.net/sourceforge/libieee1284/libieee1284-%{LIBIEEE1284_VERSION}.tar.bz2
 URL: http://sourceforge.net/projects/epsonepl/
 Vendor: http://sourceforge.net/projects/epsonepl/
 Packager: Hin-Tak Leung, Roberto Ragusa
@@ -18,18 +20,20 @@ BuildRoot: /var/tmp/epsonepl-root
 %description
 Support for the Epson EPL-5700L/5800L/5900L/6100L printer family under linux and 
 other unix-like systems. This effort is not edorsed by nor affliated with 
-Epson. It is known to work for at least one user for each of 5700L, 5800L 
-and 5900L. YMMV. 6100L tester needed.
+Epson. It is known to work for at least one user for each of 5700L, 5800L, 5900L,
+and 6100L. YMMV.
 
 %prep
 
 %setup -a 1
+%setup -a 2
 
 %build
 
 ln -s libusb-%{LIBUSB_VERSION} libusb 
+ln -s libieee1284-%{LIBUSB_VERSION} libieee1284 
 perl -pi -e "s/STRICT_WIN32_COMPATIBILITY/__unix__/;" epl_config.h
-./configure --with-kerneldevice --with-libusb
+./configure --with-kerneldevice --with-kernel1284 --with-libusb --with-libieee1284 
 make
 
 %install
@@ -52,7 +56,7 @@ echo "Attempting to remove older installs in /usr/local/bin."
 echo "Done."
 echo ""
 echo -n "Please check /usr/doc/epsoneplijs-" 
-echo -n 0.3.0
+echo -n 0.4.0
 echo " for tips on CUPS, foomatic, etc."
 echo "Happy printing! Bye for now."
 echo ""
@@ -64,6 +68,9 @@ exit 0
 /usr/bin/*
 
 %changelog
+* Sat Apr 26 2003 Hin-Tak Leung <htl10@users.sourceforge.net> 
+- bidirectional IEEE1284 parallel port support
+
 * Wed Feb  5 2003 Roberto Ragusa <rora@users.sourceforge.net> 
 - Eliminated dependency on ghostscript-fonts (some distributions have
   a different spelling of the name of the package and we should not worry
