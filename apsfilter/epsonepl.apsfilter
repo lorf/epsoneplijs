@@ -1,0 +1,46 @@
+# apsfilter epson EPL5[789]00L driver
+
+# Copyright (c) 2003 Simon Schubert
+
+##########################################################################
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation
+# files (the "Software"), to deal in the Software without
+# restriction, including without limitation the rights to use, copy,
+# modify, merge, publish, distribute, sublicense, and/or sell copies
+# of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+##########################################################################
+
+# Installation instructions:
+#
+# (1) Copy this file to "${LOCALBASE}/share/apsfilter/driver" and renamed as "epsonepl".
+#
+# (2) Add the following line (without beginning and trailing spaces) 
+#     to "${LOCALBASE}/share/apsfilter/driver/MAPPING" :
+#
+#               epsonepl:EPL5700L:EPL5800L:EPL5900L:
+#
+
+case "$QUALITY" in
+	draft)	params="EplDpi=300,EplRitech=off,EplTonerSave=on" RESOLUTION=300x300 ;;
+	low)	params="EplDpi=300,EplRitech=off,EplTonerSave=off" RESOLUTION=300x300 ;;
+	medium)	params="EplDpi=Class600,EplRitech=on,EplTonerSave=off" RESOLUTION=600x300 ;;
+	high)	params="EplDpi=600,EplRitech=off,EplTonerSave=off" RESOLUTION=600x600 ;;
+	photo)	params="EplDpi=Class1200,EplRitech=on,EplTonerSave=off" RESOLUTION=1200x600 ;;
+esac
+
+GS_FEATURES="$GS_FEATURES -sProcessColorModel=DeviceGray -dBitsPerSample=1 -sIjsServer=ijs_server_epsonepl -dIjsUseOutputFD -sIjsParams='$params,EplDensity=3' -sDeviceManufacturer=Epson -sDeviceModel=$(echo $PRINTER | sed 's#.*/##')"
+PRINTER=ijs
