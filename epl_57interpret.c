@@ -219,13 +219,15 @@ void epl_57interpret(unsigned char *buffer, int len)
 	  
 	  while (abort_if_not_zero[i_abort] != 0 ) 
 	    {
-	      fprintf(stderr,"<[%d]:%2.2X>",
-		      abort_if_not_zero[i_abort], 
-		      (0xff & buffer[abort_if_not_zero[i_abort]])
-		      ); 
+	      if (buffer[abort_if_not_zero[i_abort]] != 0) {
+		fprintf(stderr,"<[%d]:%2.2X>",
+			abort_if_not_zero[i_abort], 
+			(0xff & buffer[abort_if_not_zero[i_abort]])
+			); 
+	      }
 	      i_abort++ ;
 	    }
-
+	  
 	  fprintf(stderr,"\n");
 
 	  exit(1);
