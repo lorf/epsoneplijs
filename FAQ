@@ -4,8 +4,10 @@ Requirement
   GNU ghostscript 6.53+ or AFPL Ghostscript 7.04+, and the "ijs" device 
   listed among the device list to use this plugin.
 
-  AFPL ghostscript 8.0 has some yet unidentified issues, and known not to 
-  work. Avoid it for the time being.
+  There is a bug with ghostscript 7.22 - 8.14 inclusive. The symptom is 
+  that the page comes out all black. Either used the patched 8.00 binary
+  on our project page http://sourceforge.net/projects/epsonepl/,
+  recompile your own with the patch, or upgrade to 8.14+ or downgrade to 7.07-.
 
 USB on 5700L
 ============
