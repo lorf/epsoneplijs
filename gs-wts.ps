@@ -5,10 +5,26 @@
 %%
 %% Adapted from Raph Levien's WTS announcement.
 %%
+%
+% UseWTS is ghostscript-specific
+
 << /UseWTS true >> setuserparams
+
+% - The Half-tone dictionary syntax is defined in PLRM,
+% Section 7.4.3: Halftone Dictionaries.
+%
+% - Table 7.3 defines the valid values for HalftoneType.
+%
+% - The Spot Function below is exactly as the example in
+% Sectction 7.4.4: Spot Functions
+%
+% - { 180 mul cos exch 180 mul cos add 2 div}
+% (cos(180 * x) + cos( 180 * y))/2
+% where (x,y) is the co-ordinate of a pixel in [-1,1].
 <<
   /AccurateScreens true
   /HalftoneType 1
+  /HalftoneName (Round Dot Screen)
   /SpotFunction { 180 mul cos exch 180 mul cos add 2 div}
   /Frequency 137
   /Angle 37
