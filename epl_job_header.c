@@ -177,6 +177,15 @@ int epl_job_header(EPL_job_info *epl_job_info)
 	  ts += sprintf(ts, "                  ");      /* Don't touch these! */
 	  ts += sprintf(ts, "                  ");      /* The padding is significant! */
 	  ts += sprintf(ts, "                  ");
+	  /* this is 6200L-specific code - no idea what it means */
+	  if (epl_job_info->model == MODEL_6200L)
+	    {
+	      ts += epl_sprintf_wrap(ts,10);
+	      ts += sprintf(ts, "O%c%c%c%c%c%c%c%c%c%c",
+			    0x00, 0x00, 0x00, 0x00,
+			    0x04, 0x01, 0x31, 0xa6, 0x9a, 0x1d); 
+	      ts_start_idx[ts_count++] = ts;
+	    }
 	  ts += epl_sprintf_wrap(ts, 16);
 	  ts += sprintf(ts, "B%c", 0x00);
 	  memcpy(ts, data_block, 6); ts += 6;
