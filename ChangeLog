@@ -1,3 +1,8 @@
+2003-03-18: cvs - Hin-Tak Leung
+   . Updated flow-control timing code. Can do 20 pages via libusb now.
+   . removed some over-verbose debug outputs, added page number output.
+   . Added apsfilter contrib setup.
+
 2003-03-13: cvs - Roberto Ragusa
    . Compilation options in epl_config.h.
    . Protocol changes to work around printer crashes.

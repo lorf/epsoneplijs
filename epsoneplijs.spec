@@ -53,7 +53,7 @@ exit 0
 
 %files
 %defattr(-, root, root)
-%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test.ps cups epl_docs foomatic 
+%doc ChangeLog FAQ LIMITATIONS README* ps2epl epl_test.ps apsfilter cups epl_docs foomatic 
 /usr/bin/*
 
 %changelog

@@ -551,7 +551,9 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 
   /* Check options */
 
+#ifdef EPL_DEBUG
   fprintf(stderr, "settings:\n");
+#endif
 
   if (epl_job_info->outfile == NULL)
     {
@@ -633,7 +635,9 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
           fprintf(stderr, "Unparsable PaperSize %s, aborting!\n", s);
           return 1;
 	}
+#ifdef EPL_DEBUG
       fprintf(stderr, "  Papersize is %s inches\n", s);
+#endif
     }
 
 
@@ -670,7 +674,9 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       fprintf(stderr, "Unknown EplDpi value %s, aborting!\n", s);
       return 1;
     }
+#ifdef EPL_DEBUG
   fprintf(stderr, "  Printing at DPI %s\n", s);
+#endif
 
   /* EplRitech */
   s = find_param(pl, "EplRitech");
@@ -692,7 +698,9 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       fprintf(stderr, "Unknown EplRitech value %s, aborting!\n", s);
       return 1;
     }
+#ifdef EPL_DEBUG
   fprintf(stderr, "  Ritech is %s\n", s);
+#endif
 
   /* EplDensity */
   s = find_param(pl, "EplDensity");
@@ -726,7 +734,9 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       fprintf(stderr, "Unknown EplDensity value %s, aborting!\n", s);
       return 1;
     }
+#ifdef EPL_DEBUG
   fprintf(stderr, "  Density is %s\n", s);
+#endif
 
   /* EplTonerSave */
   s = find_param(pl, "EplTonerSave");
@@ -748,7 +758,9 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       fprintf(stderr, "Unknown EplTonerSave value %s, aborting!\n", s);
       return 1;
     }
+#ifdef EPL_DEBUG
   fprintf(stderr, "  TonerSave is %s\n", s);
+#endif
 
   /* Number of channels */
   if (ph.bps != 1)
@@ -865,6 +877,7 @@ main (int argc, char **argv)
   Epson_EPL_ParamList *pl = NULL;
   EPL_job_info *epl_job_info = NULL;
   int epl_job_started = EPL_JOB_STARTED_NO;
+  int current_page_number = 1;
   
   ctx = ijs_server_init ();
   if (ctx == NULL)
@@ -926,8 +939,9 @@ main (int argc, char **argv)
 	  break;
 	}
       
-      fprintf (stderr, "got page header, width %d x height %d\n",
-	       ph.width, ph.height);
+      fprintf (stderr, "Received page %d: width %d x height %d\n",
+	       current_page_number, ph.width, ph.height);
+      current_page_number++;
       
       /* Before starting, dump IJS parameters */
 

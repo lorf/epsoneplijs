@@ -29,6 +29,15 @@
 #include "epl_config.h"
 #include "epl_compress.h"
 
+#ifdef HAVE_LIBUSB
+#define _SVID_SOURCE 1
+#include "libusb/usb.h"
+#endif 
+
+#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_DEVICE) 
+#define USE_FLOW_CONTROL
+#endif
+
 /* job_info is created as a simplier version of
    ParamList which can be used by the header/etc routes
    without passing along string parameters */
@@ -93,6 +102,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length);
 
 int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length); 
 
+#undef EPL_DEBUG
+
 #ifdef EPL_DEBUG
 static char *printername[]={
   "<unknown>",
@@ -100,4 +111,6 @@ static char *printername[]={
   "EPL-5800L",
   "EPL-5900L"
 };
+
+#define VERBOSE
 #endif
