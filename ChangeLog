@@ -1,3 +1,7 @@
+2003-04-27: cvs - Roberto Ragusa
+   . New options added to foomatic and ps2epl.
+   . Misc little fixes.
+
 2003-04-26: cvs - Hin-Tak Leung
    . Added kernel mode and user mode bidirectional parallel port support,
         new configure option: --with-kernel1284,--with-libieee1284

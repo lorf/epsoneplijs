@@ -89,6 +89,8 @@ int epl_bid_reply_len(int model, unsigned char code)
 	case 0x11: result = 33; break; /* middle of polling - different between 58/59 */
 	case 0x12: result = 19; break; /* polling */
 	case 0x13: result = 20; break; /* 2nd command of job */
+	case 0x1b: result = 0;  break; /* this happens in initialization or closing */
+	case 0x40: result = 0;  break; /* this happens in initialization or closing */
         }
     }
   else if (model == MODEL_5900L)
@@ -106,6 +108,8 @@ int epl_bid_reply_len(int model, unsigned char code)
 	case 0x11: result = 35; break; /* middle of polling - - different between 58/59 */
 	case 0x12: result = 19; break; /* polling */
 	case 0x13: result = 20; break; /* 2nd command of job */
+	case 0x1b: result = 0;  break; /* this happens in initialization or closing */
+	case 0x40: result = 0;  break; /* this happens in initialization or closing */
         }
     }
   else if (model == MODEL_6100L)
@@ -119,7 +123,7 @@ int epl_bid_reply_len(int model, unsigned char code)
 	case 'C': result = 100; break; /* 1st level decapsulation */
 	case 'F': result = 100; break; /* page header */
 	case 'E': result = 100; break; /* page footer */
-	case 'I': result = 0;  break;  /* strip */
+	case 'I': result = 0;   break; /* strip */
 	case '@': result = 100; break; /* pre header */ 
         }
     }

@@ -39,7 +39,7 @@
 
 #include <errno.h>
 
-#include <ieee1284.h>
+#include "libieee1284/include/ieee1284.h"
 
 #include "epl_job.h"
 
@@ -114,7 +114,7 @@ static void test_deviceid (EPL_job_info *epl_job_info, struct parport_list *pl)
 	{
 	  printf ("%s, %s %s", field (id, devid_cls), field (id, devid_mfg),
 		  field (id, devid_mdl));
-	  model = epl_identify(id); 
+	  model = epl_identify(id+2); 
 	  if (model > 0)  
 	    {
 	      epl_job_info->model = model;
@@ -125,7 +125,7 @@ static void test_deviceid (EPL_job_info *epl_job_info, struct parport_list *pl)
 	{
 	  printf ("(may be cached) %s, %s %s", field (id, devid_cls),
 		  field (id, devid_mfg), field (id, devid_mdl));
-	  model = epl_identify(id); 
+	  model = epl_identify(id+2); 
 	  if (model > 0)  
 	    {
 	      epl_job_info->model = model;
@@ -139,7 +139,7 @@ static void test_deviceid (EPL_job_info *epl_job_info, struct parport_list *pl)
 	    printf ("    Daisy chain address %d: (may be cached) %s, %s %s\n", j,
 		    field (id, devid_cls), field (id, devid_mfg),
 		    field (id, devid_mdl));
-	    model = epl_identify(id); 
+	    model = epl_identify(id+2); 
 	    if (model > 0)  
 	      {
 		epl_job_info->model = model;
@@ -205,7 +205,7 @@ void epl_libieee1284_init(EPL_job_info *epl_job_info)
   
   if (epl_job_info->port == NULL) 
     {
-      printf("Didn't find any matching printer. Exiting....");
+      printf("Didn't find any matching printer. Exiting....\n");
       exit(1);
     }
   

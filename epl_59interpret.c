@@ -98,7 +98,8 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   else if (p[0x11] == 0x0f)
     {
       fprintf(stderr, "0x0f extension:\n");
-      fprintf(stderr, "  Installed memory = %iMiB\n", p[0x1b]);
+      fprintf(stderr, "  connection by    = %s\n", p[0x1b] & 0x02 ? "USB" : "PARPORT");
+      fprintf(stderr, "  installed memory = %iMiB\n", p[0x1c]);
     }
   else if (p[0x11] == 0x11)
     {

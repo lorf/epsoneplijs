@@ -19,7 +19,7 @@ BuildRoot: /var/tmp/epsonepl-root
 
 %description
 Support for the Epson EPL-5700L/5800L/5900L/6100L printer family under linux and 
-other unix-like systems. This effort is not edorsed by nor affliated with 
+other unix-like systems. This effort is not edorsed by nor affiliated with 
 Epson. It is known to work for at least one user for each of 5700L, 5800L, 5900L,
 and 6100L. YMMV.
 

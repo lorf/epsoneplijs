@@ -46,7 +46,7 @@
     </ev_shortname>
     <ev_driverval>off</ev_driverval>
    </enum_val>
-   <enum_val id="ev/1001">
+   <enum_val id="ev/1100">
     <ev_longname>
      <en>USB (libusb)</en>
     </ev_longname>
@@ -59,7 +59,7 @@
     </ev_shortname>
     <ev_driverval>libusb</ev_driverval>
    </enum_val>
-   <enum_val id="ev/1002">
+   <enum_val id="ev/1200">
     <ev_longname>
      <en>USB (kernel /dev/usb/lp0)</en>
     </ev_longname>
@@ -72,7 +72,7 @@
     </ev_shortname>
     <ev_driverval>/dev/usb/lp0</ev_driverval>
    </enum_val>
-   <enum_val id="ev/1003">
+   <enum_val id="ev/1201">
     <ev_longname>
      <en>USB (kernel /dev/usb/lp1)</en>
     </ev_longname>
@@ -84,6 +84,45 @@
           backends, the shortname must be monolingual in <en>! -->
     </ev_shortname>
     <ev_driverval>/dev/usb/lp1</ev_driverval>
+   </enum_val>
+   <enum_val id="ev/2100">
+    <ev_longname>
+     <en>ParPort (libieee1284)</en>
+    </ev_longname>
+    <!-- A multilingual <comments> block can appear here, too;
+         it should be treated as documentation for the user. -->
+    <ev_shortname>
+     <en>libieee1284</en>
+     <!-- Until someone tells me how to learn the user locale in 
+          backends, the shortname must be monolingual in <en>! -->
+    </ev_shortname>
+    <ev_driverval>libieee1284</ev_driverval>
+   </enum_val>
+   <enum_val id="ev/2200">
+    <ev_longname>
+     <en>ParPort (kernel /dev/lp0)</en>
+    </ev_longname>
+    <!-- A multilingual <comments> block can appear here, too;
+         it should be treated as documentation for the user. -->
+    <ev_shortname>
+     <en>ParPort (kernel /dev/lp0)</en>
+     <!-- Until someone tells me how to learn the user locale in 
+          backends, the shortname must be monolingual in <en>! -->
+    </ev_shortname>
+    <ev_driverval>/dev/lp0</ev_driverval>
+   </enum_val>
+   <enum_val id="ev/2201">
+    <ev_longname>
+     <en>ParPort (kernel /dev/lp1)</en>
+    </ev_longname>
+    <!-- A multilingual <comments> block can appear here, too;
+         it should be treated as documentation for the user. -->
+    <ev_shortname>
+     <en>ParPort (kernel /dev/lp1)</en>
+     <!-- Until someone tells me how to learn the user locale in 
+          backends, the shortname must be monolingual in <en>! -->
+    </ev_shortname>
+    <ev_driverval>/dev/lp1</ev_driverval>
    </enum_val>
   </enum_vals>
 </option>

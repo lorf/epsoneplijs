@@ -407,7 +407,7 @@ epson_epl_get_cb (void *get_cb_data,
       int size = strlen (val);
 
 #ifdef EPL_DEBUG
-      fprintf (stderr, "epson_epl_get_cb: Success key = %s ,val = %s\n", 
+      fprintf (stderr, "epson_epl_get_cb: Success key = %s, val = %s\n", 
 	       key,
 	       val);
 #endif
@@ -847,7 +847,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
     }
 #endif
 #ifdef HAVE_KERNEL_1284
-  /* We catch both /dev/lp0 */
+  /* We catch /dev/lp[0-9] */
   else if (strncmp(s, "/dev/lp",7) == 0)   
     {
       fprintf(stderr, "Using kernel parallel port device\n");

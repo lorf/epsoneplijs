@@ -53,10 +53,13 @@ TONERSAVE=on
   IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
 
 FLOWCONTROL=off
-  # either off, libusb, or kernel lp device name(e.g. "/dev/usb/lp0"). 
+  # either off, libusb (for USB), libieee1284 (for ParPort) or kernel
+  #   lp device name(e.g. "/dev/lp0" or "/dev/usb/lp0"). 
   # default: off
-  # the "libusb" and device name option is only available if compiled --with-libusb, 
-  #                                        and --with-kerneldevice respectively.
+  # the "libusb" and usb device name option is only available if compiled
+  #              --with-libusb and --with-kerneldevice respectively.
+  # the "libieee1284" and lp device name option is only available if compiled 
+  #              --with-libieee1284 and --with-kernel1284 respectively.
   IJSPARMS="$IJSPARMS,EplFlowControl=$FLOWCONTROL"
 
 ##################################################### End of options part #

@@ -93,7 +93,7 @@ void epl_bid_end(EPL_job_info *epl_job_info)
   switch (epl_job_info->connectivity)
     {
 #ifdef HAVE_LIBUSB
-    case VIA_KERNEL_USB: 
+    case VIA_LIBUSB: 
       epl_libusb_end(epl_job_info);
       break;
 #endif
@@ -103,14 +103,16 @@ void epl_bid_end(EPL_job_info *epl_job_info)
       break;
 #endif 
     default:
-      /* kernel device doesn't need closing? */
+      /* kernel devices don't need closing? */
       break;
     }  
 }
 
 int epl_identify(char *string)
 {
-
+#ifdef EPL_DEBUG
+  fprintf(stderr, "called identification for \"%s\"\n",string);
+#endif
   if(strstr(string, "EPL-5700L"))
     {
       fprintf(stderr, "Confirmed EPL-5700L\n");

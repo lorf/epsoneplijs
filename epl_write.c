@@ -56,7 +56,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
   /* use a different buffer to read, to be safe; probably not necessary */
   char in_buf[256]; 
 
-#ifdef EPL_DBUG
+#ifdef EPL_DEBUG
   hex_dump("We said", "->", buffer, length, 5);
 #endif
 
@@ -131,10 +131,16 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 #ifdef HAVE_LIBIEEE1284
 	    case VIA_LIBIEEE1284:
 	      ret = epl_libieee1284_read(epl_job_info->port, in_buf, reply_size);
+	      break;
 #endif
 	    default:
 	      ret = 0;
 	    }
+	}
+
+      if (ret > 0)
+        {
+	  hex_dump("Printer replied", "<-", in_buf, ret, 5);
 	}
 
       if (ret != reply_size) 
@@ -144,12 +150,9 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 		  ret);
 	  fprintf(stderr, "**USB reply from printer different size from expected: \n**If you don't see this message too often, it is probably OK\n**See FAQ.\n");
 
-	  if (ret > 0)
-	    {
-	      hex_dump("Printer replied", "<-", in_buf, ret, 5);
-	    }
 	}
-      else
+
+      if (ret > 0 && ret == reply_size)
 	{
           epl_interpret_reply(epl_job_info, in_buf, ret, code);
 	}
