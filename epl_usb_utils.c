@@ -44,13 +44,13 @@
 
 #ifdef HAVE_KERNEL_DEVICE
 /* Copied somewhat from /usr/src/linux/drivers/usb/printer.c: */     
+#define MAX_DEVICE_ID_SIZE     1024
 #define LPIOC_GET_DEVICE_ID    _IOC(_IOC_READ ,'P',1,MAX_DEVICE_ID_SIZE)     
 #define LPIOC_GET_PROTOCOLS    _IOC(_IOC_READ ,'P',2,sizeof(int[2]))
 #define LPIOC_SET_PROTOCOL     _IOC(_IOC_WRITE,'P',3,0)                 
 #define LPIOC_HP_SET_CHANNEL   _IOC(_IOC_WRITE,'P',4,0)         
 #define LPIOC_GET_BUS_ADDRESS  _IOC(_IOC_READ ,'P',5,sizeof(int[2]))
 #define LPIOC_GET_VID_PID      _IOC(_IOC_READ ,'P',6,sizeof(int[2]))
-#define MAX_DEVICE_ID_SIZE     1024
 void epl_kernel_init(EPL_job_info *epl_job_info);
 #endif
 
@@ -124,6 +124,7 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
   /* the kernel device doesn't need init, but we'll do some check anyway */
   int ioctl_args[2];
   unsigned char ioctl_string[MAX_DEVICE_ID_SIZE];  /* This 1024 comes from the kernel header */
+  int length;
  
   ioctl(epl_job_info->kernel_fd, LPIOC_GET_VID_PID, &ioctl_args);
       if ((ioctl_args[0] == USB_VENDOR_EPSON) 
@@ -143,8 +144,12 @@ fprintf (stderr,"IOC Get Protocols: %04X/%04X\n", ioctl_args[0], ioctl_args[1]);
   ioctl(epl_job_info->kernel_fd, LPIOC_GET_BUS_ADDRESS, &ioctl_args);
 fprintf (stderr,"IOC Bus Address: %04X/%04X\n", ioctl_args[0], ioctl_args[1]);
 
-  ioctl(epl_job_info->kernel_fd, LPIOC_GET_DEVICE_ID, &ioctl_string);
-fprintf (stderr,"IOC Device ID String: %s\n", ioctl_string);  
+  ioctl(epl_job_info->kernel_fd, LPIOC_GET_DEVICE_ID, ioctl_string);
+  length = (ioctl_string[0] << 8) + ioctl_string[1] - 2;
+  fprintf(stderr,"IOC Device ID String: ");
+  fwrite (ioctl_string + 2, 1, length, stderr);
+  fprintf (stderr,"\n");
+  
 
 }
 #endif
