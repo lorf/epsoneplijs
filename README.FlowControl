@@ -1,0 +1,122 @@
+This is a somewhat "advanced" issue.
+
+- What is this "FlowControl" parameter?
+
+Short answer:
+------------
+It's something which is not strictly needed to
+print, but without flow control you can have printer crashes
+when printing big jobs (more than 15 pages of normal text,
+or just a couple of pages of dithered full page photos
+at high printing resolution). If you print a few pages
+and let the printer finish the job before sending other
+pages, you can work around the problem.  Enabling flow
+control will remove this annoying limitation; add to this
+that EPL-5700L doesn't work at all if flow control is
+off and the printer is connected via USB.
+
+Long answer:
+------------
+We are a producer of data for the printer, the printer is
+a consumer. If the producer is too slow, the consumer can't
+work at full speed (less pages per minute); if the host
+is too fast, data get buffered into the memory of the printer.
+What happens when the memory is full? In a typical situation,
+the printer should not accept more data for some time.
+But this doesn't happen for EPL printers! The printer
+just crashes (or prints garbage).
+Luckily there is a solution: we can ask the printer some
+internal status and slow down the transfer when the
+printer is congested.
+This can only be done if we have a *bidirectional*
+communication with the printer.
+
+The Unix typical printing system is monodirectional:
+jobs are sent to a queue and then they pass through some
+filters and the output is finally written to a device
+(e.g. /dev/lp0).
+Consider this example:
+  application -> filters ->   ghostscript    -> device
+                            (and ijs server)
+which is often done with a pipe similar to this
+  application|filters|gs -sIjsServer=OurServer -sOutputFile=-|cat >/dev/lp0
+
+Here an application outputs the job (text, postscript, image),
+some filters maybe convert it to postscript, resize, rotate, put 4
+pages in one, etc. and pass the postscript data to ghostscript,
+which renders an high resolution bitmap and collaborates with
+the ijs server to translate the bitmap into the native language
+of the printer, which is written to the device.
+In this situation the ijs server receives the bitmap from
+ghostscript, converts the bitmap description and sends the result
+back to ghostscript; the ijs server doesn't talk to the printer
+and bidirectionality is impossible.
+
+If the "flow control" option is on, instead, the ijs server
+will not send its output back to ghostscript, but drive the printer
+directly.
+This creates two problems:
+(1) the ijs server needs a way to know where the data should go
+(USB? parport?);
+(2) the pipe should not interfere: if we want to print via parport
+the pipe can't be directed to /dev/lp0  because the ijs server would
+fail to open the parallel port device.
+
+The solution to (1) is the following.
+
+A special parameter (EplFlowControl) is passed to the ijs server
+to tell it what to do with the data. Possible values are:
+- "off": (data goes to the normal pipe)
+- "/dev/usb/lp0" or "/dev/usblp0" (or lp1, lp2...): communication
+happens through the USB lp kernel device. This works if your kernel
+supports it ("modprobe printer" could help).
+- "libusb": the USB bus is scanned to find the printer and
+communication happens through the libusb library. This works
+if the kernel has not claimed the printer ("modprobe -r printer"
+could help).
+- "/dev/lp0" (or lp1, lp2...): same as "/dev/usb/lp0", but via
+parallel port kernel device.
+- "libieee1284": similar to "libusb" but uses "libieee1284",
+for parallel port.
+
+The solution to (2) is the following.
+
+You have to tell the printing system that you want to output
+to /dev/null! The /dev/null device will be opened but no data
+will actually go there: the ijs server will handle the
+data transfer "under the curtains" as specified in the
+"EplFlowControl" parameter.
+
+If you're configuring the printer in cups or printconf or
+something else, it could be difficult to choose the /dev/null
+device. With the cups web interface, for example, it can be done
+by selecting "Internet Printing Protocol (http)" and then
+writing "file:/dev/null" in the following form. 
+
+Now, what should you choose?
+Every option has its own peculiarities.
+
+- With "off", all this stuff is disabled.
+
+- With "/dev/usb/lp0", you need kernel support (usually OK in
+most distributions) and correct permissions to /dev/usb/lp*
+files (usually OK too).
+
+- With "libusb", you need libusb compiled into
+ijs_epsonepl_server (this is OK if you use a precompiled
+binary), correct permissions for /proc/bus/usb/00?/00? files
+(this is usually *NOT OK* in most distributions) and avoiding
+usb printer kernel support ("modprobe -r printer", but sometimes
+the module is autoloaded again when you switch the printer
+on or connect it to the bus).
+
+- With "/dev/lp0" it's just as with /dev/usb/lp0. Printing
+could be slow, sometimes.
+
+- With "libieee1284" you need libieee1284 compiled into
+ijs_epsonepl_server (this is OK if you use a precompiled
+binary). Printing could be slow, sometimes.
+
+Recommended options are /dev/usb/lp0 or libusb.
+The parport ones are experimental at the moment; using "off"
+has the limitations we said above.

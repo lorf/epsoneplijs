@@ -1,3 +1,7 @@
+2003-05-04: cvs - Roberto Ragusa
+   . Misc fixes to epl_59interpret.c, epl_bid_replies.c and docs.
+   . Added README.FlowControl.
+
 2003-05-04: cvs - Hin-Tak Leung
    . 2nd try at fixing libieee1284 memory allocation problem, + misc.
 

@@ -49,7 +49,7 @@ void sleep_milliseconds(int ms);
 void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int code)
 {
   int free_memory;
-  static int last_waited_milliseconds = 1;
+  static int milliseconds_to_wait = 1;
   
   if (len < 18)
     {
@@ -120,10 +120,12 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   else if (p[0x11] == 0x11) /* 5900L only */
     {
       fprintf(stderr, "0x11 extension:\n");
+      fprintf(stderr, "  standby          = %i (%s)\n", p[0x12], p[0x12] ? "enabled" : "disabled");
       fprintf(stderr, "  printed pages    = %i\n", (p[0x19] << 8) | p[0x1a]);
       fprintf(stderr, "  toner supply     = %i%%\n", p[0x1b]);
       fprintf(stderr, "  imaging supply   = %i%%\n", p[0x1c]);
       fprintf(stderr, "  paper supply     = %i%%\n", p[0x1d]);
+      fprintf(stderr, "  low toner behav. = %i (%s)\n", p[0x22], p[0x22] ? "stop" : "go on");
     }
   else
     {
@@ -143,14 +145,16 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
   if (free_memory < FREE_MEM_LOW_LEVEL)
     {
       int ms;
-      ms = last_waited_milliseconds * 2; /* exponential back off */
-      if (ms > 5000 ) ms = 5000; /* no more than five second */
+      ms = milliseconds_to_wait;
+      fprintf(stderr, "sleeping for %i milliseconds\n", ms);
       sleep_milliseconds(ms);
-      last_waited_milliseconds = ms;
+      ms = ms * 2; /* exponential back off */
+      if (ms > 5000 ) ms = 5000; /* no more than five second */
+      milliseconds_to_wait = ms;
     }
   else
     {
-      last_waited_milliseconds = 1;
+      milliseconds_to_wait = 1;
     }
   return;
 }
