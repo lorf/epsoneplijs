@@ -25,11 +25,6 @@
  * SOFTWARE.
 **/
 
-/* we need more than -ansi to use the nanosleep routine */
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 199309L
-#endif
-
 #include <stdlib.h>
 
 /* read() and write() */

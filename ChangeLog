@@ -1,3 +1,6 @@
+2003-09-14: cvs - Roberto Ragusa
+   . Ooops, forgot to activate the polling on 6100L.
+
 2003-09-10: cvs - Hin-Tak Leung
    . Added prelimary null transport skeleton code to debug bid problems.
 
