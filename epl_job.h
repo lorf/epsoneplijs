@@ -69,6 +69,7 @@ struct parport_list *port_list;
   int free_mem_last_update;
   int bytes_sent_after_last_update;
   int stripes_sent_after_last_update;
+  int paused_mid_page; /* 0 = start of page, 1 = already paused once */
   int bytes_sent_this_page;
   int stripes_sent_this_page;
   

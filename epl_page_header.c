@@ -63,6 +63,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
 
   epl_job_info->bytes_sent_this_page = 0;
   epl_job_info->stripes_sent_this_page = 0;
+  epl_job_info->paused_mid_page = 0;
 
   bytes_per_row_padded = bytes_per_row;
   

@@ -23,20 +23,24 @@
 **/
 
 #include <stdio.h>
+#include <unistd.h>
 #include "epl_job.h"
 
-/* put here for efficiency */
-static unsigned char blank_stripe[] = {
-  0xa0, 0x1d, 0x74, 0x03, 0x0e, 0x80, 0x01, 0xd0, 0x40, 0x3a, 0xe8, 0x07, 0x1d, 0x00, 0x03, 0xa0, 
-  0x80, 0x74, 0xd0, 0x0e, 0x3a, 0x01, 0x07, 0x40, 0x00, 0xe8,
-  0xa0, 0x1d, 0x74, 0x03, 0x0e, 0x80, 0x01, 0xd0, 0x40, 0x3a, 0xe8, 0x07, 0x1d, 0x00, 0x03, 0xa0, 
-  0x80, 0x74, 0xd0, 0x0e, 0x3a, 0x01, 0x07, 0x40, 0x00, 0xe8,
-  0xa0, 0x1d, 0x74, 0x03, 0x0e, 0x80, 0x01, 0xd0, 0x40, 0x3a, 0xe8, 0x07, 0x1d, 0x00, 0x03, 0xa0, 
-  0x80, 0x74, 0xd0, 0x0e, 0x3a, 0x01, 0x07, 0x40, 0x00, 0xe8,
-  0xa0, 0x1d, 0x74, 0x03, 0x0e, 0x80, 0x01, 0xd0, 0x40, 0x3a, 0xe8, 0x07, 0x1d, 0x00, 0x03, 0xa0, 
-  0x80, 0x74, 0xd0, 0x0e, 0x3a, 0x01, 0x07, 0x40, 0x00, 0xe8,
-};
+int stripe_data_too_big(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_number);
 
+#define ABS(x) (((x) > 0)? (x): -(x)) 
+
+/* 1 if we won't be able to finish this page after sending this stripe */
+int stripe_data_too_big(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_number)
+{
+  int ret = 0;
+  int total_stripe = (epl_job_info->pixel_v + 64 - 1) / 64;
+  
+  if (104 * (total_stripe - stripe_number) >
+      (epl_job_info->free_mem_last_update - epl_job_info->bytes_sent_this_page - stream->count))
+    ret = 1;
+  return ret;
+}
 
 int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_number)
 {
@@ -44,28 +48,39 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_
   char *ts;
   int count;
   int e;
-  int total_stripe = (epl_job_info->pixel_v + 64 - 1) / 64;
 
 #ifdef EPL_DEBUG
   fprintf(stderr, "EPL print stripe\n");
 #endif
+  
+  if (stripe_data_too_big(epl_job_info, stream, stripe_number))
+    {
+      int old_free_mem = -12000 ; /* just to be far away from the real value */
+      epl_poll(epl_job_info,2);
+      if(!(epl_job_info->paused_mid_page))
+	{
+	  /* smallest full page print job is 6k? */
+	  while (ABS(old_free_mem - epl_job_info->free_mem_last_update) > 6000) 
+	    {
+	      sleep(8); /* 8 sec should be enough for any cached full-page to come out */
+	      old_free_mem = epl_job_info->free_mem_last_update;
+	      epl_poll(epl_job_info,2);
+	    } /* when we get out of the while loop, free_mem had reached a not-changing value */
+	}
+      /* we just polled, now we need to decide */
+      if (stripe_data_too_big(epl_job_info, stream, stripe_number))
+	{
+	  fprintf(stderr, "Stripe %i with %i bytes is being replaced with blank.\n",
+		  stripe_number, stream->count);
+#ifdef PRINT_AS_MUCH_AS_POSSIBLE_ON_LOW_MEMORY
+	  epl_job_info->paused_mid_page = 1;
+	  make_blank(stream);
+#endif
+	}
+    }
+
   (epl_job_info->stripes_sent_this_page)++;
   (epl_job_info->bytes_sent_this_page) += stream->count;
-  
-  if (104 * (total_stripe - stripe_number) >
-      (epl_job_info->free_mem_last_update - epl_job_info->bytes_sent_this_page))
-    {
-      int idx = 0;
-      fprintf(stderr, "Stripe %i is going critical\n", stripe_number);
-      /* it may be wise to poll here, but then, it may be not */
-#ifdef PRINT_AS_MUCH_AS_POSSIBLE_ON_LOW_MEMORY
-      stream->count = 104;
-      for (idx =0 ; idx < 104; idx++)
-	{
-      *(stream->start + idx) = blank_stripe[idx];
-	}
-#endif
-    }
   /* this part does the model-dependent stripe header */
 
   ts = temp_string;

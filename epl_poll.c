@@ -42,13 +42,7 @@ int epl_poll(EPL_job_info *epl_job_info, int type)
   ts = temp_string;
   if(epl_job_info->model == MODEL_5700L) 
     {
-      /* to be added, just return for now
-      ts += sprintf(ts, "%c%c",
-        0x??,
-	0x00
-	);
-       */
-      return 0;
+      ts += sprintf(ts, "%c%c",0x07,0x00);
     }
   else if(epl_job_info->model == MODEL_5800L
           || epl_job_info->model == MODEL_5900L) 
