@@ -82,6 +82,20 @@ void epl_libusb_init(EPL_job_info *epl_job_info)
 	      exit(1);
 	    }
 
+   /* USB Spec: value = 0, index=0, for Interface GetStatus()  */
+	  err = usb_control_msg(udev, USB_TYPE_CLASS | USB_ENDPOINT_IN | USB_RECIP_INTERFACE , USB_REQ_GET_STATUS,
+				0,0,
+				device_id_string, MAX_DEVICE_ID_SIZE - 1, EPL_USB_WRITE_TIMEOUT);  
+	  
+	  if ( err < 0 ) {
+	    fprintf (stderr,"Can't Get Device ID String: %d\n", err);  
+	  } else {
+	    length = (device_id_string[0] << 8) + device_id_string[1] - 2;
+	    fprintf(stderr,"Device ID String: ");
+	    fwrite (device_id_string + 2, 1, length, stderr);
+	    fprintf (stderr,"\n");
+	  }
+
 	  epl_job_info->usb_in_ep = -1;
 	  epl_job_info->usb_out_ep = -1;
 
