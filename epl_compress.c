@@ -67,8 +67,10 @@ static struct proto op_table[] =
 
 
 #ifdef USE_4BIT_CODE
+/* the actual value of CACHE_INVALID doesn't matter, as long as it is not 0x00 to 0x0f */
+#define CACHE_INVALID 0xFF
 static unsigned char cache[16];
-static char byte2cache[256];
+static unsigned char byte2cache[256];
 static int lri;
 
 void cache_init(void)
@@ -81,7 +83,7 @@ void cache_init(void)
     }
   for(i = 16 ; i < 256 ; i++)
     {
-      byte2cache[i] = -1;
+      byte2cache[i] = CACHE_INVALID;
     }
   lri = 0;
 }
@@ -240,7 +242,7 @@ int epl_compress_row(typ_stream *stream,
           */ 
           int byte = (*(ptr_row_current + x) ^ 0xff) & 0xff;
 #ifdef USE_4BIT_CODE
-          if (byte2cache[byte] >= 0)
+          if (byte2cache[byte] != CACHE_INVALID)
             { 
               stream_append(stream,
 	                    op_table[CACHED].code, 
@@ -257,7 +259,7 @@ int epl_compress_row(typ_stream *stream,
 		        op_table[LITERAL].width);
               stream_append(stream, byte, 8);
 #ifdef USE_4BIT_CODE
-              byte2cache[cache[lri]] = -1;
+              byte2cache[cache[lri]] = CACHE_INVALID;
 	      cache[lri] =  byte;
 	      byte2cache[byte] = lri;
               lri = (lri + 1) & 0xf;
