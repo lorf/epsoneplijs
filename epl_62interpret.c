@@ -37,7 +37,21 @@ static void hex_non_zero(unsigned IDX, unsigned char *HEX) {
   }
 }
 
-static void hex_dump(char *marker, unsigned IDX,unsigned count, unsigned char *HEX) {
+/* poorman's binary strncmp */
+static int bstrncmp(unsigned char *src, unsigned char *dest, int len) {
+  int i, ret = 0;
+  for(i = 0; i < len ; i++)
+    {
+      if (*(src +i) != *(dest + i))
+	{
+	  ret = 1;
+	break;
+	}
+    }
+  return ret;
+}
+
+static void hex_dump(char *marker, unsigned IDX, unsigned count, unsigned char *HEX) {
   int i;
     fprintf(stderr,"%s:%u:", marker, IDX);
     for(i = 0; i < count ; i++)
@@ -45,6 +59,14 @@ static void hex_dump(char *marker, unsigned IDX,unsigned count, unsigned char *H
 	fprintf(stderr," %2.2X", HEX[i+IDX]);
       }
     fprintf(stderr,"\n");  
+}
+
+static void hex_dump_notequal(char *marker, unsigned char *std, int offset, int length, unsigned char *reply)
+{
+  if(bstrncmp(std, reply + offset, length))
+    {
+      hex_dump(marker, offset, length, reply);
+    }
 }
 
 /*
@@ -82,6 +104,8 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
   */
 
   fprintf(stderr, "Sequence #:%u\n", reply[1]);
+
+  hex_non_zero(2, reply);
   if (reply[3] + 4 != reply_len)
     {
       fprintf(stderr, "**Reply size don't agree with embedded parameter length.\n");
@@ -90,6 +114,8 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
   /*
   reply[4] is never seen other than 0 (probably higher highy of reply[5,6,7]
   */
+
+  hex_non_zero(4, reply);
   free_memory = (reply[0x05] << 16) | (reply[0x06] << 8) | reply[0x07];
   fprintf(stderr, "  available memory        = 0x%8.8x\n", free_memory);
   
@@ -104,14 +130,27 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
     hex_non_zero( 9,reply);
 
   if(reply[10] == 0x01)
-    fprintf(stderr, "Receiving Data...\n");
+    fprintf(stderr, "Processing...\n");
   else
     hex_non_zero(10,reply);
 
-  hex_non_zero(11,reply);
+  switch(reply[11])
+    {
+    case 0x01:
+      fprintf(stderr, "Power - Ready\n");
+      break;
+    case 0x00:
+      fprintf(stderr, "Power - Standby\n");
+      break;
+    default:
+      fprintf(stderr, "Unknown power state %2.2X\n", reply[122]);
+      break;
+    }
+
   hex_non_zero(12,reply);
 
-  if(reply[13]) fprintf(stderr, "printed %i pages since power up\n", reply[13]);
+  if(reply[13])
+    fprintf(stderr, "printed %i pages since power up\n", reply[13]);
 
   hex_non_zero(14,reply);
 
@@ -134,16 +173,20 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
     }
   switch(reply[0])
     {
-    case '@': /* nominally 16 */
+      /* nominally 16 */
+    case '@': 
     case 'A':
     case 'B':
     case 'C':
     case 'F':
     case 'G':
     case 'O':
-    case 'q':
-    case 'c':
-    case '`':
+    case 'q': /* very strange, only seems to be issued when out-of-paper is detected. */
+    case 'c': /* send "c 01 00 64" to reset OPC level to 100%(0x64) */
+    case '`': /* "` 01 00 00 00 00 00 00" disable sleep */
+              /* "` 01 00 02 00 00 00 00" enable  sleep */
+              /* "` 01 03 01 00 00 00 00" toner out stop */
+              /* "` 01 03 00 00 00 00 00" toner out cont */
     case 0x7F:
       break;
 
@@ -166,29 +209,43 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
       3 P1:16: 51 B2 0F B9 01 00 FF FF
      19 P1:16: 51 B2 0F B9 02 00 00 00
       */
-      hex_dump("P1", 16, 8,reply);
+      {
+	unsigned char P0[] = {0x51, 0xB2};
+	hex_dump_notequal("P0", P0, 16, 2,reply);
+      }
+      hex_dump("P1", 18, 6,reply);
       fprintf(stderr, "Client ID: \"");
       fwrite(reply+24, 1, 64, stderr);
       fprintf(stderr, "\"\n");
       fprintf(stderr, "Page ever printed: %u\n",
 	      ((((((reply[88] << 8) + reply[89]) << 8) + reply[90]) << 8) + reply[91]));
-      hex_dump("P2", 92, 9, reply);
+      {
+	unsigned char P2[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff};
+	hex_dump_notequal("P2", P2, 92, 9, reply);
+      }
       fprintf(stderr, "Toner Level: %u\n", reply[101]);
-      hex_dump("P3", 102, 2, reply);
+      {
+	unsigned char P3[] = {0xff, 0xff};
+	hex_dump_notequal("P3", P3, 102, 2, reply);
+      }
       fprintf(stderr, "Photounit life: %u\n", reply[104]);
-      hex_dump("P4", 105, 3, reply);
+      {
+	unsigned char P4[] = {0xff, 0xff, 0xff};
+	hex_dump_notequal("P4", P4, 105, 3, reply);
+      }
       fprintf(stderr, "Paper size code: %2.2X\n", reply[108]);
-      /* 00 00 00 00 00 FF FF FF FF FF FF */
-      hex_dump("P5", 109, 11, reply);
-
+      {
+	unsigned char P5[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+	hex_dump_notequal("P5", P5, 109, 11, reply);
+      }
       if(reply[120])
-	fprintf(stderr, "Time to sleep: %i minutes\n", reply[120]);
+	fprintf(stderr, "Time to sleep: %i minutes\n", reply[120] * 10);
       else
-	fprintf(stderr, "Sleep disabled\n");
-	
-      /* 00 */
-      hex_dump("P6", 121, 1, reply);
-
+	fprintf(stderr, "Sleep disabled\n");	
+      {
+	unsigned char P6[] = {0x00};
+	hex_dump_notequal("P6", P6, 121, 1, reply);
+      }
       switch(reply[122])
 	{
 	case 0x01:
@@ -202,34 +259,42 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
 	  break;
 	}
 
-      /* 01 00 00 */
-      hex_dump("P5", 123, 3, reply);
+      {
+	unsigned char P5[] = {0x01, 0x00, 0x00};
+	hex_dump_notequal("P5", P5, 123, 3, reply);
+      }
       break;
 
     case 'Q': /* 120 */
       /* 2 bytes       reply[54,55] is epson MC number */
       /* 20 bytes from reply[68]    is serial number - null padded */
       /* 32 bytes from reply[88]    is model number  - null padded */
-      /* Q1:16: 51 B2 00 02 00 1E 00 00  01 31 A4 9C 02 02 0F 00 
-                00 00 00 00 00 00 00 00  0E 00 0A 00 01 02 00 00 
-                01 01 00 00 00 00
-      */
-      hex_dump("Q1", 16, 38,reply);
+      {
+	unsigned char Q1[] = 
+	  {0x51, 0xB2, 0x00, 0x02, 0x00, 0x1E, 0x00, 0x00, 0x01, 0x31, 0xA4, 0x9C, 0x02, 0x02, 0x0F, 0x00,
+	   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x0A, 0x00, 0x01, 0x02, 0x00, 0x00,
+	   0x01, 0x01, 0x00, 0x00, 0x00, 0x00};    
+	hex_dump_notequal("Q1", Q1, 16, 38,reply);
+      }
       fprintf(stderr, "Epson MC %u\n", (reply[54] << 8) + reply[55]);
-      /* Q2:56: 00 00 00 00 03 00 00 00 00 01 01 00 */
-      hex_dump("Q2", 56, 12,reply);
+      {
+	unsigned char Q2[] = 
+	  {0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00};
+	hex_dump_notequal("Q2", Q2, 56, 12,reply);
+      }
       reply[87] = '\0'; /* terminates string */
       fprintf(stderr, "Serial Number: %s\n", reply + 68); 
       reply[119] = '\0';/* terminates string */
       fprintf(stderr, "Serial Number: %s\n", reply + 88); 
       break;
 
-    case 'R': /* 18 */
-      /* 00 count of some sort */
+    case 'R': /* 18 */ /* request for the next page number? - just before job header */
+      /* 00 + page number of the next page - before page header */
       hex_dump("R1", 16, 2, reply);
       break;
 
     default:
+      fprintf(stderr, "Should not got here\n"); 
 #ifdef ABORT
       exit(1);
 #endif
@@ -238,3 +303,12 @@ void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *reply, int reply
   
   return;
 }
+
+/* 
+PQP every 10 seconds - very curious; sometimes 5 seconds; while idle.
+
+R,P@P,PPQ,POB..... in a job.
+
+7f every 0.5 sec, for 5s, then a P, etc during a poll for paper-out/cover-open.
+
+*/
