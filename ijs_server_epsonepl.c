@@ -808,15 +808,18 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   else if (strncmp(s, "/dev/usb/lp[0-9] or /dev/usblp[0-9]",8) == 0)   
     {
       fprintf(stderr, "Using kernel usb device\n");
-      epl_job_info->connectivity = VIA_KERNEL_USB;
-      epl_job_info->kernel_fd = open(s, O_RDWR |O_SYNC);
-      if (epl_job_info->kernel_fd < 0) 
+      if (epl_job_info->connectivity != VIA_KERNEL_USB) 
 	{
-	  fprintf(stderr, "Can't open device %s, aborting!\n", s);
-	  perror("Open kernel device");
-	  return 1;
-	}    				          
-   }
+	  epl_job_info->connectivity = VIA_KERNEL_USB;
+	  epl_job_info->kernel_fd = open(s, O_RDWR |O_SYNC);
+	  if (epl_job_info->kernel_fd < 0) 
+	    {
+	      fprintf(stderr, "Can't open device %s, aborting!\n", s);
+	      perror("Open kernel device");
+	      return 1;
+	    }    				          
+	}
+    }
 #endif
   else 
     {
@@ -868,6 +871,7 @@ main (int argc, char **argv)
   }
 
   /* The file handle has a danger of being used before initized */
+  epl_job_info->connectivity = PRE_INIT;  
   epl_job_info->outfile = NULL; 
 
 #ifdef USE_FLOW_CONTROL

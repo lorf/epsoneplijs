@@ -76,6 +76,7 @@ struct _EPL_job_info {
 #define MODEL_5800L   2
 #define MODEL_5900L   3
 
+#define PRE_INIT       -1
 #define VIA_PPORT       0
 #define VIA_LIBUSB      1
 #define VIA_KERNEL_USB  2
