@@ -111,7 +111,7 @@
  *************************************************************
 **/
 
-#ifdef STRICT_WIN32_COMPATIBILITY
+#ifdef __unix__
 #undef STRIPE_OVERFLOW_WORKAROUND_HEADER
 #undef STRIPE_OVERFLOW_WORKAROUND_STRIPE_PAD
 #define USE_DELTA_STRATEGY 
@@ -130,7 +130,7 @@
 #include "libieee1284/include/ieee1284.h"
 #endif 
 
-#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_LIBIEEE1284) || defined(HAVE_KERNEL_1284)
+#if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_LIBIEEE1284) || defined(HAVE_KERNEL_1284) || defined(HAVE_NULLTRANS)
 #define USE_FLOW_CONTROL
 #endif
 

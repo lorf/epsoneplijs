@@ -1,3 +1,6 @@
+2004-11-28: cvs - Hin-Tak Leung
+   . missed HAVE_NULLTRANS in turning on the USE_FLOWCONTROL code.
+	
 2004-09-29: cvs - Hin-Tak Leung
    . Adding "Printer Memory Low" message to the bottom of an abort,
      rather than just blank.
