@@ -2,7 +2,7 @@ Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L/6100L printe
 Name: epsoneplijs
 Version: 0.4.0
 %define LIBUSB_VERSION 0.1.7
-%define LIBIEEE1284_VERSION 0.2.7
+%define LIBIEEE1284_VERSION 0.2.8
 Release: pre3
 Copyright: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
 Group: Applications/Graphics
