@@ -53,9 +53,6 @@ TONERSAVE=on
   IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
 
 FLOWCONTROL=off
-  # This is a 5700L-only option. Other printers should set to "off",
-  # regardless of whether it is parallel- or USB-connected.
-  #
   # either off, libusb, or kernel lp device name(e.g. "/dev/usb/lp0"). 
   # default: off
   # the "libusb" and device name option is only available if compiled --with-libusb, 

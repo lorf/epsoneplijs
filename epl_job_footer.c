@@ -24,47 +24,57 @@
 
 #include <stdio.h>
 #include "epl_job.h"
-#include "epl_usb.h"
 
 int epl_job_footer(EPL_job_info *epl_job_info) 
 {
   char temp_string[256];
   char *ts;
-  int e;
+  int ts_count; /* how many strings */
+  char *ts_beg[5]; /* where strings begin */
+  int i, e;
 
 #ifdef EPL_DEBUG
   fprintf(stderr, "EPL job footer\n");
 #endif
 
-  ts=temp_string;
+  ts = temp_string;
+  ts_count = 0;
+  ts_beg[ts_count++] = ts;
   if(epl_job_info->model == MODEL_5700L)
     {
       ts += sprintf(ts, "%c%c",0x01,0x00);
+      ts_beg[ts_count++] = ts;
     }
   else if(epl_job_info->model == MODEL_5800L
           || epl_job_info->model == MODEL_5900L)
     {
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "%c%c", 0x03, 0x00);
+      ts_beg[ts_count++] = ts;
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "%c%c", 0x01, 0x00);
+      ts_beg[ts_count++] = ts;
       
       ts += sprintf(ts, "\x1b\x01");
       ts += sprintf(ts, "@EJL \x0a");
+      ts_beg[ts_count++] = ts;
       
       if(epl_job_info->model == MODEL_5900L)
         {
 	  ts += sprintf(ts, "@EJL EJ \x0a");
           ts += sprintf(ts, "\x1b\x01");
           ts += sprintf(ts, "@EJL \x0a");
+          ts_beg[ts_count++] = ts;
 	}
     }
   else if(epl_job_info->model == MODEL_6100L)
     {
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "C%c", 0x00);
+      ts_beg[ts_count++] = ts;
       ts += epl_sprintf_wrap(ts, 2);
       ts += sprintf(ts, "A%c", 0x00);
+      ts_beg[ts_count++] = ts;
 
       ts += sprintf(ts, "\x1b\x01");
       ts += sprintf(ts, "@EJL \x0a");
@@ -72,21 +82,21 @@ int epl_job_footer(EPL_job_info *epl_job_info)
       ts += sprintf(ts, "@EJL EJ \x0a");
       ts += sprintf(ts, "\x1b\x01");
       ts += sprintf(ts, "@EJL \x0a");
+      ts_beg[ts_count++] = ts;
     }
 
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s job footer (%i bytes)\n",
-          printername[epl_job_info->model], ts - temp_string);
+  fprintf(stderr, "Writing %s job footer (%i bytes in %i parts)\n",
+          printername[epl_job_info->model], ts - temp_string, ts_count);
 #endif
-  e = epl_write_bid(epl_job_info, temp_string, ts - temp_string);
-  if(e != ts - temp_string) return -1;
 
-  if ((epl_job_info->connectivity != VIA_PPORT)
-      && (epl_job_info->model == MODEL_5700L))
+  for (i = 0 ; i < ts_count - 1 ; i++)
     {
-      epl_usb_end(epl_job_info);
+      fprintf(stderr,"string %i from %p to %p\n", i, ts_beg[i], ts_beg[i+1]);
+      e = epl_write_bid(epl_job_info, ts_beg[i], ts_beg[i+1] - ts_beg[i]);
+      if(e != ts_beg[i+1] - ts_beg[i]) return -1;
     }
-  
+
   return 0;
 } 
 

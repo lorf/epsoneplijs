@@ -10,7 +10,7 @@ Requirement
 USB on 5700L
 ============
   Printing via USB connectivity to the 5700L is supported via two
-  mechansms: the generic Linux kernel device, or via the libusb package.
+  mechanisms: the generic Linux kernel device, or via the libusb package.
   Support for both can be compiled in together, but they are mutually 
   exclusive at runtime - the kernel device requires the kernel module 
   "printer.o" loaded, while the libusb code requires the kernel module not
@@ -42,6 +42,12 @@ USB on 5700L
    any problems, and please attach the whole of testlibusb's output
    (it scans your USB and output every piece of info it finds)
    when you report problems.
+
+USB on 5800L, 5900L, 6100L
+==========================
+  USB support has been recently extended to all printers. IF you want to try
+  it, just follow the same instructions given for 5700L.
+  This is experimental, at the moment.
 
 Usage Problems
 ==============

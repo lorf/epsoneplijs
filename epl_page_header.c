@@ -154,8 +154,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
   e = epl_write_bid(epl_job_info, temp_string, ts - temp_string);
   if(e != ts - temp_string) return -1;
 
-  if ((epl_job_info->connectivity != VIA_PPORT)
-      && (epl_job_info->model == MODEL_5700L))
+  if ((epl_job_info->connectivity != VIA_PPORT))
     {
       epl_usb_mid(epl_job_info);
     }

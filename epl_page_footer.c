@@ -35,7 +35,7 @@ int epl_page_footer(EPL_job_info *epl_job_info)
   fprintf(stderr, "EPL page footer\n");
 #endif
 
-  ts=temp_string;
+  ts = temp_string;
   if(epl_job_info->model == MODEL_5700L)
     {
       ts += sprintf(ts, "%c%c",0x03,0x00);

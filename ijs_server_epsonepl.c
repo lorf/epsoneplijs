@@ -49,6 +49,7 @@
 #include "ijs_server.h"
 
 #include "epl_job.h"
+#include "epl_usb.h"
 
 #define BUF_SIZE 4096
 
@@ -896,9 +897,9 @@ main (int argc, char **argv)
     exit(1);
   }
 
-  /* The file handle has a danger of being used before initized */
-  epl_job_info->connectivity = PRE_INIT;  
-  epl_job_info->outfile = NULL; 
+  /* The file handle has a danger of being used before initialized */
+  epl_job_info->connectivity = PRE_INIT;
+  epl_job_info->outfile = NULL;
 
 #ifdef USE_FLOW_CONTROL
   gettimeofday(&(epl_job_info->time_last_write),NULL);
@@ -962,9 +963,13 @@ main (int argc, char **argv)
 
       /* Job Header */      
       
-      if (epl_job_started == EPL_JOB_STARTED_NO) 
+      if (epl_job_started == EPL_JOB_STARTED_NO) /* only do one job header per job */
 	{
-	  /* only do one job header per job */
+	  /* init USB if needed */
+          if ((epl_job_info->connectivity != VIA_PPORT))
+            {
+              epl_usb_init(epl_job_info);
+            }
           status = epl_job_header (epl_job_info);      
           if (status != 0)
             {
@@ -1082,6 +1087,10 @@ main (int argc, char **argv)
         {
           fprintf (stderr, "output error\n");
           exit (1);
+        }
+      if ((epl_job_info->connectivity != VIA_PPORT))
+        {
+          epl_usb_end(epl_job_info);
         }
     }
 

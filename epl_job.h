@@ -47,7 +47,7 @@ struct _EPL_job_info {
   int density;
   int pixel_h;
   int pixel_v;
-  int connectivity;  /* via USB or Pport - only 5700L needs this */
+  int connectivity;
 #ifdef HAVE_KERNEL_DEVICE
   int kernel_fd;
 #endif
@@ -69,6 +69,7 @@ struct _EPL_job_info {
 #define MODEL_5900L   3
 /* Just in case there is a 6000L. Probably not important. */
 #define MODEL_6100L   5
+#define MODEL_USEDSLOTS 6 /* this is the number of printers we have */
 
 #define PRE_INIT       -1
 #define VIA_PPORT       0

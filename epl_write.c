@@ -35,7 +35,7 @@
 
 #include "epl_job.h"
 #include "epl_usb.h"
-#include "epl_usb_5700l.h"
+#include "epl_usb_replies.h"
 
 /* sleep routine only used here */
 void do_subsec_sleep(EPL_job_info *epl_job_info);
@@ -45,61 +45,123 @@ void do_subsec_sleep(EPL_job_info *epl_job_info);
 int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 {
   int ret_write;
+  int i_len;
   
-  /* use a different buffer to read, to be safe; probably not neccessary */
+  /* use a different buffer to read, to be safe; probably not necessary */
   char in_buf[256]; 
-  
+
+  fprintf(stderr, "We said: (len=%i,%4.4x)", length, length);
+  for (i_len = 0 ; i_len < length; i_len++)
+    {
+      if (i_len % 0x10 == 0)
+        {
+          fprintf(stderr, "\n-> %4.4x: ", i_len);
+        }
+      if (i_len % 0x08 == 0)
+        {
+          fprintf(stderr, " ");
+        }
+      fprintf(stderr,"%2.2x ", (0xff & buffer[i_len])); 
+      if (i_len == 0x2f && length > 0x3f)
+        {
+          fprintf(stderr, " \n...");
+	  i_len = length / 0x10 * 0x10 - 1; /* skip to last row */
+        }
+    }
+  fprintf(stderr, "\n");
+
   ret_write = epl_write_uni(epl_job_info, buffer, length);  
   
   if (ret_write != length) 
     {
-      fprintf(stderr,"Write didn't succeed in bid, aborting: %d\n",ret_write);
+      fprintf(stderr,"Write didn't succeed in bid-writing, aborting: %d\n",ret_write);
       exit(1);
     }
   
-  if ((epl_job_info->connectivity != VIA_PPORT)
-      && (epl_job_info->model == MODEL_5700L))
+  if (epl_job_info->connectivity != VIA_PPORT)
     {
       int ret = 0;
+      int code;
+      int reply_size;
 
-#ifdef HAVE_LIBUSB
-      if(epl_job_info->connectivity == VIA_LIBUSB) 
-	{
-	  ret = usb_bulk_read (epl_job_info->usb_dev_hd, 
-			       epl_job_info->usb_in_ep,
-			       in_buf, 
-			       epl_5700l_reply_size[(int) *buffer], 
-			       EPL_USB_READ_TIMEOUT);
-	} 
-#endif
-      
-#ifdef HAVE_KERNEL_DEVICE
-      if(epl_job_info->connectivity == VIA_KERNEL_USB) 
-	{
-	  ret = read(epl_job_info->kernel_fd, 
-		     in_buf, 
-		     epl_5700l_reply_size[(int) *buffer]);
+      code = *buffer;
+      /* skip encapsulation */
+      /* this is a little hackish, but it's ok for now  --  rora */
+      if (*buffer == 0x1d)
+        {
+          char *tmp = buffer;
+          while(*tmp != 0x49) {tmp++;fprintf(stderr,"skip-");} /* we could never stop 8-) */
+	  tmp++; code = *tmp;
 	}
+      /* we could get here with code=0x1b (5900L) */
+      if (code < 0 || code >= KNOWN_REPLY_CODES) /* avoid out of bounds condition */
+        {
+          reply_size = -1;
+	}
+      else
+        {
+          reply_size = epl_usb_reply_size[epl_job_info->model][code];
+        }
+
+      if (reply_size == -1) /* something is wrong */
+        {
+          fprintf(stderr, "We don't know the reply size for the code %2.2x, but we try to go on (crossed fingers)\n", 
+                  (int) *buffer);
+          reply_size = 0;
+        }
+
+      if (reply_size != 0) /* we have to read something */
+        {
+#ifdef HAVE_LIBUSB
+          if(epl_job_info->connectivity == VIA_LIBUSB) 
+	    {
+	      ret = usb_bulk_read(epl_job_info->usb_dev_hd,
+			          epl_job_info->usb_in_ep,
+			          in_buf,
+			          reply_size,
+			          EPL_USB_READ_TIMEOUT);
+	    } 
 #endif
-      
-      if(ret > 0) 
+
+#ifdef HAVE_KERNEL_DEVICE
+          if(epl_job_info->connectivity == VIA_KERNEL_USB) 
+	    {
+	      ret = read(epl_job_info->kernel_fd,
+		         in_buf,
+		         reply_size);
+	    }
+#endif
+        }
+      else
+        {
+          ret = 0;
+	}
+
+      if(ret > 0)
 	{
 	  int i_ret;
 	  fprintf(stderr, "Printer replied: ");
 	  for (i_ret = 0 ; i_ret < ret; i_ret++)
 	    {
-	      fprintf(stderr,"%2.2X ", (0xff & in_buf[i_ret])); 
+	      if (i_ret % 16 == 0)
+	        {
+	          fprintf(stderr, "\n<- %4.4x: ", i_ret);
+                }
+	      if (i_ret % 8 == 0)
+	        {
+	          fprintf(stderr, " ");
+                }
+	      fprintf(stderr,"%2.2x ", (0xff & in_buf[i_ret])); 
 	    }
 	  fprintf(stderr, "\n");
 	}
 
-      if (ret != epl_5700l_reply_size[(int) *buffer]) 
+      if (ret != reply_size) 
 	{
 	  fprintf(stderr, "expected %d, got %d\n", 
-		  epl_5700l_reply_size[(int) *buffer],
+		  reply_size,
 		  ret);
 	  fprintf(stderr, "**USB reply from printer different size from expected: \n**If you don't see this message too often, it is probaly alright\n**See FAQ.\n");
-	  
 	}
     } 
   return ret_write;
@@ -111,10 +173,13 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
 {  
   int ret = 0;
 
-  if ((epl_job_info->connectivity != VIA_PPORT)
-      && (epl_job_info->model == MODEL_5700L))
+  if (epl_job_info->connectivity != VIA_PPORT)
     {
-      do_subsec_sleep(epl_job_info);
+      /* 5700L needs a slow data transfer */
+      if (epl_job_info->model == MODEL_5700L)
+        {
+          do_subsec_sleep(epl_job_info);
+        }
 
 #ifdef HAVE_LIBUSB
       if(epl_job_info->connectivity == VIA_LIBUSB) 
