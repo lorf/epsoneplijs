@@ -199,7 +199,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 	      perror("Bid read:");
 	    }
 	}
-    } 
+    }
   return ret_write;
 }
 
@@ -314,11 +314,12 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
       break;
 
     case MODEL_6100L:
-      epl_61interpret(epl_job_info, p, len);
+      /* 6100L uses the routine same as the 6200L */
+      epl_62interpret(epl_job_info, p, len);
       break;
 
     case MODEL_6200L:
-      epl_61interpret(epl_job_info, p, len);
+      epl_62interpret(epl_job_info, p, len);
       break;
 #endif
     default:
@@ -423,17 +424,17 @@ void do_free_mem_slowdown(EPL_job_info *epl_job_info)
     {
       time_now = get_time_now();
 #ifdef EPL_DEBUG
-	  fprintf(stderr, "time_now=%f, time_last_write_stripe=%f\n",time_now,e->time_last_write_stripe);
+      fprintf(stderr, "time_now=%f, time_last_write_stripe=%f\n",time_now,e->time_last_write_stripe);
 #endif
-      estimated_free_mem = e->free_mem_last_update    /* read on! */
-         /* bytes we sent + 12.5% safety */
-         - e->bytes_sent_after_last_update - e->bytes_sent_after_last_update / 8
-         /* extra overhead per stripe for safety */
-         - 64 * e->stripes_sent_after_last_update
-         /* the printer could be lying if we just sent something, */
-         /* so we account for an extra big stripe (80000 > worst case) */
-         /* if 3 seconds have not passed yet */
-         - (time_now - e->time_last_write_stripe < 3. ? 80000 : 0);
+      /* est_mem = bytes we sent + 12.5% safety 
+	 + extra overhead per stripe for safety 
+	 + the printer could be lying if we just sent something, */
+      /* So we account for an extra big stripe (80000 > worst case) 
+	 if 3 seconds have not passed yet */
+      estimated_free_mem = e->free_mem_last_update
+	- e->bytes_sent_after_last_update - e->bytes_sent_after_last_update / 8
+	- 64 * e->stripes_sent_after_last_update
+	- (time_now - e->time_last_write_stripe < 3. ? 80000 : 0);
       if (estimated_free_mem < FREE_MEM_LOW_LEVEL)
         {
           /*
@@ -449,7 +450,7 @@ void do_free_mem_slowdown(EPL_job_info *epl_job_info)
           sleep_seconds(s);
           s = s * 2; /* exponential back off */
           if (s > 5 ) s = 5; /* no more than five second */
-/*s=0.001;*/ /* hard coded for tests */
+	  /*s=0.001;*/ /* hard coded for tests */
           seconds_to_wait = s;
           epl_poll(epl_job_info, 2); /* we just need the memory value */
           continue;
