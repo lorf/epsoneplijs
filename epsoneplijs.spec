@@ -1,10 +1,12 @@
 Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L printers
 Name: epsoneplijs
-Version: 0.2.2
+Version: 0.2.3
+%define LIBUSB_VERSION 0.1.7
 Release: 1
 Copyright: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
 Group: Applications/Graphics
-Source0:  http://osdn.dl.sourceforge.net/sourceforge/epsonepl/epsoneplijs-0.2.2.tgz
+Source0:  http://osdn.dl.sourceforge.net/sourceforge/epsonepl/epsoneplijs-%{version}.tgz
+Source1:  http://osdn.dl.sourceforge.net/sourceforge/libusb/libusb-%{LIBUSB_VERSION}.tar.gz
 URL: http://sourceforge.net/projects/epsonepl/
 Vendor: http://sourceforge.net/projects/epsonepl/
 Packager: Hin-Tak Leung, Roberto Ragusa
@@ -24,14 +26,15 @@ and 5900L. YMMV.
 
 %build
 
-./configure
+./configure --with-kerneldevice --with-libusb
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/{bin,man,doc}
 make install prefix=$RPM_BUILD_ROOT/usr
-# install test5700lusb testlibusb $RPM_BUILD_ROOT/usr/bin
+[ -f test5700lusb ] && install test5700lusb $RPM_BUILD_ROOT/usr/bin 
+[ -f testlibusb   ] && install testlibusb   $RPM_BUILD_ROOT/usr/bin 
 strip $RPM_BUILD_ROOT/usr/bin/*
 
 %post
@@ -42,7 +45,7 @@ echo "Attempting to remove older installs in /usr/local/bin."
 echo "Done."
 echo ""
 echo -n "Please check /usr/doc/epsoneplijs-" 
-echo -n 0.2.2
+echo -n 0.2.3
 echo " for tips on CUPS, foomatic, etc."
 echo "Happy printing! Bye for now."
 echo ""
@@ -54,5 +57,8 @@ exit 0
 /usr/bin/*
 
 %changelog
+* Wed Feb  5 2003 Hin-Tak Leung <htl10@users.sourceforge.net> v0.2.3
+- Merged USB-related changes
+
 * Wed Feb  5 2003 Hin-Tak Leung <htl10@users.sourceforge.net> v0.2.2
 - first ever release available in RPMS

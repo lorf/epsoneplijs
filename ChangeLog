@@ -1,30 +1,55 @@
-2003-02-02: 4-bit codes - Roberto Ragusa
-         . Meaning of the 4 bit codes finally discovered.
-         . The 4 bit codes are now used.
+2003-02-28: 0.2.3 - Hin-Tak Leung
+   . Merged in USB-related code, 
+        configure now accepts --with-kerneldevice,--with-libusb
+   . documentation update regarding USB and the 4-bit code.
+   * !!Changed behavior!!:
+        reverting "USB=on" in ps2epl to "off", as there is now
+        two ways of doing 5700L USB printing.
 
+2003-02-05: 0.2.2 - Roberto Ragusa, Hin-Tak Leung
+   . Maintainence update to 0.2, released as rpm.
+
+2003-02-04: 0.2.1usb - Hin-Tak Leung
+   . rpm's available for the first time
+   . bundling PPD files and some e-mails from the mailing list with tips
+
+2003-02-02: 4-bit codes - Roberto Ragusa
+   . Meaning of the 4 bit codes finally discovered.
+   . The 4 bit codes are now used.
+
+2003-02-01: 0.2usb - Hin-Tak Leung
+   . Printing to 5700L via USB now works. Added "USB=on/off" IjsParam.
+   . Grafted a 2003-01-25 CVS snapshot of libusb plus minor customization.
+   . Minor changes in various documentation.
+   . Added minimal FAQ.
+   * !!Changed behavior!!: 
+        ps2epl now has "TonerSave=on", and also "USB=on" for 5700L.  
+        All users should try to use CUPS/etc, while the script should be 
+        reserved for testing purposes. Edit to get old behaviour. 
+   
 2003-01-28: 0.2 - misc fixes - Roberto Ragusa
-         . Foomatic .xml files now compatible with cups.
-         . 5800L footers fixed.
+   . Foomatic .xml files now compatible with cups.
+   . 5800L footers fixed.
 
 2003-01-22: 0.1e - foomatic data - Roberto Ragusa
-         . Added foomatic .xml files.
-         . Makefile.in: reenabled example server/client compilation,
-           fixed install section.
-         . Simplified headers/footers handling.
+   . Added foomatic .xml files.
+   . Makefile.in: reenabled example server/client compilation,
+     fixed install section.
+   . Simplified headers/footers handling.
 
 2003-01-16: 0.1d - papersize, dpi, options support - Roberto Ragusa
-         . Many printing parameters are now definable in ps2epl
-           (papersize, dpi, ritech, tonersave, density).
-         . Improved error checking.
-         . Misc fixes and clean up.
-         . Makefile.in: compiler optimizations turned on, only
-           compile ijs_server_epsonepl.
+   . Many printing parameters are now definable in ps2epl
+     (papersize, dpi, ritech, tonersave, density).
+   . Improved error checking.
+   . Misc fixes and clean up.
+   . Makefile.in: compiler optimizations turned on, only
+     compile ijs_server_epsonepl.
 
 2003-01-13: headers and footers reorg - Roberto Ragusa
-         . Fixes 5800L/5900L? Breaks 5700L? :-)
+   . Fixes 5800L/5900L? Breaks 5700L? :-)
 
 2003-01-12: 5700L multi-page fix - Hin-Tak Leung  
-         . Breaks 5800L/5900L. Careful.
+   . Breaks 5800L/5900L. Careful.
 
 2003-01-09: version 0.1 - Hin-Tak Leung
-         . Test Release
+   . Test Release

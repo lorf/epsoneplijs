@@ -1,11 +1,7 @@
-OPEN  . USB not supported.
-
 OPEN  . Installation not user friendly.
 
-
 ----- OBSOLETE ENTRIES -----
-
-FIXED . The 4 bit codes are now implemented.
+FIXED . USB not supported.
 
 FIXED . Printing process not user friendly.
 

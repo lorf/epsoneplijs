@@ -47,7 +47,7 @@ static struct proto run_table[] =
 
 /* op code table */
 
-#define UNKNOWN    0
+#define CACHED     0
 #define LITERAL    1
 #define COPY_P     2
 #define COPY_L1    3
@@ -56,7 +56,7 @@ static struct proto run_table[] =
 
 static struct proto op_table[] = 
   {
-    {0x00, 2}, /* Unknown            -   00 */
+    {0x00, 2}, /* Cached             -   00 */
     {0x02, 2}, /* Literal            -   10 */
     {0x01, 2}, /* Copy row prev      -   01 */
     {0x03, 3}, /* Copy 1st byte left -  011 */
@@ -236,8 +236,8 @@ int epl_compress_row(typ_stream *stream,
           if (byte2cache[byte] >= 0)
             { 
               stream_append(stream,
-	                    op_table[UNKNOWN].code, 
-		            op_table[UNKNOWN].width);
+	                    op_table[CACHED].code, 
+		            op_table[CACHED].width);
               stream_append(stream,
 	                    byte2cache[byte], 
                             4);

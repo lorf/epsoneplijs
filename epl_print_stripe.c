@@ -66,12 +66,13 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream)
   fprintf(stderr, "Writing %s stripe header (%i bytes)\n",
           printername[epl_job_info->model], ts - temp_string);
 #endif
-  e = fwrite(temp_string, 1, ts - temp_string, epl_job_info->outfile);
+
+  e = epl_write_uni(epl_job_info, temp_string, ts - temp_string);
   if(e != ts - temp_string) return -1;
 
   /* model-independent part - dump the stream body */
 
-  e = fwrite(stream->start, 1, count, epl_job_info->outfile);
+  e = epl_write_uni(epl_job_info, stream->start, count);
   if(e != count) return -1;
 
   return 0;

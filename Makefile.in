@@ -1,8 +1,12 @@
 # Unix
 
 CC=@CC@
-CFLAGS=-g -O2 -Wall -ansi -pedantic -Wmissing-prototypes
-LDLIBS=
+CFLAGS_EXTRA_DEFS=@HAVE_KERNEL_DEVICE@ @HAVE_LIBUSB@
+CFLAGS= $(CFLAGS_EXTRA_DEFS) -g -O2 -Wall -ansi -pedantic -Wmissing-prototypes
+LDPATH=@LIBUSB_EXTRA_LDPATH@
+LDLIBS=@LIBUSB_EXTRA_LDLIBS@
+EXTRA_DEPS=@LIBUSB_EXTRA_DEPS@
+EXTRA_BINS=@LIBUSB_EXTRA_BINS@
 OBJ=.@OBJEXT@
 EXE=@EXEEXT@
 
@@ -32,9 +36,15 @@ INSTALL = @INSTALL@
 
 IJS_COMMON_OBJ=ijs$(OBJ)
 
-all:	libijs.a libijs$(SHARED_OBJ) ijs_server_epsonepl$(EXE) ijs_client_example$(EXE) ijs_server_example$(EXE) 
+all:	libijs.a libijs$(SHARED_OBJ) ijs_client_example$(EXE) ijs_server_example$(EXE) ijs_server_epsonepl$(EXE) $(EXTRA_BINS) 
 
 LIB_OBJS=ijs$(OBJ) ijs_client$(OBJ) ijs_server$(OBJ) $(IJS_EXEC_SERVER)
+
+EPL_USB_OBJS=epl_write$(OBJ) epl_usb_utils$(OBJ)
+
+EPL_OBJS=epl_job_header$(OBJ) epl_page_header$(OBJ) epl_page_footer$(OBJ) \
+           epl_job_footer$(OBJ) epl_print_stripe$(OBJ) epl_compress$(OBJ) \
+          $(EPL_USB_OBJS)         
 
 libijs.a:	$(LIB_OBJS)
 	rm -f $@
@@ -48,19 +58,33 @@ libijs$(SHARED_OBJ):	$(LIB_OBJS)
 	$(CC) $(SHARED_LDFLAGS) $^ -o $@
 
 ijs_client_example$(EXE):	ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON_OBJ) $(IJS_EXEC_SERVER)
-	$(CC) $(CFLAGS) $(FE)ijs_client_example$(EXE) ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON_OBJ) $(IJS_EXEC_SERVER) $(LDLIBS)
+	$(CC) $(CFLAGS) $(FE)ijs_client_example$(EXE) ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON_OBJ) $(IJS_EXEC_SERVER) 
 
 ijs_server_example$(EXE):	ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
-	$(CC) $(CFLAGS) $(FE)ijs_server_example$(EXE) ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) $(LDLIBS)
+	$(CC) $(CFLAGS) $(FE)ijs_server_example$(EXE) ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
 
-ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) epl_job_header$(OBJ) epl_page_header$(OBJ) epl_page_footer$(OBJ) epl_job_footer$(OBJ) epl_print_stripe$(OBJ) epl_compress$(OBJ)
-	$(CC) $(CFLAGS) $(FE)ijs_server_epsonepl$(EXE) ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) epl_job_header$(OBJ) epl_page_header$(OBJ) epl_page_footer$(OBJ) epl_job_footer$(OBJ) epl_print_stripe$(OBJ) epl_compress$(OBJ) $(IJS_COMMON_OBJ) $(LDLIBS)
+ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) $(EPL_OBJS) $(EXTRA_DEPS)
+	$(CC) $(CFLAGS) $(FE)ijs_server_epsonepl$(EXE) ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(EPL_OBJS) $(IJS_COMMON_OBJ) $(LDPATH) $(LDLIBS)
+
+testlibusb$(EXE): libusb/tests/testlibusb$(OBJ) libusb/.libs/libusb.a
+	$(CC) -c -I./libusb -o libusb/tests/testlibusb$(OBJ) libusb/tests/testlibusb.c
+	$(CC) $(CFLAGS) $(FE)testlibusb$(EXE) libusb/tests/testlibusb$(OBJ) $(LDPATH) $(LDLIBS)
+
+test5700lusb$(EXE): test5700lusb$(OBJ) libusb/.libs/libusb.a
+	$(CC) -c -I./libusb -o test5700lusb$(OBJ) test5700lusb.c
+	$(CC) $(CFLAGS) $(FE)test5700lusb$(EXE) test5700lusb$(OBJ) $(LDPATH) $(LDLIBS)
+
+libusb/.libs/libusb.a:
+	(cd libusb ; ./autogen.sh ; ./configure --disable-shared ; make)
+	# libusb.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 
+	$(RM) libusb/libusb.spec
 
 common_clean:
 	$(RM) *$(OBJ) ijs_client_example$(EXE) ijs_server_example$(EXE) ijs_server_epsonepl$(EXE)
 
 clean: common_clean
-	$(RM) *~ gmon.out core ijs_spec.log ijs_spec.tex ijs_spec.aux libijs.a libijs$(SHARED_OBJ) config.cache config.log config.status ijs-config
+	$(RM) *~ gmon.out core ijs_spec.log ijs_spec.tex ijs_spec.aux libijs.a libijs$(SHARED_OBJ) config.cache config.log config.status ijs-config testlibusb$(EXE) test5700lusb$(EXE) libusb/libusb.spec
+	[ -d libusb ] && (cd libusb ; make clean) 
 
 install: all
 	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(bindir)/ijs_server_epsonepl$(EXE)

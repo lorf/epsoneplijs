@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2003 Roberto Ragusa
+ * Copyright (c) 2003 Roberto Ragusa, Hin-Tak Leung
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include "epl_job.h"
+#include "epl_usb.h"
 
 int epl_job_footer(EPL_job_info *epl_job_info) 
 {
@@ -73,9 +74,15 @@ int epl_job_footer(EPL_job_info *epl_job_info)
   fprintf(stderr, "Writing %s job footer (%i bytes)\n",
           printername[epl_job_info->model], ts - temp_string);
 #endif
-  e = fwrite(temp_string, 1, ts - temp_string, epl_job_info->outfile);
+  e = epl_write_bid(epl_job_info, temp_string, ts - temp_string);
   if(e != ts - temp_string) return -1;
 
+  if ((epl_job_info->connectivity != VIA_PPORT)
+      && (epl_job_info->model == MODEL_5700L))
+    {
+      epl_usb_end(epl_job_info);
+    }
+  
   return 0;
 } 
 

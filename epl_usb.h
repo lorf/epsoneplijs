@@ -1,5 +1,8 @@
+/*
+  Copyright (c) 2003 Hin-Tak Leung
+*/  
+
 /**
- * Copyright (c) 2003 Roberto Ragusa, Hin-Tak Leung
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -22,45 +25,16 @@
  * SOFTWARE.
 **/
 
-#include <stdio.h>
-#include "epl_job.h"
+#define USB_VENDOR_EPSON 0x04B8
+#define USB_PRODUCT_5700L 0x0001
+#define USB_PRODUCT_5800L 0x0005
+#define USB_PRODUCT_5900L 0x0005
 
-int epl_page_footer(EPL_job_info *epl_job_info)
-{
-  char temp_string[256];
-  char *ts;
-  int e;
+/* milliseconds */
+#define EPL_USB_TIMEOUT 100
 
-#ifdef EPL_DEBUG
-  fprintf(stderr, "EPL page footer\n");
-#endif
+void epl_usb_init(EPL_job_info *epl_job_info);
 
-  ts=temp_string;
-  if(epl_job_info->model == MODEL_5700L)
-    {
-      ts += sprintf(ts, "%c%c",
-        0x03,
-        0x00
-	);
-    }
-  else if(epl_job_info->model == MODEL_5800L
-          || epl_job_info->model == MODEL_5900L)
-    {
-      ts += sprintf(ts, "\x01d");
-      ts += sprintf(ts, "2eps{I");
-      ts += sprintf(ts, "%c%c",
-        0x05,
-        0x00
-        );
-    }
+void epl_usb_mid(EPL_job_info *epl_job_info);
 
-#ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s page footer (%i bytes)\n",
-          printername[epl_job_info->model], ts - temp_string);
-#endif
-
-  e = epl_write_bid(epl_job_info,temp_string, ts - temp_string);
-  if(e != ts - temp_string) return -1;
-
-  return 0;
-} 
+void epl_usb_end(EPL_job_info *epl_job_info);

@@ -2,6 +2,44 @@ AC_INIT(ijs.c)
 IJS_VERSION=0.34
 AC_SUBST(IJS_VERSION)
 AC_PROG_CC
+
+# Prepare to check for  USB support.
+
+# Check for OS USB support
+os=`uname -s`
+AC_MSG_CHECKING(for OS USB support)
+AC_ARG_WITH(kerneldevice, [  --without-kerneldevice  disable kernel USB device support (default)
+  --with-kerneldevice     enable  kernel USB device support])
+if test "$with_kerneldevice"  = yes -a "$os" = Linux ; then
+HAVE_KERNEL_DEVICE=-DHAVE_KERNEL_DEVICE
+AC_MSG_RESULT(yes)
+else
+AC_MSG_RESULT(no)
+fi
+
+# Check for libusb support (needed for composite USB support
+# on Linux and for all USB support on non-Linux systems).
+AC_ARG_WITH(libusb,[  --with-libusb           enable  libusb support (requires libusb sub-directory)
+  --without-libusb        disable libusb and full-feature USB support])
+
+AC_MSG_CHECKING(for libusb)
+if test "$with_libusb" != no -a -d libusb -a -f libusb/usb.h ; then
+HAVE_LIBUSB="-DHAVE_LIBUSB -D_SVID_SOURCE"
+LIBUSB_EXTRA_LDPATH=-L./libusb/.libs
+LIBUSB_EXTRA_LDLIBS=-lusb
+LIBUSB_EXTRA_DEPS=libusb/.libs/libusb.a 
+LIBUSB_EXTRA_BINS="test5700lusb testlibusb" 
+AC_MSG_RESULT(yes)
+else
+AC_MSG_RESULT(no)
+fi
+AC_SUBST(HAVE_KERNEL_DEVICE)
+AC_SUBST(HAVE_LIBUSB)
+AC_SUBST(LIBUSB_EXTRA_LDPATH)
+AC_SUBST(LIBUSB_EXTRA_LDLIBS)
+AC_SUBST(LIBUSB_EXTRA_DEPS)
+AC_SUBST(LIBUSB_EXTRA_BINS)
+
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_OUTPUT(Makefile

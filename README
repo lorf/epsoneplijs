@@ -1,56 +1,82 @@
-Requirement:
-	Type "gs -h" to get your ghostscript version and
-	device list. You need GNU ghostscript 6.53+ or
-	AFPL Ghostscript 7.04+, and the "ijs" device listed
-	among the device list to use this plugin.
+Requirement
+===========
+  Type "gs -h" to get your ghostscript version and device list. You need 
+  GNU ghostscript 6.53+ or AFPL Ghostscript 7.04+, and the "ijs" device 
+  listed among the device list to use this plugin.
 
-	AFPL ghostscript 8.0 has some yet unidentified issues,
-	and known not to work. Avoid it for the time being.
+  AFPL ghostscript 8.0 has some yet unidentified issues, and known not 
+  to work. Avoid it for the time being (and all devel versions of gs 
+  between v. 7.22 - 8.0).
 
-Installation:
-	./configure
-	make
-	make install
+  The kernel device code (./configure --with-kerneldevice) switches on code 
+  portions which depends on features of the linux kernel only found in 2.4.19+ 
+  onwards, but the ./configure script only check the host is linux but 
+  can't auto-detect kernel version. Therefore the default is "--without".
 
-	(be sure /usr/local/bin is in your path,
-	if it isn't, try with "./configure --prefix=/usr")
+Installation
+============
 
-	Check the content of the script "foomatic/copy_to_foomatic"
-	  in this source bundle for notes on foomatic and cups
+  ./configure
+  make
+  make install
 
-Usage:
-	See ps2epl for selectable options.
-        Change "EPL5700L" to "EPL5800L", or "EPL5900L"
-	where appropriate.
-	Print using "./ps2epl myfile.ps" and
-	"cat myfile.epl >/dev/lp0".
-	
-	Alternatively, if your system is based on
-	foomatic, have a look at the foomatic dir.
+  (be sure /usr/local/bin is in your path, if it isn't, try with 
+  "./configure --prefix=/usr")
 
-License:
-	The ijs-derived part follows the same license
-	as ijs. The rest under the GNU public license, 
-	except "epl_compress.c", which is not to be
-	used for any purpose other than in relation
- 	to the Epson EPL series of printers.
+  Check the content of the script "foomatic/copy_to_foomatic" in this source 
+  bundle for notes on foomatic and cups. Read the "FAQ" file, and so browse 
+  the mailing list archive (link at the bottom of 
+  http://sourceforge.net/projects/epsonepl/)  for frequently asked questions
+  that has been asked before.
 
-=====================================================
-Notes:
+Usage
+=====
+  See ps2epl for selectable options. Change "EPL5700L" to "EPL5800L", 
+  or "EPL5900L" where appropriate.
 
-Almost all the files came as it was from the ijs-0.34 
-distribution, except
+  Testing: Print using "./ps2epl myfile.ps" and "cat myfile.epl >/dev/lp0",
+  or in one step: "./ps2epl myfile.ps /dev/lp0"
+  
+  Alternatively, if your system is based on foomatic, have a look at the 
+  foomatic dir.
+
+License
+=======
+  The ijs-derived part follows the same licence as ijs. The rest of the code 
+  is under the GNU public license, except "epl_compress.c".
+
+  As of version 0.2.3, the usb branch has merged back to the main branch,
+  and we no longer bundle libusb as a sub-directory within the source bundle. 
+  The src rpm still includes a libusb tar ball and recreates a sub-directory 
+  during rpm building, for convenience.
+
+  The content of "epl_compress.c" may have issues with Epson which we are 
+  not yet sure about. Therefore we hereby explicitly ask whoever uses the 
+  content of that file, NOT to use it for any purpose other than in relation  
+  to the Epson EPL series of printers.
+
+Notes
+=====
+  Almost all the files came as it was from the ijs-0.34 distribution, except
  
-	ChangeLog
-	LIMITATIONS
-	Makefile.in
-	README	
-	epl_*
-	ijs_server_epsonepl.c
-	ps2epl
-	epl_docs/*
-	foomatic/*
+    ChangeLog
+    LIMITATIONS
+    Makefile.in
+    README  
+    epl_*
+    ijs_server_epsonepl.c
+    ps2epl
+    epl_docs/*
+    foomatic/*
+    test5700lusb.c
 
-"Makefile.in" has been mildly adapted from ijs-0.34,
-"ijs_server_epsonepl.c" adapted from "ijs_server_example.c"
-"ps2epl" adapted from "ps2pdfwr" of ghostscript.
+"Makefile.in" has been mildly adapted from ijs-0.34, "ijs_server_epsonepl.c" 
+ adapted from "ijs_server_example.c", "ps2epl" adapted from "ps2pdfwr" of 
+ghostscript.
+
+Developer Notes
+===============
+++ SnoopyPro (from HTL)
+   Run it with this to silent it up about missing VxD:
+         wine --debugmsg fixme-all SnoopyPro.exe
+

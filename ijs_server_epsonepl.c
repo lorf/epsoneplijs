@@ -31,10 +31,20 @@
  * SOFTWARE.
 **/
 
+/* fdopen requires this */
+#define _POSIX_C_SOURCE  1
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
+
+#ifdef HAVE_KERNEL_DEVICE
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#endif
+
 #include "ijs.h"
 #include "ijs_server.h"
 
@@ -575,7 +585,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   s = find_param(pl, "DeviceModel");
   if (s == NULL)
     {
-      fprintf(stderr, "Printer DeviceModel not set, aborting!");
+      fprintf(stderr, "Printer DeviceModel not set, aborting!\n");
       return 1;
     }
 
@@ -596,14 +606,15 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
       fprintf(stderr, "Unknown Printer %s, aborting!\n", s);
       return 1;
     }
+#ifdef EPL_DEBUG
   fprintf(stderr, "  Using protocol for %s\n",printername[epl_job_info->model]);
-
+#endif
 
   /* PaperSize */
   s = find_param(pl, "PaperSize");
   if (s == NULL)
     {
-      fprintf(stderr, "PaperSize not set, using default (A4 210x297mm)");
+      fprintf(stderr, "PaperSize not set, using default (A4 210x297mm)\n");
       epl_job_info->paper_size_mm_h = 210;
       epl_job_info->paper_size_mm_v = 297;
     }
@@ -619,7 +630,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 	}
       else
 	{
-          fprintf(stderr, "Unparsable PaperSize %s, aborting!", s);
+          fprintf(stderr, "Unparsable PaperSize %s, aborting!\n", s);
           return 1;
 	}
       fprintf(stderr, "  Papersize is %s inches\n", s);
@@ -630,7 +641,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   s = find_param(pl, "EplDpi");
   if (s == NULL)
     {
-      fprintf(stderr, "EplDpi not set, using default (600)");
+      fprintf(stderr, "EplDpi not set, using default (600)\n");
       epl_job_info->dpi_h = 600;
       epl_job_info->dpi_v = 600;
     }
@@ -665,7 +676,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   s = find_param(pl, "EplRitech");
   if (s == NULL)
     {
-      fprintf(stderr, "EplRitech not set, using default (on)");
+      fprintf(stderr, "EplRitech not set, using default (on)\n");
       epl_job_info->ritech = 1;
     }
   else if (strcmp(s, "on") == 0)
@@ -687,7 +698,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   s = find_param(pl, "EplDensity");
   if (s == NULL)
     {
-      fprintf(stderr, "EplDensity not set, using default (3)");
+      fprintf(stderr, "EplDensity not set, using default (3)\n");
       epl_job_info->density = 3;
     }
   else if (strcmp(s, "1") == 0)
@@ -721,7 +732,7 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
   s = find_param(pl, "EplTonerSave");
   if (s == NULL)
     {
-      fprintf(stderr, "EplTonerSave not set, using default (off)");
+      fprintf(stderr, "EplTonerSave not set, using default (off)\n");
       epl_job_info->toner_save = 0;
     }
   else if (strcmp(s, "on") == 0)
@@ -776,6 +787,42 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
        return 1;
     }
 
+  s = find_param(pl, "USB");
+
+  if (s == NULL)
+    {
+      epl_job_info->connectivity = VIA_PPORT;
+    }
+  else if (strcmp(s, "off") == 0)
+    {
+      epl_job_info->connectivity = VIA_PPORT;
+    }
+#ifdef HAVE_LIBUSB
+  else if (strcmp(s, "on") == 0)
+    {
+      fprintf(stderr, "Using libusb\n");
+      epl_job_info->connectivity = VIA_LIBUSB;
+    }
+#endif
+#ifdef HAVE_KERNEL_DEVICE
+  else if (strncmp(s, "/dev/usb/lp[0-9] or /dev/usblp[0-9]",8) == 0)   
+    {
+      fprintf(stderr, "Using kernel usb device\n");
+      epl_job_info->connectivity = VIA_KERNEL_USB;
+      epl_job_info->kernel_fd = open(s, O_RDWR |O_SYNC);
+      if (epl_job_info->kernel_fd < 0) 
+	{
+	  fprintf(stderr, "Can't open device %s, aborting!\n", s);
+	  perror("Open kernel device");
+	  return 1;
+	}    				          
+   }
+#endif
+  else 
+    {
+      fprintf(stderr, "Unknown USB option %s, aborting!\n", s);
+      return 1;
+    }
 
   /* If we get here, all it's OK */
   return 0;
@@ -811,7 +858,7 @@ main (int argc, char **argv)
   fprintf(stderr, "Try to allocate %i byte of memory for job info\n",sizeof(EPL_job_info));
 #endif
   
-  epl_job_info = (EPL_job_info *)malloc(sizeof(EPL_job_info));
+  epl_job_info = (EPL_job_info *)calloc(1, sizeof(EPL_job_info));
   
   if (epl_job_info == NULL) {
 #ifdef EPL_DEBUG
@@ -819,6 +866,13 @@ main (int argc, char **argv)
 #endif
     exit(1);
   }
+
+  /* The file handle has a danger of being used before initized */
+  epl_job_info->outfile = NULL; 
+
+#ifdef USE_FLOW_CONTROL
+  gettimeofday(&(epl_job_info->time_last_write),NULL);
+#endif
   
   do 
     {

@@ -23,7 +23,9 @@
 **/
 
 #include <stdio.h>
+#include <unistd.h>
 #include "epl_job.h"
+#include "epl_usb.h"
 
 int epl_page_header(EPL_job_info *epl_job_info) 
 {
@@ -116,8 +118,15 @@ int epl_page_header(EPL_job_info *epl_job_info)
   fprintf(stderr, "Writing %s page header (%i bytes)\n",
           printername[epl_job_info->model], ts - temp_string);
 #endif
-  e = fwrite(temp_string, 1, ts - temp_string, epl_job_info->outfile);
+
+  e = epl_write_bid(epl_job_info, temp_string, ts - temp_string);
   if(e != ts - temp_string) return -1;
 
+  if ((epl_job_info->connectivity != VIA_PPORT)
+      && (epl_job_info->model == MODEL_5700L))
+    {
+      epl_usb_mid(epl_job_info);
+    }
+  
   return 0;
 } 

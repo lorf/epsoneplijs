@@ -25,7 +25,7 @@ PAPERSIZE=a4
 
 # Start of options part ###################################################
 
-DPI=600
+DPI=300
   # possible values: 300, Class600, 600, Class1200
   # default: 600
   IJSPARMS="EplDpi=$DPI"
@@ -40,10 +40,17 @@ DENSITY=3
   # default: 3
   IJSPARMS="$IJSPARMS,EplDensity=$DENSITY"
 
-TONERSAVE=off
+TONERSAVE=on
   # possible values: on, off
   # default: off
   IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
+
+USB=off
+  # either on(=use libusb), off, or device name(e.g. "/dev/usb/lp0"). 
+  # default: off
+  # the "on" and device name option is only available if compiled --with-libusb, 
+  #                                        and --with-kerneldevice respectively.
+  IJSPARMS="$IJSPARMS,USB=$USB"
 
 ##################################################### End of options part #
 

@@ -22,6 +22,9 @@
  * SOFTWARE.
 **/
 
+/* fdopen requires this */
+#define _POSIX_C_SOURCE  1
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -242,7 +245,7 @@ example_get_cb (void *get_cb_data,
 {
   ExampleParamList *pl = *(ExampleParamList **)get_cb_data;
   ExampleParamList *curs;
-  const char *val;
+  const char *val = NULL;
   char buf[256];
   int code;
 
