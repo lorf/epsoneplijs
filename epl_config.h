@@ -81,7 +81,18 @@
 #define COARSE_HORIZONTAL_POSITION
 
 
+/**
+ *************************************************************
+ * Correlations between some subsidiary/internal options.
+ * Do not modify below this point unless you are familiar
+ * with how this piece of software functions.
+ *************************************************************
+**/
 
+#ifdef STRICT_WIN32_COMPATIBILITY
+#undef STRIPE_OVERFLOW_WORKAROUND
+#undef USE_DELTA_STRATEGY 
+#endif
 
 #ifdef EPL_DEBUG
 #define VERBOSE
