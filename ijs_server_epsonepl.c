@@ -821,6 +821,10 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
     {
       epl_job_info->connectivity = VIA_STDOUT_PIPE;
     }
+  else if (strcmp(s, "nowhere") == 0)
+    {
+      epl_job_info->connectivity = VIA_NOWHERE;
+    }
 #ifdef HAVE_LIBUSB
   else if (strcmp(s, "libusb") == 0)
     {
