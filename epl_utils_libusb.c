@@ -33,8 +33,13 @@
 #include "epl_job.h"
 #include "epl_bid.h"
 
+#define MAX_DEVICE_ID_SIZE     1024
+
 void epl_libusb_init(EPL_job_info *epl_job_info)
 {
+  unsigned char device_id_string[MAX_DEVICE_ID_SIZE];  /* This 1024 comes from the kernel header */
+  int err, length;
+
   struct usb_bus *bus;
   struct usb_device *dev;
 

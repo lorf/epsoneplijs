@@ -47,7 +47,7 @@ void epl_kernel_init(EPL_job_info *epl_job_info)
   /* the kernel device doesn't need init, but we'll do some check anyway */
   int ioctl_args[2];
   int model;
-  unsigned char ioctl_string[MAX_DEVICE_ID_SIZE+1];  /* This 1024 comes from the kernel header, we add 1 for null */
+  unsigned char ioctl_string[MAX_DEVICE_ID_SIZE];  /* This 1024 comes from the kernel header */
   unsigned char *ioctl_string_shifted_by_two;
   int length;
  
