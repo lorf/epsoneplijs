@@ -57,6 +57,18 @@ int stripe_data_too_big(EPL_job_info *epl_job_info, typ_stream *stream, int stri
     
     if (min_needed_after_this_stripe > expected_to_remain_after_this_stripe)
       ret = 1;
+    
+    if (epl_job_info->model == MODEL_5700L)
+      {
+	/* HTL: I do not understand this, but it seems to be a genuine limit per page */
+	if ((epl_job_info->bytes_sent_this_page + stream->count + 104 * (total_stripe - stripe_number)) > 2000000)
+	  ret = 1;
+      }
+    
+    if(ret)
+      fprintf(stderr, "blanking after stripe %i, %i bytes\n", 
+	      epl_job_info->stripes_sent_this_page, epl_job_info->bytes_sent_this_page); 
+    
     return ret;
 }
 
@@ -112,7 +124,7 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_
   (epl_job_info->stripes_sent_this_page)++;
   (epl_job_info->bytes_sent_this_page) += stream->count;
 #ifdef EPL_DEBUG
-  fprintf(stderr, "to do stripe %i, %i bytes so far\n", epl_job_info->stripes_sent_this_page, epl_job_info->bytes_sent_this_page); 
+  fprintf(stderr, "to do stripe %i, and up to %i bytes\n", epl_job_info->stripes_sent_this_page, epl_job_info->bytes_sent_this_page); 
 #endif
   /* this part does the model-dependent stripe header */
 
