@@ -2,7 +2,7 @@
   <!-- A multilingual <comments> block can appear here, too;
        it should be treated as documentation for the user. -->
   <arg_longname>
-   <en>TonerSave</en>
+   <en>Toner Save</en>
   </arg_longname>
   <arg_shortname>
    <en>TonerSave</en><!-- backends only know <en> shortnames! -->

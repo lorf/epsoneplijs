@@ -1,3 +1,6 @@
+2003-04-30: cvs - Roberto Ragusa
+   . Misc foomatic fixes.
+
 2003-04-28: cvs - Hin-Tak Leung
    * Changed "--with-kerneldevice" to "--with-kernelusb" for configure. 
    . Also changed all "HAVE_KERNEL_DEVICE" to "HAVE_KERNEL_USB_DEVICE" 
