@@ -22,10 +22,11 @@ Epson. It is known to work for at least one user for each of 5700L, 5800L
 and 5900L. YMMV.
 %prep
 
-%setup 
+%setup -a 1
 
 %build
 
+ln -s libusb-%{LIBUSB_VERSION} libusb 
 ./configure --with-kerneldevice --with-libusb
 make
 
@@ -53,7 +54,7 @@ exit 0
 
 %files
 %defattr(-, root, root)
-%doc ChangeLog FAQ LIMITATIONS README TODO ps2epl epl_test.ps cups epl_docs foomatic 
+%doc ChangeLog FAQ LIMITATIONS README ps2epl epl_test.ps cups epl_docs foomatic 
 /usr/bin/*
 
 %changelog
