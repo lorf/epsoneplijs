@@ -1,5 +1,7 @@
 OPEN  . Installation not user friendly.
 
+OPEN  . (FIXED?) No flow control on 6100L yet.
+
 ----- OBSOLETE ENTRIES -----
 FIXED . USB not supported.
 

@@ -2125,7 +2125,7 @@ if test "$with_kernelusb"  != no ; then
            -o "$with_kernelusb" = yes ; then
          HAVE_KERNEL_USB_DEVICE=-DHAVE_KERNEL_USB_DEVICE
          KUSB_EXTRA_OBJS=epl_utils_kusb.o
-         BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o"
+         BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o epl_61interpret.o"
 	 if test "$with_kernelusb" = yes ; then
              echo "$as_me:$LINENO: result: Linux ${major}.${minor}.${patch} - configured to yes - I hope you know what you are doing" >&5
 echo "${ECHO_T}Linux ${major}.${minor}.${patch} - configured to yes - I hope you know what you are doing" >&6
@@ -2164,7 +2164,7 @@ LIBUSB_EXTRA_LDLIBS=-lusb
 LIBUSB_EXTRA_DEPS=libusb/.libs/libusb.a
 LIBUSB_EXTRA_OBJS=epl_utils_libusb.o
 LIBUSB_EXTRA_BINS="test5700lusb testlibusb"
-BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o"
+BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o epl_61interpret.o"
 echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
@@ -2185,7 +2185,7 @@ if test "$with_kernel1284"  != no ; then
 #the autoprobe file is a sign of os 1284 config. may be version dependent.
    if test "$os" = Linux -a -f /proc/sys/dev/parport/parport0/autoprobe ; then
          HAVE_KERNEL_1284=-DHAVE_KERNEL_1284
-         BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o"
+         BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o epl_61interpret.o"
          echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
    else
@@ -2215,7 +2215,7 @@ LIBIEEE1284_EXTRA_LDLIBS=-lieee1284
 LIBIEEE1284_EXTRA_DEPS=libieee1284/.libs/libieee1284.a
 LIBIEEE1284_EXTRA_OBJS=epl_utils_libieee1284.o
 LIBIEEE1284_EXTRA_BINS=
-BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o"
+BID_EXTRA_OBJS="epl_57interpret.o epl_59interpret.o epl_61interpret.o"
 echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else

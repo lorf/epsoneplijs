@@ -28,9 +28,6 @@
 #include "epl_job.h"
 #include "epl_bid.h"
 
-/* the following two defines are not used (so, why are they here?) */
-#define EPL_5700L_USB_EP_OUTBOUND  0x01
-#define EPL_5700L_USB_EP_INBOUND   0x82
    
 /* 
  Mythical replies from 5700l that needs to be dealt with 
@@ -119,16 +116,17 @@ int epl_bid_reply_len(int model, unsigned char code)
       switch (code)
         {
 	  /* big numbers for the time being */
-	case '@': result = 16;  break; /* 0x40 - job header */ 
-	case 'A': result = 16;  break; /* 0x41 - job footer */
-	case 'B': result = 16;  break; /* 0x42 - 1st level encapsulation */
-	case 'C': result = 16;  break; /* 0x43 - 1st level decapsulation */
-	case 'F': result = 16;  break; /* 0x46 - page header */
-	case 'G': result = 16;  break; /* 0x47 - page footer */
-	case 'L': result = 0;   break; /* 0x4C - strip */
-        case 'P': result = 126; break; /* 0x50 - */
-        case 'Q': result = 120; break; /* 0x51 - */
-        case 'R': result = 18;  break; /* 0x52 - */
+	case 0x40: result = 16;  break; /* '@' - job header */ 
+	case 0x41: result = 16;  break; /* 'A' - job footer */
+	case 0x42: result = 16;  break; /* 'B' - 1st level encapsulation */
+	case 0x43: result = 16;  break; /* 'C' - 1st level decapsulation */
+	case 0x46: result = 16;  break; /* 'F' - page header */
+	case 0x47: result = 16;  break; /* 'G' - page footer */
+	case 0x4C: result = 0;   break; /* 'L' - strip */
+        case 0x50: result = 126; break; /* 'P' - poll? */
+        case 0x51: result = 120; break; /* 'Q' - poll? */
+        case 0x52: result = 18;  break; /* 'R' - poll? */
+        case 0x7f: result = 16;  break; /*     - ? */
         }
     }
   return result;

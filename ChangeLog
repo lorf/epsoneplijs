@@ -1,3 +1,21 @@
+2003-09-08: cvs - Roberto Ragusa
+   . Added epl_61interpret.c.
+   . First attempt to do (free mem) flow control on 6100L.
+
+2003-09-04: cvs - Roberto Ragusa
+   . Unified all sleeping functions into sleep_seconds(double s).
+   . We try to accurately detect how big is the buffer of the printer
+     (this will be useful for future enhancements).
+   . Flow control is now more cleanly integrated. At the moment
+     there are two speed limiters: a stripe to stripe delay
+     (used only for 5700L) and a closed-loop free mem delay
+     (5800L, 5900L only; it should work for 5700L too but it's
+     disabled because htl doesn't want it :-) ).
+   . The free mem flow control now uses a better estimation
+     algorithm.
+   . Small misc fixes (code style, debug output).
+   . Added epl_time.c, a lot of code has been moved around.
+
 2003-07-18: cvs - Hin-Tak Leung
    . fixing the autoconf code to detect correctly kernel versions of the form
      "2.4.21-0.13mdk" (extra dot) reported for mandrake 9.x.  

@@ -27,8 +27,10 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+
 #include "epl_job.h"
 #include "epl_bid.h"
+#include "epl_time.h"
 
 /* forward declarations */
 void epl_57_dump_extra(int length, unsigned char *buffer);
@@ -114,7 +116,7 @@ void epl_57interpret(unsigned char *buffer, int len)
       switch (buffer[15])
 	{
 	case 0x00: 
-	  fprintf(stderr, "Connected: Paraport\n");
+	  fprintf(stderr, "Connected: Parport\n");
 	  break;
 	case 0x02: 
 	  fprintf(stderr, "Connected: USB\n");
@@ -178,15 +180,15 @@ void epl_57interpret(unsigned char *buffer, int len)
   
   if (buffer[7] == 0x11) {
     /* don't know how long to sleep, but the printer said "please back off" */
-    sleep(2); 
+    sleep_seconds(2); 
   } else if (buffer[7] > 0x11) {
     fprintf(stderr,"Probably should abort here for pos[7] = %2.2X\n", (0xff & buffer[7]));
-    sleep(2); 
+    sleep_seconds(2); 
   }
 
   if (buffer[1] > 0x00) {
     fprintf(stderr,"Pause on pos[1] = %2.2X\n", (0xff & buffer[1]));
-    sleep(2); 
+    sleep_seconds(2); 
   }
 
   if(buffer[9] == 0x04) 
@@ -205,7 +207,7 @@ void epl_57interpret(unsigned char *buffer, int len)
     {
       /* Probably should abort here */
       fprintf(stderr,"Pause on pos[9] = %2.2X\n", (0xff & buffer[9]));
-      sleep(2); 
+      sleep_seconds(2); 
     }
   
   /* Abort condition Finally */

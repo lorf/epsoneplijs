@@ -30,8 +30,6 @@
 #define _POSIX_C_SOURCE 199309L
 #endif
 
-#include <time.h>
-
 #include <stdlib.h>
 
 /* read() and write() */
@@ -41,15 +39,20 @@
 
 #include "epl_job.h"
 #include "epl_bid.h"
-
-/* sleep routine only used here */
-void do_subsec_sleep(EPL_job_info *epl_job_info);
+#include "epl_time.h"
 
 /* generic hex dump routine, prints to stderr */
 void hex_dump(char *title, char *prefix, char *buffer, int len, int maxrows);
 
 /* this interprets the replies from the printer */
 void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsigned char code);
+
+/* slow down the 5700l */
+void do_5700l_slowdown(EPL_job_info *epl_job_info);
+
+/* slow down if printer memory almost full */
+void do_free_mem_slowdown(EPL_job_info *epl_job_info);
+
 
 /* Bi-directional communication routine */
 
@@ -68,7 +71,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
   
   if (ret_write != length) 
     {
-      fprintf(stderr,"Write didn't succeed in bid-writing, aborting: %d\n",ret_write);
+      fprintf(stderr,"Write didn't succeed in bid-writing, aborting: %d\n", ret_write);
       exit(1);
     }
   
@@ -85,10 +88,10 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
       if ((*buffer == 0x1d) && (epl_job_info->model != MODEL_5700L))
         {
           int i;
-          for (i = 0 ;  i < length - 1 ; i++)
+          for (i = 0; i < length - 1; i++)
             {
 #ifdef EPL_DEBUG
-              fprintf(stderr,"skip-");
+              fprintf(stderr, "skip-");
 #endif
 	      if (buffer[i] == 0x49)
                 {
@@ -96,6 +99,9 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
                   break;
 	        }
 	    }
+#ifdef EPL_DEBUG
+	  fprintf(stderr, "\n");
+#endif
 	}
       /* we could get here with code=0x1b (5900L) or other values (6100L) */
       /* the called function returns -1 for invalid values */
@@ -194,12 +200,6 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
 
   if (epl_job_info->connectivity != VIA_STDOUT_PIPE)
     {
-      /* 5700L needs a slow data transfer */
-      if (epl_job_info->model == MODEL_5700L)
-        {
-          do_subsec_sleep(epl_job_info);
-        }
-      
       switch (epl_job_info->connectivity)
 	{
 #ifdef HAVE_LIBUSB
@@ -237,73 +237,6 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
   return ret;
 }
 
-/* 
-   Sleeping routine to do flow control. This code assumes that the execution time
-   of any part of itself is negligible (i.e. < 1 micro-seconds), and we never
-   need to sleep for more than 1 second.
-   ***So there is a fair amount of cutting corners here and there...careful***
-
-   On very slow or very busy machines, this assumption may not be true.
-*/
-/* 
-   Flow control parameter:
-   According to the spec, the 5700L can do 8 pages per minutes; i.e. 
-   7 seconds per page; the max page length is about 14in, containing about 
-   140 stripes at max resolution. So the printer must be able to process
-   a stripe within 0.05 seconds, or 50,000 micro-seconds. Hence this 
-   number. One may need to increase or look for problems elsewhere
-   if a value of 50,000 doesn't work reliably.
-
-   The smallest value chosen so there is no unnecessary waits.
-   The wait route will use this value for high resolution, and
-   double it when the vertical resolution is only 300dpi. 
-   (only 300 or 600 are valid values)  
-*/
-#define USEC_BETWEEN_WRITES_5700L 50000
-
-void do_subsec_sleep(EPL_job_info *epl_job_info) 
-{
-#ifdef USE_FLOW_CONTROL
-  long last_wrote_sec, last_wrote_usec;
-  unsigned long usec_interval;
-  struct timeval time_now;
-
-  long sleep_time_between_writes;
-
-  if( epl_job_info->dpi_v <= 600) 
-    { 
-      sleep_time_between_writes = ( 600 / epl_job_info->dpi_v ) * USEC_BETWEEN_WRITES_5700L ;
-    } 
-  else
-    {
-      /* just in case a future printer might have dpi_v > 600 */
-      sleep_time_between_writes =  USEC_BETWEEN_WRITES_5700L;
-    }
-
-  last_wrote_sec = epl_job_info->time_last_write.tv_sec;
-  last_wrote_usec = epl_job_info->time_last_write.tv_usec;
-  gettimeofday(&time_now,NULL);
-
-  usec_interval = (time_now.tv_sec - last_wrote_sec) * 1000000 
-    + time_now.tv_usec - last_wrote_usec; 
-
-  if (usec_interval < sleep_time_between_writes)
-    {
-      /* 
-	 probably should also check usec_interval > 0, but it is never negative... 
-         like-wise, hopefully we should never need to sleep for more than one seconds 
-	 between stripes
-      */
-      struct timespec time_to_sleep;
-      time_to_sleep.tv_sec = 0 ;
-      time_to_sleep.tv_nsec = (sleep_time_between_writes - usec_interval) * 1000;
-      nanosleep(&time_to_sleep, NULL);      
-    }
-  /* store the time away so we can read it next time this routine is called */
-  gettimeofday(&(epl_job_info->time_last_write),NULL);
-#endif
-}
-
 /*
    This routine dump hexadecimal data in a easily readable format.
    Useful for debugging.
@@ -312,7 +245,7 @@ void hex_dump(char *title, char *prefix, char *buffer, int len, int maxrows)
 {
   int i;
   fprintf(stderr, "%s: (len=%i=0x%4.4x)", title, len, len);
-  for (i = 0 ; i < len ; i++)
+  for (i = 0; i < len; i++)
     {
       if (i == 0x10 * (maxrows - 2) && len > 0x10 * maxrows)
         {
@@ -348,25 +281,185 @@ void epl_interpret_reply(EPL_job_info *epl_job_info, char *buffer, int len, unsi
     {
 #ifdef USE_FLOW_CONTROL
     case MODEL_5700L:
-      epl_job_info->estimated_free_mem = FREE_MEM_DEFAULT_VALUE; /* fake */
       epl_57interpret(p, len);
+      /*
+         we don't worry about these, always force them to 0 as if
+	 epl_57interpret() did it
+      */
+      epl_job_info->bytes_sent_after_last_update = 0;
+      epl_job_info->stripes_sent_after_last_update = 0;
       break;
 
     case MODEL_5800L:
       /* 5800L uses the routine same as the 5900L */
-      epl_59interpret(epl_job_info, p, len, code);
+      epl_59interpret(epl_job_info, p, len);
       break;
 
     case MODEL_5900L:
-      epl_59interpret(epl_job_info, p, len, code);
+      epl_59interpret(epl_job_info, p, len);
       break;
 
     case MODEL_6100L:
-      epl_job_info->estimated_free_mem = FREE_MEM_DEFAULT_VALUE; /* fake */
+      epl_61interpret(epl_job_info, p, len);
       break;
 #endif
     default:
       break;
     }
+}
+
+/* 
+   Sleeping routine to do flow control on 5700L. We sleep between stripes to
+   avoid congesting the printer. This code assumes that the execution time
+   of any part of itself is negligible (i.e. < 1 micro-seconds)
+   ***So there is a fair amount of cutting corners here and there...careful***
+
+   On very slow or very busy machines, this assumption may not be true.
+   
+   How is flow control parameter calculated:
+   According to the spec, the 5700L can do 8 pages per minutes; i.e. 
+   7 seconds per page; the max page length is about 14in, containing about 
+   140 stripes at max resolution. So the printer must be able to process
+   a stripe within 0.050 seconds. Hence this number. One may need to
+   increase or look for problems elsewhere if a value of 0.050 doesn't
+   work reliably.
+
+   The smallest value chosen so there is no unnecessary waits.
+   The wait route will use this value for high resolution, and
+   double it when the vertical resolution is only 300dpi. 
+   (only 300 or 600 are valid values)  
+*/
+#define SECS_BETWEEN_WRITES_5700L 0.050
+
+void do_5700l_slowdown(EPL_job_info *epl_job_info) 
+{
+#ifdef USE_FLOW_CONTROL
+  double now;
+  double time_between_writes;
+  double sec_interval;
+
+  now = get_time_now();
+  /* sleep time is vertical resolution dependent */
+  time_between_writes = SECS_BETWEEN_WRITES_5700L * 600 / epl_job_info->dpi_v;
+
+  /* should we delay? */
+  sec_interval = epl_job_info->time_last_write_stripe - now;
+  if (sec_interval < time_between_writes)
+    {
+      sleep_seconds(time_between_writes - sec_interval);
+    }
+  /* upper levels will keep time_last_write_stripe updated for us */
+#endif
+}
+
+/*
+   Sleeping routine that avoids filling the memory of the printer.
+   We keep track of the free memory and sleep when the value is
+   too low.
+*/
+
+void do_free_mem_slowdown(EPL_job_info *epl_job_info)
+{  
+#ifdef USE_FLOW_CONTROL
+  static double seconds_to_wait = 0.001;
+  EPL_job_info *e = epl_job_info; /* for brevity */ 
+  double time_now;
+  int estimated_free_mem;
+
+  /*
+  If our estimated free mem is too low, we check the real
+  value and refuse to go ahead if it is actually low.
+  We indefinitely wait for some memory to be freed.
+  So, yes, we can get stuck here for ever; and this is
+  right, because if the printer goes out of paper on
+  a 200 page job, the buffer fills up and we loop
+  here until (maybe hours later) someone adds more
+  paper.
+  This also means we've no way of exit if a page needs
+  more memory than physically installed in the printer.
+  So what? We're hopeless anyway.
+  (a good work around for this problem needs more work
+  and could be implemented in the future)
+  
+  We're overestimating the amount of memory we're consuming.
+  This is not a problem, it simply triggers the above
+  verification earlier.
+  A factor of 2 could be enough, according to my logs.
+    --  rora
+  
+  Further analysis of 5900L logs suggest a factor of 1
+  and an offset of 64 (the factor is maybe a little
+  higher than 1).
+  But there is some noise in a short time interval
+  (a couple of stripes), maybe related to buffering
+  and timing issues, so we stay on the safe side as
+  this is not critical.
+    --  rora
+  
+  Last update: we use a factor of 1.125 plus 64 bytes
+  per stripe and an extra 80000 byte if we wrote
+  a stripe recently.
+    --  rora
+  */          
+  do
+    {
+      time_now = get_time_now();
+fprintf(stderr, "time_now=%f, time_last_write_stripe=%f\n",time_now,e->time_last_write_stripe);
+      estimated_free_mem = e->free_mem_last_update    /* read on! */
+         /* bytes we sent + 12.5% safety */
+         - e->bytes_sent_after_last_update - e->bytes_sent_after_last_update / 8
+         /* extra overhead per stripe for safety */
+         - 64 * e->stripes_sent_after_last_update
+         /* the printer could be lying if we just sent something, */
+         /* so we account for an extra big stripe (80000 > worst case) */
+         /* if 3 seconds have not passed yet */
+         - (time_now - e->time_last_write_stripe < 3. ? 80000 : 0);
+      if (estimated_free_mem < FREE_MEM_LOW_LEVEL)
+        {
+          /*
+             If the buffer is almost full, go to sleep.
+             Increase sleeping time if this condition persists.
+             So, looping on this code continuosly is not a problem.
+               --  rora
+          */
+          double s;
+          s = seconds_to_wait;
+          fprintf(stderr, "low est. free memory 0x%8.8x, going to poll after %f seconds\n",
+                  estimated_free_mem, s);
+          sleep_seconds(s);
+          s = s * 2; /* exponential back off */
+          if (s > 5 ) s = 5; /* no more than five second */
+/*s=0.001;*/ /* hard coded for tests */
+          seconds_to_wait = s;
+          epl_poll(epl_job_info, 2); /* we just need the memory value */
+          continue;
+        }
+      else
+        {
+          seconds_to_wait = 0.001;
+	  break;
+        }
+    } while (1);
+#endif
+}
+
+void epl_permission_to_write_stripe(EPL_job_info *epl_job_info)
+{
+  if (epl_job_info->connectivity == VIA_STDOUT_PIPE) return;
+  
+  /* 5700L needs an extra delay to slow down data transfer */
+  if (epl_job_info->model == MODEL_5700L)
+    {
+      do_5700l_slowdown(epl_job_info);
+      /* ATTENTION: the following free_mem handling could be
+         useful for 5700L, but we're currently keeping it
+	 disabled, so we just return.
+	   -- rora
+      */
+      return;
+    }
+
+  /* Now we check how much free memory the printer has */
+    do_free_mem_slowdown(epl_job_info);
 }
 

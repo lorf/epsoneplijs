@@ -52,6 +52,7 @@
 
 #include "epl_job.h"
 #include "epl_bid.h"
+#include "epl_time.h"
 
 #define BUF_SIZE 4096
 
@@ -988,8 +989,11 @@ main (int argc, char **argv)
       if (epl_job_started == EPL_JOB_STARTED_NO) /* only do one job header per job */
 	{
 #ifdef USE_FLOW_CONTROL
-          /* initialize estimated_freemem to default value */
-	  epl_job_info->estimated_free_mem = FREE_MEM_DEFAULT_VALUE; /* fake */
+          /* initialize values */
+	  epl_job_info->printer_total_mem = TOTAL_MEM_DEFAULT_VALUE; /* fake */
+	  epl_job_info->free_mem_last_update = epl_job_info->printer_total_mem; /* fake */
+	  epl_job_info->bytes_sent_after_last_update = 0;
+	  epl_job_info->stripes_sent_after_last_update = 0;
 #endif
 	  /* init bid if needed */
           if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
@@ -1005,11 +1009,11 @@ main (int argc, char **argv)
 	      exit (1);
             }
 #ifdef USE_FLOW_CONTROL
-          /* initialize time_last_write */
-          gettimeofday(&(epl_job_info->time_last_write), NULL);
+          /* initialize time_last_write_stripe */
+          epl_job_info->time_last_write_stripe = get_time_now();
           if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
             {
-              /* try to get estimated_freemem */
+              /* try to get info about memory */
               epl_poll(epl_job_info, 0);
               epl_poll(epl_job_info, 1); /* just for fun */
             }
@@ -1107,61 +1111,12 @@ main (int argc, char **argv)
 	  stream_pad16bit(stream);
 
 #ifdef USE_FLOW_CONTROL
-              /*
-                 If our estimated free mem is too low, we check the real
-                 value and refuse to go ahead if it is really low.
-                 We indefinitely wait for some memory to be freed.
-                 So, yes, we can get stuck here for ever; and this is
-                 right, because if the printer goes out of paper on
-                 a 200 page job, the buffer fills up and we loop
-                 here until (maybe hours later) someone adds more
-                 paper.
-                 This also means we've no way of exit if a page needs
-                 more memory than physically installed in the printer.
-                 So what? We're hopeless anyway.
-                 NOTE: this doesn't use 100% CPU because epl_poll
-                 sleeps for some (adaptively chosen) time if memory is low.
-
-                 We're overestimating the amount of memory we're consuming.
-                 This is not a problem, it simply triggers the above
-                 verification earlier.
-                 A factor of 2 could be enough, according to my logs.
-                   --  rora
-                 Further analisys of 5900L logs suggest a factor of 1
-                 and an offset of 64 (the factor is maybe a little
-                 higher than 1).
-                 But there is some noise in a short time interval
-                 (a couple of stripes), maybe related to buffering
-                 and timing issues, so we stay on the safe side as
-                 this is not critical.
-                   --  rora
-              */          
-          if ((epl_job_info->connectivity != VIA_STDOUT_PIPE))
-            {
-/* This unindented part has only a research purpose */
-/* and will be eliminated soon. */
-/* Ugly coding style and ugly formatting is permitted :-) -- rora */
-static last_free_mem=0;
-static bytes_written=0;
-/*
-              while (epl_job_info->estimated_free_mem < FREE_MEM_LOW_LEVEL)
-*/
-do
-	        {
-	          fprintf(stderr, "low free memory 0x%8.8x, going to poll\n",
-	                  epl_job_info->estimated_free_mem);
-                  epl_poll(epl_job_info, 2); /* we just need the memory value */
-fprintf(stderr, "ESTDATA: really written=%i, memory diff=%i\n",
- bytes_written, epl_job_info->estimated_free_mem - last_free_mem);
-last_free_mem=epl_job_info->estimated_free_mem;
-bytes_written=0;
-	        }
-while (epl_job_info->estimated_free_mem < FREE_MEM_LOW_LEVEL);
-              epl_job_info->estimated_free_mem -= 3 * stream->count + 64;
-bytes_written+=stream->count;
-            }
+	  epl_permission_to_write_stripe(epl_job_info);
 #endif
 	  epl_print_stripe(epl_job_info, stream, i_stripe);
+          epl_job_info->time_last_write_stripe = get_time_now();
+	  epl_job_info->bytes_sent_after_last_update += stream->count;
+	  epl_job_info->stripes_sent_after_last_update++;
 	}
 	
       /* Page footer */

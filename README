@@ -57,7 +57,7 @@ Usage
   See ps2epl for selectable options. Change "EPL5700L" to "EPL5800L", 
   "EPL5900L" or "EPL6100L" where appropriate.
 
-  Testing: Print using "./ps2epl myfile.ps" and "cat myfile.epl >/dev/lp0",
+  Testing: print using "./ps2epl myfile.ps" and "cat myfile.epl >/dev/lp0",
   or in one step: "./ps2epl myfile.ps /dev/lp0". If you want to try the
   flow control option (look at README.FlowControl) the commands
   should be "./ps2epl myfile.ps" (an empty .epl will be generated and

@@ -35,7 +35,10 @@ USB on 5700L
       so loading the driver only interferes with the plugin's operation.
 
       Beware that some systems may autoload the kernel driver at boot-up 
-      time. 
+      time and when the printer is switched on or reconnected. If your
+      system is running hotplug you can add a line with "printer" (no
+      extra spaces!) to /etc/hotplug/blacklist, so it will not be
+      autoloaded anymore.
    
    There is a test5700lusb binary in libusb/tests/ which would get the 5700L
    connected via USB to spit out a blank page. Run it before reporting
@@ -57,7 +60,7 @@ Usage Problems
 
   Failure (too old): RH 7.1 (gs 5.50), RH 7.2 (?), ASPLinux 7.2
 
-  Developer's choices: Slackware 8.1 (HTL), Redhat 8.0 (RR)
+  Developers' choices: Slackware 8.1 (HTL), Redhat 8.0/9 (RR)
  
   Reported Success: SuSE 7.3 (FE), Mandrake 9.0 (CS), Debian 3.0 (JM), 
                     SuSE 8.0 (HS), Mandrake 8.2 (AC)

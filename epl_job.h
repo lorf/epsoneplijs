@@ -64,9 +64,13 @@ struct parport_list *port_list;
 #endif
   
 #ifdef USE_FLOW_CONTROL
-  struct timeval time_last_write;
-  int estimated_free_mem;
-#define FREE_MEM_DEFAULT_VALUE (2*1048576)
+  double time_last_write_stripe;
+  int printer_total_mem;
+  int free_mem_last_update;
+  int bytes_sent_after_last_update;
+  int stripes_sent_after_last_update;
+  
+#define TOTAL_MEM_DEFAULT_VALUE (2*1048576)
 #define FREE_MEM_LOW_LEVEL 0x20000
 #endif
 };
@@ -77,7 +81,7 @@ struct parport_list *port_list;
 #define MODEL_5900L   3
 /* Just in case there is a 6000L. Probably not important. */
 #define MODEL_6100L   5
-#define MODEL_USEDSLOTS 6 /* this is the number of printers we have */
+#define MODEL_USEDSLOTS 6 /* this is the number of the first not used slot */
 
 #define PRE_INIT        -1
 #define VIA_STDOUT_PIPE        0
@@ -105,6 +109,8 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length);
 
 int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length); 
 
+void epl_permission_to_write_stripe(EPL_job_info *epl_job_info);
+
 int epl_status(int argc, char **argv);
 
 int epl_usb_reply_len(int model, unsigned char code);
@@ -113,7 +119,9 @@ int epl_identify(char *string);
 
 void epl_57interpret(unsigned char *buffer, int len);
 
-void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int code);
+void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
+
+void epl_61interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 
 
 #ifdef EPL_DEBUG

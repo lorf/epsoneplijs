@@ -25,20 +25,11 @@
  * SOFTWARE.
 **/
 
-/* we need more than -ansi to use the nanosleep routine */
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 199309L
-#endif
-
-#include <time.h>
-
 #include <stdlib.h>
 
 #include "epl_job.h"
 #include "epl_bid.h"
 
-/* sleep */
-void sleep_milliseconds(int ms);
 
 /*
    This routine interprets the reply for the 5800L and 5900L.
@@ -46,23 +37,25 @@ void sleep_milliseconds(int ms);
    Some of them tell us to slow down data transfer to avoid printer
    congestion.
 */
-void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int code)
+void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len)
 {
   int free_memory;
-  static int milliseconds_to_wait = 1;
+  int total_memory = -1; /* sentinel value */
   
+  fprintf(stderr, "Printer says:\n");
   if (len < 18)
     {
       /* This condition should never happen */
       fprintf(stderr, "**Reply size too short - This condition should never happen.");
+      return;
     }
   if (len != 18 + p[0x11])
     {
       /* This condition should never happen */
       fprintf(stderr, "**Reply size inconsistent - This condition should never happen.");
+      return;
     }
   
-  fprintf(stderr, "Printer says:\n");
   free_memory = (p[0x04] << 16) | (p[0x05] << 8) | p[0x06];
   fprintf(stderr, "  free memory        = 0x%8.8x\n", free_memory);
   
@@ -107,6 +100,7 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
           fprintf(stderr, "(of 0x10 type)\n");
 	  fprintf(stderr, "  connection by      = %s\n", p[0x1b] & 0x02 ? "USB" : "PARPORT");
 	  fprintf(stderr, "  installed memory   = %iMiB\n", p[0x1c]);
+	  total_memory = p[0x1c] * 1048576;
 	  break;
 	case 0x11: /* 5800L only */
           fprintf(stderr, "(of 0x11 type)\n");
@@ -134,44 +128,28 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len, int 
       fprintf(stderr, "unknown 0x%2.2x extension, ignoring\n", p[0x11]);
     }
   
-  fprintf(stderr, "updating freemem estimate from 0x%8.8x",
-	  epl_job_info->estimated_free_mem);
-  epl_job_info->estimated_free_mem = free_memory;
+  fprintf(stderr, "updating free_mem from 0x%8.8x",
+	  epl_job_info->free_mem_last_update);
+  epl_job_info->free_mem_last_update = free_memory;
   fprintf(stderr, " to 0x%8.8x\n",
-          epl_job_info->estimated_free_mem);
+          epl_job_info->free_mem_last_update);
+
+  /* if the printer is reporting more free memory than what we thought the total memory
+     was, we can increase total_mem */
+  if (epl_job_info->printer_total_mem < free_memory) total_memory = free_memory;
+  /* do we have to update total_mem? */
+  if (total_memory != -1)      /* we got the number */
+    {
+      fprintf(stderr, "updating total_mem from 0x%8.8x",
+	      epl_job_info->printer_total_mem);
+      epl_job_info->printer_total_mem = total_memory;
+      fprintf(stderr, " to 0x%8.8x\n",
+              epl_job_info->printer_total_mem);
+    }
   
-  /* If the buffer is almost full, go to sleep.
-     Increase sleeping time if this condition persists.
-     So, calling this function continuosly is not a problem.
-     --  rora
-  */
-  if (free_memory < FREE_MEM_LOW_LEVEL)
-    {
-      int ms;
-      ms = milliseconds_to_wait;
-      fprintf(stderr, "sleeping for %i milliseconds\n", ms);
-      sleep_milliseconds(ms);
-      ms = ms * 2; /* exponential back off */
-      if (ms > 5000 ) ms = 5000; /* no more than five second */
-      milliseconds_to_wait = ms;
-    }
-  else
-    {
-      milliseconds_to_wait = 1;
-    }
+  /* finally, reset the *_after_last_update counters */
+  epl_job_info->bytes_sent_after_last_update = 0;
+  epl_job_info->stripes_sent_after_last_update = 0;
+  
   return;
 }
-
-/*
-   sleep for (at least) some milliseconds
-*/
-void sleep_milliseconds(int ms)
-{
-  struct timespec ts;
-
-  fprintf(stderr, "sleeping %i milliseconds\n", ms);
-  ts.tv_sec = ms / 1000;
-  ts.tv_nsec = 1000000 * (ms % 1000);
-  nanosleep(&ts, NULL);
-}
-
