@@ -1,3 +1,7 @@
+2004-09-29: cvs - Hin-Tak Leung
+   . Adding "Printer Memory Low" message to the bottom of an abort,
+     rather than just blank.
+	
 2004-09-25: cvs - Hin-Tak Leung
    . more work on "print as much as possible on low mem".	
 	
