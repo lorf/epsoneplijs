@@ -66,7 +66,8 @@ int epl_page_header(EPL_job_info *epl_job_info)
   
 #ifdef STRIPE_OVERFLOW_WORKAROUND
   /* The number of bytes guaranteed to hold the compressed data, padded to 32-bit boundary */
-  bytes_per_row_padded = (((bytes_per_row * 1.25 + 2 + 1) + 4 - 1 ) / 4 ) * 4;  
+  /* The compiler is too clever and removed /4 * 4!                                        */
+  bytes_per_row_padded = ((bytes_per_row * 5 / 4 + 2 + 1) + 4 - 1 ) & ~0x03;  
 #endif
 
   /* model-indepenent part for 57,58,5900L*/
