@@ -64,7 +64,10 @@ static int epl_5700l_reply_size[] =
    number. One may need to increase or look for problems elsewhere
    if a value of 50,000 doesn't work reliably.
 
-   The smallest value chosen so there is no unnecessary waits. 
+   The smallest value chosen so there is no unnecessary waits.
+   The wait route will use this value for high resolution, and
+   double it when the vertical resolution is only 300dpi. 
+   (only 300 or 600 are valid values)  
 */
    
 #define USEC_BETWEEN_WRITES_5700L 50000

@@ -31,7 +31,8 @@
 #define USB_PRODUCT_5900L 0x0005
 
 /* milliseconds */
-#define EPL_USB_TIMEOUT 100
+#define EPL_USB_WRITE_TIMEOUT 5000
+#define EPL_USB_READ_TIMEOUT  1000
 
 void epl_usb_init(EPL_job_info *epl_job_info);
 

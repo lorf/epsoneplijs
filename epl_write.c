@@ -69,7 +69,7 @@ int epl_write_bid(EPL_job_info *epl_job_info, char *buffer, int length)
 			       epl_job_info->usb_in_ep,
 			       in_buf, 
 			       epl_5700l_reply_size[(int) *buffer], 
-			       EPL_USB_TIMEOUT);
+			       EPL_USB_READ_TIMEOUT);
 	} 
 #endif
       
@@ -122,7 +122,7 @@ int epl_write_uni(EPL_job_info *epl_job_info, char *buffer, int length)
 	  ret = usb_bulk_write (epl_job_info->usb_dev_hd, 
 				epl_job_info->usb_out_ep,
 				buffer, length, 
-				EPL_USB_TIMEOUT);
+				EPL_USB_WRITE_TIMEOUT);
 	}
 #endif
       
@@ -156,7 +156,19 @@ void do_subsec_sleep(EPL_job_info *epl_job_info)
   long last_wrote_sec, last_wrote_usec;
   unsigned long usec_interval;
   struct timeval time_now;
-  
+
+  long sleep_time_between_writes;
+
+  if( epl_job_info->dpi_v <= 600) 
+    { 
+      sleep_time_between_writes = ( 600 / epl_job_info->dpi_v ) * USEC_BETWEEN_WRITES_5700L ;
+    } 
+  else
+    {
+      /* just in case a future printer might have dpi_v > 600 */
+      sleep_time_between_writes =  USEC_BETWEEN_WRITES_5700L;
+    }
+
   last_wrote_sec = epl_job_info->time_last_write.tv_sec;
   last_wrote_usec = epl_job_info->time_last_write.tv_usec;
   gettimeofday(&time_now,NULL);
@@ -164,7 +176,7 @@ void do_subsec_sleep(EPL_job_info *epl_job_info)
   usec_interval = (time_now.tv_sec - last_wrote_sec) * 1000000 
     + time_now.tv_usec - last_wrote_usec ; 
 
-  if (usec_interval < USEC_BETWEEN_WRITES_5700L)
+  if (usec_interval < sleep_time_between_writes)
     {
       /* 
 	 probably should also check usec_interval > 0, but it is never negative... 
@@ -173,7 +185,7 @@ void do_subsec_sleep(EPL_job_info *epl_job_info)
       */
       struct timespec time_to_sleep;
       time_to_sleep.tv_sec = 0 ;
-      time_to_sleep.tv_nsec = (USEC_BETWEEN_WRITES_5700L - usec_interval) * 1000;
+      time_to_sleep.tv_nsec = (sleep_time_between_writes - usec_interval) * 1000;
       nanosleep(&time_to_sleep, NULL);      
     }
   /* store the time away so we can read it next time this routine is called */
