@@ -125,6 +125,7 @@ void epl_59interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 
 void epl_61interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 
+void epl_62interpret(EPL_job_info *epl_job_info, unsigned char *p, int len);
 
 #ifdef EPL_DEBUG
 
