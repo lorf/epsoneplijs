@@ -75,7 +75,7 @@ fi
 
 # Check for libieee1284 support (needed for status info through parallel port
 # on Linux and for bid-dir parallel port support on non-Linux systems).
-AC_ARG_WITH(libusb,[  --with-libieee1284      enable  libieee1284 support (requires libieee1284 sub-directory)
+AC_ARG_WITH(libieee1284,[  --with-libieee1284      enable  libieee1284 support (requires libieee1284 sub-directory)
   --without-libieee1284   disable libieee1284 and full-feature parallel port support])
 
 AC_MSG_CHECKING(for libieee1284)

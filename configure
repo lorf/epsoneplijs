@@ -2189,9 +2189,9 @@ fi
 # Check for libieee1284 support (needed for status info through parallel port
 # on Linux and for bid-dir parallel port support on non-Linux systems).
 
-# Check whether --with-libusb or --without-libusb was given.
-if test "${with_libusb+set}" = set; then
-  withval="$with_libusb"
+# Check whether --with-libieee1284 or --without-libieee1284 was given.
+if test "${with_libieee1284+set}" = set; then
+  withval="$with_libieee1284"
 
 fi;
 
