@@ -1,3 +1,7 @@
+2004-01-16: cvs - Hin-Tak Leung
+   . Sync with linuxprinting.org and correcting XML files to 
+     address cups compatibility issues.
+
 2004-01-14: cvs - Hin-Tak Leung
    . Added user-contributed foomatic install script for Debian.
 
