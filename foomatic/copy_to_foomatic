@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# WARNING: check the correctness of the path and backup
+#          files we are going to ovewrwrite!
+
+# After copying the files, try using the printer
+# configurator of your system and see if your
+# printer is now available.
+
+rm -f /usr/share/foomatic/db/source/opt/epsonepl-Tonersave.xml # OLD.
+
+cp driver/*  /usr/share/foomatic/db/source/driver/
+cp opt/*     /usr/share/foomatic/db/source/opt/
+cp printer/* /usr/share/foomatic/db/source/printer/
+
+# If the printer is not available and you're using CUPS,
+# activate this part to copy PPDs to the cups database.
+# Then restart cups ("/etc/rc.d/init.d/cups restart"
+# or similar) and retry.
+
+##### PPDs generation, RedHat paths
+
+#foomatic-datafile -t cups -d epl5700l -p Epson-EPL-5700L >Epson-EPL-5700L-epl5700l-cups.ppd
+#foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >Epson-EPL-5800L-epl5800l-cups.ppd
+#foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >Epson-EPL-5900L-epl5900l-cups.ppd
+#gzip -9 Epson-EPL-*-cups.ppd
+#cp -av Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/foomatic/Epson/
+
+##### PPDs generation, Mandrake paths
+
+#foomatic-datafile -t cups -d epl5700l -p Epson-EPL-5700L >epl5700l.ppd
+#foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >epl5800l.ppd
+#foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >epl5900l.ppd
+#gzip -9 epl*.ppd
+#cp -av epl*.ppd.gz /usr/share/cups/model/epson/
+

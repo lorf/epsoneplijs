@@ -1,0 +1,99 @@
+#!/bin/sh
+
+
+IJSPARMS=""
+
+# Start of printer selection part #########################################
+
+MODEL=EPL5700L
+  # possible values: EPL5700L, EPL5800L, EPL5900L
+  # default: none, you have to specify a printer!
+
+########################################### End of printer selection part #
+
+
+# Start of paper size selection part ######################################
+
+PAPERSIZE=a4
+  # possible values: a4, letter, legal ...
+  #                  The full list is available in the Use.htm file of
+  #                  the ghostscript documentation (see appendix).
+  # default: none, you have to specify a paper size!
+
+######################################## End of paper size selection part #
+
+
+# Start of options part ###################################################
+
+DPI=600
+  # possible values: 300, Class600, 600, Class1200
+  # default: 600
+  IJSPARMS="EplDpi=$DPI"
+
+RITECH=on
+  # possible values: on, off
+  # default: on
+  IJSPARMS="$IJSPARMS,EplRitech=$RITECH"
+
+DENSITY=3
+  # possible values: 1, 2, 3, 4, 5
+  # default: 3
+  IJSPARMS="$IJSPARMS,EplDensity=$DENSITY"
+
+TONERSAVE=off
+  # possible values: on, off
+  # default: off
+  IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
+
+##################################################### End of options part #
+
+
+###########################################################################
+###########################################################################
+###########################################################################
+###########################################################################
+
+while true
+do
+	case "$1" in
+	-?*) OPTIONS="$OPTIONS $1" ;;
+	*)  break ;;
+	esac
+	shift
+done
+
+if [ $# -lt 1 -o $# -gt 2 ]; then
+	echo "Usage: `basename $0` [options...] (input.[e]ps|-) [output.epl|-]" 1>&2
+	exit 1
+fi
+
+infile="$1";
+
+if [ $# -eq 1 ]
+then
+	case "${infile}" in
+	  -)		outfile=- ;;
+	  *.eps)	base=`basename "${infile}" .eps`; outfile="${base}.epl" ;;
+	  *.ps)		base=`basename "${infile}" .ps`; outfile="${base}.epl" ;;
+	  *)		base=`basename "${infile}"`; outfile="${base}.epl" ;;
+	esac
+else
+	outfile="$2"
+fi
+
+echo
+echo -e "***** Printer: \"$MODEL\" *****"
+echo
+echo -e "***** Paper Size: \"$PAPERSIZE\" *****"
+echo
+echo -e "***** using parameters: \"$IJSPARMS\" *****"
+echo
+
+exec gs -sPAPERSIZE=$PAPERSIZE \
+-sProcessColorModel=DeviceGray -dBitsPerSample=1 \
+-sDEVICE=ijs -sIjsServer=ijs_server_epsonepl \
+-sDeviceManufacturer=Epson -sDeviceModel=$MODEL \
+-sIjsParams="$IJSPARMS" \
+-dIjsUseOutputFD \
+-dNOPAUSE -dSAFER -dBATCH \
+-sOutputFile=$outfile $infile
