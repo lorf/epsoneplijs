@@ -9,8 +9,20 @@ Requirement
 
 USB on 5700L
 ============
-  if you see "can't claim USB device" and got directed here, you need to 
-  check a few things concerning permissions:
+  Printing via USB connectivity to the 5700L is supported via two
+  mechansms: the generic Linux kernel device, or via the libusb package.
+  Support for both can be compiled in together, but they are mutually 
+  exclusive at runtime - the kernel device requires the kernel module 
+  "printer.o" loaded, while the libusb code requires the kernel module not
+  loaded. The former mechanism is more compatible with the rest of Linux's
+  USB sub-system, but it is quite linux-specific. The latter is probably
+  more portable (libusb has been ported to FreeBSD, NetBSD, OpenBSD, Darwin
+  MacOS X).
+
+  The kernel device code is probably best trouble-shoot through syslogs, etc.
+
+  As for the libusb code, f you see "can't claim USB device" and got 
+  directed here, you need to check a few things concerning permissions:
 
   (1) /proc/bus/usb is mounted, 
 
@@ -43,6 +55,8 @@ Usage Problems
  
   Reported Success: SuSE 7.3 (FE), Mandrake 9.0 (CS), Debian 3.0 (JM), 
                     SuSE 8.0 (HS), Mandrake 8.2 (AC)
+
+  The code has reportedly been ported successfully to FreeBSD.
 
 *) "ijs_server_epsonepl: command not found"
    "Can't start ijs server "ijs_server_epsonepl""
