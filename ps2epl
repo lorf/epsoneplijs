@@ -6,7 +6,7 @@ IJSPARMS=""
 # Start of printer selection part #########################################
 
 MODEL=EPL5900L
-  # possible values: EPL5700L, EPL5800L, EPL5900L
+  # possible values: EPL5700L, EPL5800L, EPL5900L, EPL6100L
   # default: none, you have to specify a printer!
 
 ########################################### End of printer selection part #
@@ -25,14 +25,20 @@ PAPERSIZE=a4
 
 # Start of options part ###################################################
 
+# ** 6100L may not support all options. Please make sure to use the 
+# "safety" options before reporting any problem.
+
+
 DPI=300
   # possible values: 300, Class600, 600, Class1200
   # default: 600
+  # ** 6100L should set this to 600 for safety. 
   IJSPARMS="EplDpi=$DPI"
 
 RITECH=on
   # possible values: on, off
   # default: on
+  # ** 6100L should set this to "off" for safety.
   IJSPARMS="$IJSPARMS,EplRitech=$RITECH"
 
 DENSITY=3
@@ -43,9 +49,13 @@ DENSITY=3
 TONERSAVE=on
   # possible values: on, off
   # default: off
+  # ** 6100L should set this to "on" for safety.
   IJSPARMS="$IJSPARMS,EplTonerSave=$TONERSAVE"
 
 FLOWCONTROL=off
+  # This is a 5700L-only option. Other printers should set to "off",
+  # regardless of whether it is parallel- or USB-connected.
+  #
   # either off, libusb, or kernel lp device name(e.g. "/dev/usb/lp0"). 
   # default: off
   # the "libusb" and device name option is only available if compiled --with-libusb, 

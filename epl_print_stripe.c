@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include "epl_job.h"
 
-int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream) 
+int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_number) 
 {
   char temp_string[256];
   char *ts;
@@ -53,13 +53,23 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream)
   else if(epl_job_info->model == MODEL_5800L
           || epl_job_info->model == MODEL_5900L) 
     {
-      ts += sprintf(ts, "\x01d%deps{I%c%c%c%c%c%c%c",
-	count + 7,
+      ts += epl_sprintf_wrap(ts, count + 7);
+      ts += sprintf(ts, "%c%c%c%c%c%c%c",
 	0x06,
 	0x00,
 	0x01,
 	count >> 24, count >> 16, count >> 8, count
 	);
+    }
+  else if(epl_job_info->model == MODEL_6100L) 
+    {
+      ts += epl_sprintf_wrap(ts, count + 12);
+      ts += sprintf(ts, "L%c%c%c%c%c%c%c%c%c%c%c",
+		    0x00, 0x01, 0x04, 0x00,
+		    stripe_number,
+		    0x00, 0x00,
+		    count >> 24, count >> 16, count >> 8, count
+		    );
     }
   
 #ifdef EPL_DEBUG

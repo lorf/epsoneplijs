@@ -23,6 +23,7 @@
 **/
 
 #include <stdio.h>
+#include <string.h>
 #include "epl_job.h"
 #include "epl_usb.h"
 
@@ -34,7 +35,10 @@ int epl_job_header(EPL_job_info *epl_job_info)
   char tonersave;
   char density;
   char dpi_code1, dpi_code2;
+  char papertype;
   int e;
+  char data_block[7];  /* +1 for string termination */
+  char data_block_6xL[9];  /* +1 for string termination */
 
 #ifdef EPL_DEBUG
   fprintf(stderr, "EPL job header\n");
@@ -65,48 +69,115 @@ int epl_job_header(EPL_job_info *epl_job_info)
     {
       return -1;
     }
+  papertype = 0 ;  /* normal paper; other options are transparency, etc */
 
-  /* Create the string */
+  /* 
+     Much of the 6100L options are less inflexible - emit warning, and possibly
+     change to abort if the hardware really does not support it.
+  */  
 
-  ts = temp_string;
-  if(epl_job_info->model == MODEL_5700L)
+  if (epl_job_info->model == MODEL_6100L)
     {
-      ts += sprintf(ts, "%c%c%c%c%c%c%c%c",
-	0x00, 0x00,
+      if(ritech != 0x00) 
+	{
+	  fprintf(stderr, "6100L: Hardware may not support RITech. Use at your own risk!\n");
+	}
+
+      if(tonersave != 0x00) 
+	{
+	  fprintf(stderr, "6100L: Hardware-based Toner Save may not be supported. Use this option at your own risk!\n");
+	}
+
+      if(epl_job_info->dpi_h != 600 || epl_job_info->dpi_v != 600) 
+	{
+	  fprintf(stderr, "6100L: Hardware may not support resolution %d x %d - Use this resolution at your own risk!\n", 
+		  epl_job_info->dpi_h, epl_job_info->dpi_v);
+	}
+    }
+
+  /* model-independent part */
+  
+  sprintf(data_block, "%c%c%c%c%c%c",
 	dpi_code1, dpi_code2,
 	ritech,
 	tonersave,
-	0x00,
+	  papertype, 
 	density
 	);
+  /* 
+     6100L notes:
+     ===========
+     papertype                   \163
+     density                     \164
+     ignore selected paper size  \167
+     auto continue              \168
+  */
+  
+  sprintf(data_block_6xL, "%c%c%c%c%c%c%c%c",
+	  0x00, 0x00,
+	  0x00, /* Ignore selected paper size = False */
+	  0x00, /* Auto continue = False */
+	  0x00, 0x00, 0x00, 0x00
+	  );
+
+
+  /* model-specific part: Create the string */
+
+  ts = temp_string;
+  if (epl_job_info->model == MODEL_5700L)
+    {
+      ts += sprintf(ts, "%c%c",0x00, 0x00);
+      memcpy(ts, data_block, 6);
+      ts += 6;
     }
-  else if(epl_job_info->model == MODEL_5800L
-          || epl_job_info->model == MODEL_5900L)
+  else if (epl_job_info->model == MODEL_5800L
+	   || epl_job_info->model == MODEL_5900L
+	   || epl_job_info->model == MODEL_6100L)
     {
       ts += sprintf(ts, "\x01b\x001");
       ts += sprintf(ts, "@EJL \x00a");
       ts += sprintf(ts, "@EJL STARTJOB");
-      if(epl_job_info->model == MODEL_5900L) 
+
+      if (epl_job_info->model == MODEL_5900L)  
         {
           ts += sprintf(ts, " MACHINE=\"experiment\" USER=\"epl5x00l_driver_"
 	    EPL_VERSION "\"");
         }
+
+      if (epl_job_info->model == MODEL_6100L)  
+	{
+	  /* probably the same as 5900L, just being conservative */
+	  ts += sprintf(ts, " MACHINE=\"test_box \" USER=\"epl\"");
+	}
+
       ts += sprintf(ts, "\x00a");
       ts += sprintf(ts, "@EJL EN LA=ESC/PAGE\x00a");
-      ts += sprintf(ts, "\x01d");
-      ts += sprintf(ts, "4eps{I");
+
+      if (epl_job_info->model == MODEL_5800L
+	  || epl_job_info->model == MODEL_5900L)
+	{
+	  ts += epl_sprintf_wrap(ts,4);
       ts += sprintf(ts, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
-      ts += sprintf(ts, "\x01d");
-      ts += sprintf(ts, "9eps{I");
-      ts += sprintf(ts, "%c%c%c%c%c%c%c%c%c",
-        0x02, 0x00,
-        dpi_code1, dpi_code2,
-        ritech,
-        tonersave,
-        0x00, /* Paper type? */
-        density,
-        0x00  
-        );
+	  ts += epl_sprintf_wrap(ts,9);
+	  ts += sprintf(ts, "%c%c", 0x02, 0x00);
+	  memcpy(ts, data_block, 6);
+	  ts += 6;
+	  ts += sprintf(ts, "%c", 0x00);
+	}
+      else if (epl_job_info->model == MODEL_6100L)
+	{
+	  ts += epl_sprintf_wrap(ts,68);
+	  ts += sprintf(ts, "@%c%c%ctest_box ", 0x00, 0x00, 0x00);
+	  ts += sprintf(ts, "                  ");      /* Don't touch these! */
+	  ts += sprintf(ts, "                  ");      /* The padding is significant! */
+	  ts += sprintf(ts, "                  ");
+	  ts += epl_sprintf_wrap(ts, 16);
+	  ts += sprintf(ts, "B%c", 0x00);
+	  memcpy(ts, data_block, 6);
+	  ts += 6;
+	  memcpy(ts, data_block_6xL, 8);
+	  ts += 8;
+	}      
     }
 
 #ifdef EPL_DEBUG

@@ -116,7 +116,7 @@ epson_epl_enum_cb (void *enum_cb_data,
   else if (!strcmp (key, "DeviceManufacturer"))
     val = "Epson";
   else if (!strcmp (key, "DeviceModel"))
-    val = "EPL5700L,EPL5800L,EPL5900L";
+    val = "EPL5700L,EPL5800L,EPL5900L,EPL6100L";
   else if (!strcmp (key, "PageImageFormat"))
     val = "Raster";
   else if (!strcmp (key, "EplDpi"))
@@ -603,6 +603,10 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
     {
       epl_job_info->model = MODEL_5900L ;
     }
+  else if (strcmp(s, "EPL6100L") == 0)
+    {
+      epl_job_info->model = MODEL_6100L ;
+    }
   else 
     {
       fprintf(stderr, "Unknown Printer %s, aborting!\n", s);
@@ -880,6 +884,14 @@ main (int argc, char **argv)
   int epl_job_started = EPL_JOB_STARTED_NO;
   int current_page_number = 1;
   
+  if (argc > 1) /* the IJS plugin is being run stand-alone */ 
+    {
+      fprintf(stderr, "Epson EPL-5x00L IJS plugin version: %s\n", EPL_VERSION);
+      fprintf(stderr, "Copyright (c) 2003 Hin-Tak Leung, Roberto Ragusa\n");
+      fprintf(stderr, "Please read the accompanied README file for usage\n");
+      exit(0);
+    } 
+
   ctx = ijs_server_init ();
   if (ctx == NULL)
     return (1);
@@ -1057,7 +1069,7 @@ main (int argc, char **argv)
 	    }
 	  stream_pad16bit(stream);
 
-	  epl_print_stripe(epl_job_info, stream);
+	  epl_print_stripe(epl_job_info, stream, i_stripe);
 	}
 	
       /* Page footer */

@@ -38,20 +38,18 @@ int epl_page_footer(EPL_job_info *epl_job_info)
   ts=temp_string;
   if(epl_job_info->model == MODEL_5700L)
     {
-      ts += sprintf(ts, "%c%c",
-        0x03,
-        0x00
-	);
+      ts += sprintf(ts, "%c%c",0x03,0x00);
     }
   else if(epl_job_info->model == MODEL_5800L
           || epl_job_info->model == MODEL_5900L)
     {
-      ts += sprintf(ts, "\x01d");
-      ts += sprintf(ts, "2eps{I");
-      ts += sprintf(ts, "%c%c",
-        0x05,
-        0x00
-        );
+      ts += epl_sprintf_wrap(ts, 2);
+      ts += sprintf(ts, "%c%c",0x05,0x00);
+    }
+  else if(epl_job_info->model == MODEL_6100L)
+    {
+      ts += epl_sprintf_wrap(ts, 2);
+      ts += sprintf(ts, "G%c",0x00);
     }
 
 #ifdef EPL_DEBUG

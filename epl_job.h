@@ -79,6 +79,8 @@ struct _EPL_job_info {
 #define MODEL_5700L   1
 #define MODEL_5800L   2
 #define MODEL_5900L   3
+/* Just in case there is a 6000L. Probably not important. */
+#define MODEL_6100L   5
 
 #define PRE_INIT       -1
 #define VIA_PPORT       0
@@ -92,7 +94,7 @@ int epl_job_header(EPL_job_info *epl_job_info);
 
 int epl_page_header(EPL_job_info *epl_job_info);
 
-int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream);
+int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_number);
 
 int epl_page_footer(EPL_job_info *epl_job_info);
 
@@ -109,8 +111,14 @@ static char *printername[]={
   "<unknown>",
   "EPL-5700L",
   "EPL-5800L",
-  "EPL-5900L"
+  "EPL-5900L",
+  "",              /* placeholder for future 6000L */
+  "EPL-6100L"
 };
 
 #define VERBOSE
 #endif
+
+#define epl_sprintf_wrap(str,length) \
+            sprintf((str), "%c%deps{I",0x1d, (length))
+

@@ -39,35 +39,39 @@ int epl_job_footer(EPL_job_info *epl_job_info)
   ts=temp_string;
   if(epl_job_info->model == MODEL_5700L)
     {
-      ts += sprintf(ts, "%c%c",
-        0x01,
-        0x00
-	);
+      ts += sprintf(ts, "%c%c",0x01,0x00);
     }
   else if(epl_job_info->model == MODEL_5800L
           || epl_job_info->model == MODEL_5900L)
     {
-      ts += sprintf(ts, "\x01d");
-      ts += sprintf(ts, "2eps{I");
-      ts += sprintf(ts, "%c%c",
-        0x03,
-        0x00
-        );
-      ts += sprintf(ts, "\x01d");
-      ts += sprintf(ts, "2eps{I");
-      ts += sprintf(ts, "%c%c",
-        0x01, /* 1=last page 2=next page??? maybe not */
-        0x00
-        );
-      ts += sprintf(ts, "\x01b\x001");
-      ts += sprintf(ts, "@EJL \x00a");
+      ts += epl_sprintf_wrap(ts, 2);
+      ts += sprintf(ts, "%c%c", 0x03, 0x00);
+      ts += epl_sprintf_wrap(ts, 2);
+      ts += sprintf(ts, "%c%c", 0x01, 0x00);
+
+      ts += sprintf(ts, "\x1b\x01");
+      ts += sprintf(ts, "@EJL \x0a");
  
       if(epl_job_info->model == MODEL_5900L)
         {
-	  ts += sprintf(ts, "@EJL EJ \x00a");
-          ts += sprintf(ts, "\x01b\x001");
-          ts += sprintf(ts, "@EJL \x00a");
+	  ts += sprintf(ts, "@EJL EJ \x0a");
+          ts += sprintf(ts, "\x1b\x01");
+          ts += sprintf(ts, "@EJL \x0a");
 	}
+	}
+  else if(epl_job_info->model == MODEL_6100L)
+    {
+      ts += epl_sprintf_wrap(ts, 2);
+      ts += sprintf(ts, "C%c", 0x00);
+      ts += epl_sprintf_wrap(ts, 2);
+      ts += sprintf(ts, "A%c", 0x00);
+
+      ts += sprintf(ts, "\x1b\x01");
+      ts += sprintf(ts, "@EJL \x0a");
+ 
+      ts += sprintf(ts, "@EJL EJ \x0a");
+      ts += sprintf(ts, "\x1b\x01");
+      ts += sprintf(ts, "@EJL \x0a");
     }
 
 #ifdef EPL_DEBUG
