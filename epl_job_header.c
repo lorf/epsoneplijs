@@ -70,7 +70,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
     {
       return -1;
     }
-  papertype = 0 ;  /* normal paper; other options are transparency, etc */
+  papertype = epl_job_info->papertype ;  /* normal paper = 0; other options are transparency, etc */
 
   /* 
      Much of the 6100L/6200L options are less inflexible - emit warning, and possibly

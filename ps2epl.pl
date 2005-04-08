@@ -18,7 +18,9 @@ my %IJSPARAMS = (
     'EplRitech'      => undef,  # on, off                                 - default on
     'EplDensity'     => undef,  # 1,2,3,4,5                               - default 3
     'EplTonerSave'   => undef,  # on, off                                 - default off
-    'EplFlowControl' => undef   # off, libusb, libieee1284, "/dev/lp0"... - default off 
+    'EplFlowControl' => undef,  # off, libusb, libieee1284, "/dev/lp0"... - default off 
+    'EplPaperType'   => undef,  # 0=Normal, 1=Thick, 2=Thicker, 3=Transparency - default 0
+    'EplCopies'      => undef,  # bigger than 1                           - default 1	 
     );
 
 my $infile;
@@ -42,7 +44,9 @@ Available options:
    ritech       = on, off
    density      = 1, 2, 3, 4, 5
    tonersave    = on, off
-   flowcontrol  = libusb, libiee1284, /dev/usb/lp0, /dev/lp0 (and other devices), nowhere 
+   flowcontrol  = libusb, libiee1284, /dev/usb/lp0, /dev/lp0 (and other devices), nowhere
+   papertype    = 0,1,2,3,   Normal,Thick,Thicker,Trans
+   copies       = 1,2, ...
 
 EOF
 }

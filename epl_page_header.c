@@ -57,7 +57,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
   hor_pixels = epl_job_info->pixel_h;
   ver_pixels = epl_job_info->pixel_v;
   stripes_per_page = (epl_job_info->pixel_v + stripe_size - 1) / stripe_size;
-  copies = 1;
+  copies = epl_job_info->copies;
   cust_paper_hor = epl_job_info->paper_size_mm_h;
   cust_paper_ver = epl_job_info->paper_size_mm_v;
 
@@ -87,8 +87,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
 	  hor_pixels >> 8, hor_pixels,
 	  stripes_per_page >> 8, stripes_per_page,
 	  0x00, /* MP Tray */
-	  0x00,
-	  copies,
+	  copies >> 8, copies,
 	  0xff,
 	  0xfe,
 	  cust_paper_hor >> 8, cust_paper_hor,
@@ -108,8 +107,8 @@ int epl_page_header(EPL_job_info *epl_job_info)
 	  ver_pixels >> 8, ver_pixels,                       /* \195 \196 */
 	  hor_pixels >> 8, hor_pixels,                       /* \197 \198 */
 	  stripes_per_page >> 8, stripes_per_page,           /* \199 \200 */
-	  0x00, 0x00, 0x00, 0x00, 0x00, /* 6100L/6200L */
-	  copies,                                            /* \206      */ 
+	  0x00, 0x00, 0x00, 0x00, /* 6100L/6200L */
+	  copies >> 8, copies,                               /* \206      */ 
 	  0x00, 0x00, 0x01,  /* 6100L/6200L */
 	  0x00, 0x00, 0x00,  /* 6100L/6200L */
 	  cust_paper_hor >> 8, cust_paper_hor,

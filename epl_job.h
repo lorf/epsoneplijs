@@ -48,6 +48,8 @@ struct _EPL_job_info {
   int pixel_h;
   int pixel_v;
   int connectivity;
+  int papertype;
+  int copies;
 #if defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_KERNEL_1284)
   int kernel_fd;
 #endif

@@ -83,7 +83,7 @@ epson_epl_list_cb (void *list_cb_data,
 		 char *val_buf,
 		 int val_size)
 {
-  const char *param_list = "OutputFile,OutputFD,DeviceManufacturer,DeviceModel,PageImageFormat,Dpi,Width,Height,BitsPerSample,ByteSex,ColorSpace,NumChan,PaperSize,PrintableArea,PrintableTopLeft,TopLeft,Quality,EplDpi,EplRitech,EplDensity,EplTonerSave";
+  const char *param_list = "OutputFile,OutputFD,DeviceManufacturer,DeviceModel,PageImageFormat,Dpi,Width,Height,BitsPerSample,ByteSex,ColorSpace,NumChan,PaperSize,PrintableArea,PrintableTopLeft,TopLeft,Quality,EplDpi,EplRitech,EplDensity,EplTonerSave,EplPaperType,EplCopies";
   int size = strlen (param_list);
 
 #ifdef EPL_DEBUG
@@ -131,6 +131,10 @@ epson_epl_enum_cb (void *enum_cb_data,
     val = "3,1,2,4,5";
   else if (!strcmp (key, "EplTonerSave"))
     val = "off, on";
+  else if (!strcmp (key, "EplPaperType"))
+    val = "0,1,2,3";
+  else if (!strcmp (key, "EplCopies"))
+    val = "1,2,3,4,5,6";
 
   if (val == NULL)
     {
@@ -773,6 +777,59 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
 #ifdef EPL_DEBUG
   fprintf(stderr, "  TonerSave is %s\n", s);
 #endif
+
+  /* EplPaperType */
+  s = find_param(pl, "EplPaperType");
+  if (s == NULL)
+    {
+      fprintf(stderr, "EplPaperType not set, using default Normal (0)\n");
+      epl_job_info->papertype = 0;
+    }
+  else if ((strcmp(s, "0") == 0) || (strcmp(s, "Normal") == 0))
+    {
+      epl_job_info->papertype = 0;
+    }
+  else if ((strcmp(s, "1") == 0) || (strcmp(s, "Thick") == 0))
+    {
+      epl_job_info->papertype = 1;
+    }
+  else if ((strcmp(s, "2") == 0) || (strcmp(s, "Thicker") == 0))
+    {
+      epl_job_info->papertype = 2;
+    }
+  else if ((strcmp(s, "3") == 0) || (strcmp(s, "Transparency") == 0))
+    {
+      epl_job_info->papertype = 3;
+    }
+  else 
+    {
+      fprintf(stderr, "Unknown EplPaperType value %s, aborting!\n", s);
+      return 1;
+    }
+#ifdef EPL_DEBUG
+  fprintf(stderr, "  PaperType is %s\n", s);
+#endif
+
+  /* EplCopies */
+  s = find_param(pl, "EplCopies");
+  if (s == NULL)
+    {
+      fprintf(stderr, "EplCopies not set, using default (1)\n");
+      epl_job_info->copies = 1;
+    }
+  else 
+    {
+      epl_job_info->copies = atoi(s);
+      if(!epl_job_info->copies)
+	{
+	  fprintf(stderr, "Unknown EplCopies value %s, aborting!\n", s);
+	  return 1;
+	}
+      else
+	{
+	  fprintf(stderr, "Printing %d copies\n", epl_job_info->copies);
+	}
+    }
 
   /* Number of channels */
   if ((ph.n_chan != 1) && (ph.n_chan != 3))

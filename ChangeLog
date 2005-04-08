@@ -1,3 +1,7 @@
+2005-04-08: cvs - Hin-Tak Leung
+   . Adding EplPaperType and EplCopies to everywhere
+   . except cups/foomatic related areas.
+	
 2004-11-28: cvs - Hin-Tak Leung
    . missed HAVE_NULLTRANS in turning on the USE_FLOWCONTROL code.
 	

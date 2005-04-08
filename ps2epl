@@ -63,6 +63,17 @@ FLOWCONTROL=off
   # there is also a "nowhere" option for development use.
   IJSPARMS="$IJSPARMS,EplFlowControl=$FLOWCONTROL"
 
+PAPERTYPE=Normal
+  # Normal, Thick, Thicker, Transparency
+  # 0, 1, 2, 3 for thicker and thicker paper upto transparency
+  # default: 0 (Normal) - both names and numbers are accepted
+  IJSPARMS="$IJSPARMS,EplPaperType=$PAPERTYPE"
+
+COPIES=1
+  # Anything number bigger than or equal to 1
+  # default: 1
+  IJSPARMS="$IJSPARMS,EplCopies=$COPIES"
+
 ##################################################### End of options part #
 
 
