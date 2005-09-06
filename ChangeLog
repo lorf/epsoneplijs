@@ -1,3 +1,7 @@
+2005-09-06: cvs - Hin-Tak Leung
+   . 5700L error interpretation improvements
+   . commented on multiple copies limited to 255
+
 2005-04-08: cvs - Hin-Tak Leung
    . Adding EplPaperType and EplCopies to everywhere
    . except cups/foomatic related areas.

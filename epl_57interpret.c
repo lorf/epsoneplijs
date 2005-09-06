@@ -52,9 +52,12 @@ void epl_57interpret(EPL_job_info *epl_job_info, unsigned char *buffer, int len)
      - This utilise a convenient fact that position 0 is always 
      just reflecting the sent command, and is neither informative
      nor abortive.
+     - 08 = 01 for toner low?
+     - 12 = 01 after printing 255 pages.
+     - 10 = 14 is paper jam at input tray, not fatal.
   */
   int abort_if_not_zero[] = {2,3,
-			     8,10,11,12,
+			     11,
 			     0}; 
   int i_abort = 0;
 
@@ -182,6 +185,9 @@ void epl_57interpret(EPL_job_info *epl_job_info, unsigned char *buffer, int len)
   if (buffer[7] == 0x11) {
     /* don't know how long to sleep, but the printer said "please back off" */
     sleep_seconds(2); 
+  } else if (buffer[7] == 0x18) {
+    /* don't know how long to sleep, but the printer said "please back off" - happened sending multiple pages */
+    sleep_seconds(10); 
   } else if (buffer[7] > 0x11) {
     fprintf(stderr,"Probably should abort here for pos[7] = %2.2X\n", (0xff & buffer[7]));
     sleep_seconds(2); 
@@ -211,12 +217,23 @@ void epl_57interpret(EPL_job_info *epl_job_info, unsigned char *buffer, int len)
       sleep_seconds(2); 
     }
   
-  /* Abort condition Finally */
+  if(buffer[8] != 0x00) 
+    {
+      fprintf(stderr,"Toner Low?: %2.2X\n", (0xff & buffer[8]));
+    }
 
   if(buffer[10] != 0x00) 
     {
       fprintf(stderr,"Paper Jam: %2.2X\n", (0xff & buffer[10]));
+      sleep_seconds(10);
     }
+
+  if(buffer[12] != 0x00) 
+    {
+      fprintf(stderr,"Multiple copies: %2.2X\n", (0xff & buffer[12]));
+    }
+
+  /* Abort condition Finally */
 
   while (abort_if_not_zero[i_abort] != 0 ) 
     {

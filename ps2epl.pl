@@ -46,7 +46,7 @@ Available options:
    tonersave    = on, off
    flowcontrol  = libusb, libiee1284, /dev/usb/lp0, /dev/lp0 (and other devices), nowhere
    papertype    = 0,1,2,3,   Normal,Thick,Thicker,Trans
-   copies       = 1,2, ...
+   copies       = 1,2, ... up to 255
 
 EOF
 }
