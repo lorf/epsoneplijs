@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#if (defined(sun) && defined(SVR4)) /* Solaris */
+#if (defined(__sun__) && defined(__svr4__))/* Solaris */
 #define __EXTENSIONS__
 #endif
 
