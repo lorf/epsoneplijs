@@ -116,6 +116,7 @@ else
 AC_MSG_RESULT(no)
 fi
 
+#may want to check to `uname -o` = Solaris one day.
 AC_MSG_CHECKING(for solaris-specific requirements)
 if test "$os" = SunOS ; then
 AC_MSG_RESULT(yes)
