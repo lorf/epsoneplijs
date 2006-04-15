@@ -29,6 +29,11 @@
 
 #include <stdio.h>
 #include <time.h>
+
+#if (defined(sun) && defined(SVR4)) /* Solaris */
+#define __EXTENSIONS__
+#endif
+
 #include <sys/time.h>
 
 #include "epl_time.h"

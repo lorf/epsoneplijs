@@ -67,7 +67,7 @@ Usage Problems
   Reported Success: SuSE 7.3 (FE), Mandrake 9.0 (CS), Debian 3.0 (JM), 
                     SuSE 8.0 (HS), Mandrake 8.2 (AC)
 
-  The code has reportedly been ported successfully to FreeBSD.
+  The code has reportedly been ported successfully to FreeBSD and Solaris 10.
 
 *) "ijs_server_epsonepl: command not found"
    "Can't start ijs server "ijs_server_epsonepl""

@@ -1,3 +1,7 @@
+2006-04-15: cvs - Hin-Tak Leung
+   . Solaris 10 related changes, may also work with solaris 9
+     and earlier.
+	
 2005-09-06: cvs - Hin-Tak Leung
    . 5700L error interpretation improvements
    . commented on multiple copies limited to 255
