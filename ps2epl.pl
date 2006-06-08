@@ -40,7 +40,7 @@ Available options:
    model        = EPL5700L, EPL5800L, EPL5900L, EPL6100L, EPL6200L
    papersize    = a4, letter, (anything that ghostscript accepts)
 
-   dpi          = 300, Class300, 600, Class1200
+   dpi          = 300, Class600, 600, Class1200
    ritech       = on, off
    density      = 1, 2, 3, 4, 5
    tonersave    = on, off
