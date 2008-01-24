@@ -149,7 +149,7 @@ int epl_page_header(EPL_job_info *epl_job_info)
     }
 
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s page header (%i bytes)\n",
+  fprintf(stderr, "Writing %s page header (%li bytes)\n",
           printername[epl_job_info->model], ts - temp_string);
 #endif
 

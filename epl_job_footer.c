@@ -86,7 +86,7 @@ int epl_job_footer(EPL_job_info *epl_job_info)
     }
 
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s job footer (%i bytes in %i parts)\n",
+  fprintf(stderr, "Writing %s job footer (%li bytes in %i parts)\n",
           printername[epl_job_info->model], ts - temp_string, ts_count);
 #endif
 

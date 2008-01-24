@@ -63,7 +63,7 @@ int epl_poll(EPL_job_info *epl_job_info, int type)
     }
   
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s poll (%i bytes)\n",
+  fprintf(stderr, "Writing %s poll (%li bytes)\n",
           printername[epl_job_info->model], ts - temp_string);
 #endif
 

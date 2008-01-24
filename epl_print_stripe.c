@@ -164,7 +164,7 @@ int epl_print_stripe(EPL_job_info *epl_job_info, typ_stream *stream, int stripe_
     }
   
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s stripe header (%i bytes)",
+  fprintf(stderr, "Writing %s stripe header (%li bytes)",
           printername[epl_job_info->model], ts - temp_string);
 #endif
 

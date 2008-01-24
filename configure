@@ -2212,8 +2212,9 @@ if test "$with_kernelusb"  != no ; then
       minor=${minor_plus%%.*}
 #after  1st dot in minor_plus
       patch=${minor_plus#$minor.}
-#remove everything after dash
+#remove everything after dash and . - some newer kernels have extra levels
       patch=${patch%%-*}
+      patch=${patch%%.*}
       #only accepts 3.x+, 2.6.x+, 2.5.7+ , 2.4.19+
       if test "$major" -ge 3 \
            -o "$major" -eq 2 -a "$minor" -ge 6 \

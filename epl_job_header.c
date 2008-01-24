@@ -198,7 +198,7 @@ int epl_job_header(EPL_job_info *epl_job_info)
     }
 
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s job header (%i bytes in %i parts)\n",
+  fprintf(stderr, "Writing %s job header (%li bytes in %i parts)\n",
           printername[epl_job_info->model], ts - temp_string, ts_count);
 #endif
 

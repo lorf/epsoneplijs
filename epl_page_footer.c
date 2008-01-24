@@ -54,7 +54,7 @@ int epl_page_footer(EPL_job_info *epl_job_info)
     }
 
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Writing %s page footer (%i bytes)\n",
+  fprintf(stderr, "Writing %s page footer (%li bytes)\n",
           printername[epl_job_info->model], ts - temp_string);
 #endif
 

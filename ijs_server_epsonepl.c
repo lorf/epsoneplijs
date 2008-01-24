@@ -977,7 +977,7 @@ main (int argc, char **argv)
   ijs_server_install_get_cb (ctx, epson_epl_get_cb, &pl);
   
 #ifdef EPL_DEBUG
-  fprintf(stderr, "Try to allocate %i byte of memory for job info\n",sizeof(EPL_job_info));
+  fprintf(stderr, "Try to allocate %lu byte of memory for job info\n",sizeof(EPL_job_info));
 #endif
   
   epl_job_info = (EPL_job_info *)calloc(1, sizeof(EPL_job_info));
