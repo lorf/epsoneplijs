@@ -1,6 +1,6 @@
 Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L/6100L/6200L printers
 Name: epsoneplijs
-Version: 0.4.0
+Version: 0.4.1
 %define LIBUSB_VERSION 0.1.7
 %define LIBIEEE1284_VERSION 0.2.8
 Release: 1
@@ -67,7 +67,7 @@ echo "Attempting to remove older installs in /usr/local/bin."
 echo "Done."
 echo ""
 echo -n "Please check /usr/doc/epsoneplijs-" 
-echo -n 0.4.0
+echo -n 0.4.1
 echo " for tips on CUPS, foomatic, etc."
 echo "Happy printing! Bye for now."
 echo ""
