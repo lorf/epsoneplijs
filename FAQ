@@ -71,6 +71,8 @@ Usage Problems
 
 *) "ijs_server_epsonepl: command not found"
    "Can't start ijs server "ijs_server_epsonepl""
+   CUPS webgui: "foomatic-rip failed"
+   CUPS error: Could not execute ijs_server_epsonepl, permission debied
 
   The binary 'ijs_server_epsonepl' needs to be in your $PATH. Check your 
   $PATH variable with "echo $PATH", and/or verify with 
