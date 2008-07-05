@@ -74,6 +74,10 @@ supports it ("modprobe printer" could help).
 communication happens through the libusb library. This works
 if the kernel has not claimed the printer ("modprobe -r printer"
 could help).
+
+In kernel 2.6.x, the kernel usb printer module is called "usblp",
+rather than "printer".
+
 - "/dev/lp0" (or lp1, lp2...): same as "/dev/usb/lp0", but via
 parallel port kernel device.
 - "libieee1284": similar to "libusb" but uses "libieee1284",
