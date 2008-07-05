@@ -1,10 +1,10 @@
 Summary: Ghostscript IJS Plugin for the Epson EPL-5700L/5800L/5900L/6100L/6200L printers
 Name: epsoneplijs
 Version: 0.4.1
-%define LIBUSB_VERSION 0.1.7
-%define LIBIEEE1284_VERSION 0.2.8
+%define LIBUSB_VERSION 0.1.12
+%define LIBIEEE1284_VERSION 0.2.11
 Release: 1
-Copyright: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
+License: Copyright  (c) 2003 Hin-Tak Leung, Roberto Ragusa. Distribution and Use restricted.
 Group: Applications/Graphics
 Source0:  http://osdn.dl.sourceforge.net/sourceforge/epsonepl/epsoneplijs-%{version}.tgz
 Source1:  http://osdn.dl.sourceforge.net/sourceforge/libusb/libusb-%{LIBUSB_VERSION}.tar.gz
@@ -34,7 +34,7 @@ ln -s libieee1284-%{LIBIEEE1284_VERSION} libieee1284
 #fixing ieee1284.h brokenness.
 perl -i -e 'undef $/;$_ = <>;s/,\n\};/\};/g;s/,\s*\/\*.*?\*\/\n\};/\};/g;print;' libieee1284/include/ieee1284.h
 perl -pi -e "s/STRICT_WIN32_COMPATIBILITY/__unix__/;" epl_config.h
-
+(cd libusb && ./configure --disable-build-docs --disable-shared)
 ## More flexible to just let it do its own job
 # ./configure --with-kernelusb --with-kernel1284 --with-libusb --with-libieee1284 
 ./configure 

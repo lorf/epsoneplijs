@@ -81,7 +81,7 @@ test5700lusb$(EXE): test5700lusb$(OBJ) libusb/.libs/libusb.a
 
 # libusb.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 
 libusb/.libs/libusb.a:
-	(cd libusb ; ./autogen.sh ; ./configure --disable-shared ; make)
+	(cd libusb ; ./autogen.sh ; ./configure --disable-shared --disable-build-docs; make)
 	$(RM) libusb/libusb.spec
 
 
