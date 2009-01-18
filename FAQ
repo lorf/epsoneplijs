@@ -128,4 +128,11 @@ Usage Problems
    - Internal buffer overflow. Flow control (only available with USB)
      avoids this problem on 5800L/5900L (and on 5700L in most cases).
 
+*) USB operation with CUPS 1.3.x
+
+   Some user reports that it works better configuring CUPS with the 
+   parallel port backend but against a USB device, rather than letting 
+   CUPS auto-detect. i.e.
+         As 'device-URI', enter 'parallel:/dev/usb/lp0'
+  instead of letting CUPS decide (USB:...)
      
