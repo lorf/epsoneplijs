@@ -136,3 +136,13 @@ Usage Problems
          As 'device-URI', enter 'parallel:/dev/usb/lp0'
   instead of letting CUPS decide (USB:...)
      
+*) CUPS complains that the PPD is broken
+   cupstestppd is a tool that can test for conformance. If in doubt,
+   regenerates the PPDs in 'foomatic_PPDs' using one of the scripts
+   'foomatic_scripts' as example, against the latest foomatic.
+   cups has gone progressively tighter with its PPD conformance test,
+   so a PPD that works alright with and earlier verion of CUPS can
+   suddenly fail after a CUPS upgrade. cupstestppd should provide
+   guidelines for how to modify a ppd to make it work, if the latest
+   foomatic doesn't already do the correct job.
+   *** Note: you should shutdown cups before editing /etc/cups/ppd/* .
