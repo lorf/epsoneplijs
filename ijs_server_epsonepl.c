@@ -573,12 +573,12 @@ pl_to_epljobinfo (Epson_EPL_ParamList *pl, IjsPageHeader ph, EPL_job_info *epl_j
           fn = find_param (pl, "OutputFD");
           if (fn != NULL)
   	    {
-	    epl_job_info->outfile = fdopen (atoi (fn), "w");
+	    epl_job_info->outfile = fdopen (atoi (fn), "wb");
 	    }
         }
       else
         {
-          epl_job_info->outfile = fopen (fn, "w");
+          epl_job_info->outfile = fopen (fn, "wb");
         }
       if (epl_job_info->outfile == NULL)
         {
