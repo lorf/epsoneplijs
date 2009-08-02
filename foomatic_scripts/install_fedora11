@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#### Fedora 11
+
+# Add the xml files to the foomatic database.
+# specifying *.xml to avoid warning from CVS
+
+cp ../foomatic/driver/*.xml  /usr/share/foomatic/db/source/driver/
+cp ../foomatic/opt/*.xml     /usr/share/foomatic/db/source/opt/
+cp ../foomatic/printer/*.xml /usr/share/foomatic/db/source/printer/
+
+##### Generate PPDs and install them
+
+foomatic-datafile -t cups -d epl5700l -p 312297          >../foomatic_PPDs/Epson-EPL-5700L-epl5700l-cups.ppd
+foomatic-datafile -t cups -d epl5800l -p Epson-EPL-5800L >../foomatic_PPDs/Epson-EPL-5800L-epl5800l-cups.ppd
+foomatic-datafile -t cups -d epl5900l -p Epson-EPL-5900L >../foomatic_PPDs/Epson-EPL-5900L-epl5900l-cups.ppd
+foomatic-datafile -t cups -d epl6100l -p Epson-EPL-6100L >../foomatic_PPDs/Epson-EPL-6100L-epl6100l-cups.ppd
+foomatic-datafile -t cups -d epl6200l -p Epson-EPL-6200L >../foomatic_PPDs/Epson-EPL-6200L-epl6200l-cups.ppd
+
+gzip -9f ../foomatic_PPDs/Epson-EPL-*-cups.ppd
+
+# On fedora 11, /usr/share/cups/model/foomatic-db-ppds is symlink to /usr/share/foomatic/db/source/PPD
+# We use one of its sub-directories:
+
+cp -av ../foomatic_PPDs/Epson-EPL-*-cups.ppd.gz /usr/share/cups/model/foomatic-db-ppds/Epson/
