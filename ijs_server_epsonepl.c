@@ -1179,9 +1179,11 @@ main (int argc, char **argv)
 	  epl_permission_to_write_stripe(epl_job_info);
 #endif
 	  epl_print_stripe(epl_job_info, stream, i_stripe);
+#ifdef USE_FLOW_CONTROL
           epl_job_info->time_last_write_stripe = get_time_now();
 	  epl_job_info->bytes_sent_after_last_update += stream->count;
 	  epl_job_info->stripes_sent_after_last_update++;
+#endif /* USE_FLOW_CONTROL */
 	}
 	
       /* Page footer */

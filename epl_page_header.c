@@ -61,9 +61,11 @@ int epl_page_header(EPL_job_info *epl_job_info)
   cust_paper_hor = epl_job_info->paper_size_mm_h;
   cust_paper_ver = epl_job_info->paper_size_mm_v;
 
+#ifdef USE_FLOW_CONTROL
   epl_job_info->bytes_sent_this_page = 0;
   epl_job_info->stripes_sent_this_page = 0;
   epl_job_info->paused_mid_page = 0;
+#endif /* USE_FLOW_CONTROL */
 
   bytes_per_row_padded = bytes_per_row;
   
