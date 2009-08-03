@@ -6,6 +6,10 @@ What is this?
   EPL-6100L and EPL-6200L laser printers. EPL-6100L and EPL-6200L 
   support is not deeply tested (volunteers wanted!).
 
+  There are some reports that LP-1400 (sold in Japan) is EPL-6200L compatible,
+  and EPL-2180 (an A3 printer sold in China and the Philipines) also - for the
+  latter we may extend the paper size support if this can be confirmed.
+  (LP-800S=5900L?, LP-1200 owners please comment).
 
 Requirement
 ===========
