@@ -31,3 +31,11 @@ override_dh_auto_install:
 	dh_auto_install
 	install -d -m 0755 debian/epsoneplijs/usr/bin
 	install -c -m 0755 ps2epl.pl test5700lusb epl-5700 epl-5800 epl5x00l debian/epsoneplijs/usr/bin/
+	install -d -m 0755 debian/epsoneplijs/usr/share/foomatic/db/source/driver
+	install -m 0644 foomatic/driver/* debian/epsoneplijs/usr/share/foomatic/db/source/driver/
+	install -d -m 0755 debian/epsoneplijs/usr/share/foomatic/db/source/opt
+	install -m 0644 foomatic/opt/* debian/epsoneplijs/usr/share/foomatic/db/source/opt/
+	install -d -m 0755 debian/epsoneplijs/usr/share/foomatic/db/source/printer
+	install -m 0644 foomatic/printer/* debian/epsoneplijs/usr/share/foomatic/db/source/printer/
+	install -d debian/epsoneplijs/usr/share/cups/model/foomatic-ppds/Epson
+	install -m 0644 foomatic_PPDs/Epson-EPL-*-cups.ppd.gz debian/epsoneplijs/usr/share/cups/model/foomatic-ppds/Epson/
