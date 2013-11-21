@@ -38,4 +38,5 @@ override_dh_auto_install:
 	install -d -m 0755 debian/epsoneplijs/usr/share/foomatic/db/source/printer
 	install -m 0644 foomatic/printer/* debian/epsoneplijs/usr/share/foomatic/db/source/printer/
 	install -d debian/epsoneplijs/usr/share/cups/model/foomatic-ppds/Epson
-	install -m 0644 foomatic_PPDs/Epson-EPL-*-cups.ppd.gz debian/epsoneplijs/usr/share/cups/model/foomatic-ppds/Epson/
+	gzip -9f foomatic-fresh-ppds/Epson-EPL-*.ppd
+	install -m 0644 foomatic-fresh-ppds/Epson-EPL-*.ppd.gz debian/epsoneplijs/usr/share/cups/model/foomatic-ppds/Epson/

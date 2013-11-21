@@ -1,0 +1,1448 @@
+diff --git a/foomatic-fresh-ppds/Epson-EPL-5700L-epl5700l.ppd b/foomatic-fresh-ppds/Epson-EPL-5700L-epl5700l.ppd
+new file mode 100644
+index 0000000..855ee93
+--- /dev/null
++++ b/foomatic-fresh-ppds/Epson-EPL-5700L-epl5700l.ppd
+@@ -0,0 +1,281 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with all supported printer drivers and printing
++*% spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Epson-EPL-5700L-epl5700l.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"EPL5700L.PPD"
++*Manufacturer:	"Epson"
++*Product:	"(EPL-5700L)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 100 foomatic-rip"
++*cupsFilter:	"application/vnd.cups-pdf 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Epson EPL-5700L"
++*ShortNickName: "Epson EPL-5700L epl5700l"
++*NickName:      "Epson EPL-5700L Foomatic/epl5700l (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*PSVersion:	"(3010.000) 815"
++*PSVersion:	"(3010.000) 850"
++*PSVersion:	"(3010.000) 860"
++*PSVersion:	"(3010.000) 861"
++*PSVersion:	"(3010.000) 862"
++*PSVersion:	"(3010.000) 863"
++*PSVersion:	"(3010.000) 864"
++*PSVersion:	"(3010.000) 870"
++*LanguageLevel:	"3"
++*ColorDevice:	False
++*DefaultColorSpace: Gray
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Depl5700l,R1,M0,TG;"
++
++*driverName epl5700l: ""
++*driverType G/Ghostscript built-in: ""
++*driverUrl: "http://sourceforge.net/projects/epsonepl/"
++*driverObsolete: False
++
++*DefaultResolution: 1200x600dpi
++
++
++
++*HWMargins: 12 12 12 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 100 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop
++<</PageSize [ 5 -2 roll ] /ImagingBBox null>>setpagedevice"
++*End
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: 312297 epl5700l
++*FoomaticRIPCommandLine: "gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessCol&&
++orModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ij&&
++s_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDevice&&
++Model=EPL5700L -sIjsParams=&quot;%B&quot; -sOutputFile=- -"
++*End
++
++*OpenUI *PageSize/Page Size: PickOne
++*OrderDependency: 100 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageSize A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageSize A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageSize B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageSize Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageSize EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageSize EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageSize EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageSize EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageSize Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageSize Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 100 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageRegion A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageRegion A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageRegion B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageRegion Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageRegion Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageRegion Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/US Letter: "12 12 600 780"
++*ImageableArea A4/A4: "12 12 583 830"
++*ImageableArea A5/A5: "12 12 409 583"
++*ImageableArea B5/B5 (JIS): "12 12 504 717"
++*ImageableArea Env10/Envelope #10: "12 12 285 672"
++*ImageableArea EnvC5/Envelope C5: "12 12 447 637"
++*ImageableArea EnvDL/Envelope DL: "12 12 300 612"
++*ImageableArea EnvISOB5/Envelope B5: "12 12 487 697"
++*ImageableArea EnvMonarch/Envelope Monarch: "12 12 267 528"
++*ImageableArea Executive/Executive: "12 12 510 744"
++*ImageableArea Legal/US Legal: "12 12 600 996"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/US Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension A5/A5: "421 595"
++*PaperDimension B5/B5 (JIS): "516 729"
++*PaperDimension Env10/Envelope #10: "297 684"
++*PaperDimension EnvC5/Envelope C5: "459 649"
++*PaperDimension EnvDL/Envelope DL: "312 624"
++*PaperDimension EnvISOB5/Envelope B5: "499 709"
++*PaperDimension EnvMonarch/Envelope Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension Legal/US Legal: "612 1008"
++
++*OpenGroup: General/General
++
++*OpenUI *FlowControl/Flow Control: PickOne
++*FoomaticRIPOption FlowControl: enum CmdLine B
++*OrderDependency: 190 AnySetup *FlowControl
++*DefaultFlowControl: Off
++*FlowControl libieee1284/ParPort (libieee1284): "%% FoomaticRIPOptionSetting: FlowControl=libieee1284"
++*FoomaticRIPOptionSetting FlowControl=libieee1284: "EplFlowControl=lib&&
++ieee1284,"
++*End
++*FlowControl libusb/USB (libusb): "%% FoomaticRIPOptionSetting: FlowControl=libusb"
++*FoomaticRIPOptionSetting FlowControl=libusb: "EplFlowControl=libusb,"
++*FlowControl Off/Off: "%% FoomaticRIPOptionSetting: FlowControl=Off"
++*FoomaticRIPOptionSetting FlowControl=Off: "EplFlowControl=off,"
++*FlowControl ParPort_kernel_dev_lp0/ParPort (kernel dev_lp0): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp0"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp0: "EplFlow&&
++Control=/dev/lp0,"
++*End
++*FlowControl ParPort_kernel_dev_lp1/ParPort (kernel dev_lp1): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp1"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp1: "EplFlow&&
++Control=/dev/lp1,"
++*End
++*FlowControl USB_kernel_dev_usb_lp0/USB (kernel dev_usb_lp0): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp0"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp0: "EplFlow&&
++Control=/dev/usb/lp0,"
++*End
++*FlowControl USB_kernel_dev_usb_lp1/USB (kernel dev_usb_lp1): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp1"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp1: "EplFlow&&
++Control=/dev/usb/lp1,"
++*End
++*CloseUI: *FlowControl
++
++*OpenUI *Dpi/Dpi: PickOne
++*FoomaticRIPOption Dpi: enum CmdLine B
++*OrderDependency: 200 AnySetup *Dpi
++*DefaultDpi: 600x600dpi
++*Dpi 300x300dpi/300x300 dpi: "%% FoomaticRIPOptionSetting: Dpi=300x300dpi"
++*FoomaticRIPOptionSetting Dpi=300x300dpi: "EplDpi=300,"
++*Dpi 600x300dpi/600x300 dpi (Class600): "%% FoomaticRIPOptionSetting: Dpi=600x300dpi"
++*FoomaticRIPOptionSetting Dpi=600x300dpi: "EplDpi=Class600,"
++*Dpi 600x600dpi/600x600 dpi: "%% FoomaticRIPOptionSetting: Dpi=600x600dpi"
++*FoomaticRIPOptionSetting Dpi=600x600dpi: "EplDpi=600,"
++*Dpi 1200x600dpi/1200x600 dpi (Class1200): "%% FoomaticRIPOptionSetting: Dpi=1200x600dpi"
++*FoomaticRIPOptionSetting Dpi=1200x600dpi: "EplDpi=Class1200,"
++*CloseUI: *Dpi
++
++*OpenUI *Ritech/Ritech: PickOne
++*FoomaticRIPOption Ritech: enum CmdLine B
++*OrderDependency: 210 AnySetup *Ritech
++*DefaultRitech: On
++*Ritech Off/Off: "%% FoomaticRIPOptionSetting: Ritech=Off"
++*FoomaticRIPOptionSetting Ritech=Off: "EplRitech=off,"
++*Ritech On/On: "%% FoomaticRIPOptionSetting: Ritech=On"
++*FoomaticRIPOptionSetting Ritech=On: "EplRitech=on,"
++*CloseUI: *Ritech
++
++*OpenUI *TonerSave/Toner Save: PickOne
++*FoomaticRIPOption TonerSave: enum CmdLine B
++*OrderDependency: 215 AnySetup *TonerSave
++*DefaultTonerSave: Off
++*TonerSave Off/Off: "%% FoomaticRIPOptionSetting: TonerSave=Off"
++*FoomaticRIPOptionSetting TonerSave=Off: "EplTonerSave=off,"
++*TonerSave On/On: "%% FoomaticRIPOptionSetting: TonerSave=On"
++*FoomaticRIPOptionSetting TonerSave=On: "EplTonerSave=on,"
++*CloseUI: *TonerSave
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *Density/Density: PickOne
++*FoomaticRIPOption Density: enum CmdLine B
++*OrderDependency: 205 AnySetup *Density
++*DefaultDensity: 3
++*Density 1/1: "%% FoomaticRIPOptionSetting: Density=1"
++*FoomaticRIPOptionSetting Density=1: "EplDensity=1,"
++*Density 2/2: "%% FoomaticRIPOptionSetting: Density=2"
++*FoomaticRIPOptionSetting Density=2: "EplDensity=2,"
++*Density 3/3: "%% FoomaticRIPOptionSetting: Density=3"
++*FoomaticRIPOptionSetting Density=3: "EplDensity=3,"
++*Density 4/4: "%% FoomaticRIPOptionSetting: Density=4"
++*FoomaticRIPOptionSetting Density=4: "EplDensity=4,"
++*Density 5/5: "%% FoomaticRIPOptionSetting: Density=5"
++*FoomaticRIPOptionSetting Density=5: "EplDensity=5,"
++*CloseUI: *Density
++
++*CloseGroup: Adjustment
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+diff --git a/foomatic-fresh-ppds/Epson-EPL-5800L-epl5800l.ppd b/foomatic-fresh-ppds/Epson-EPL-5800L-epl5800l.ppd
+new file mode 100644
+index 0000000..4f6028a
+--- /dev/null
++++ b/foomatic-fresh-ppds/Epson-EPL-5800L-epl5800l.ppd
+@@ -0,0 +1,281 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with all supported printer drivers and printing
++*% spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Epson-EPL-5800L-epl5800l.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"EPL5800L.PPD"
++*Manufacturer:	"Epson"
++*Product:	"(EPL-5800L)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 100 foomatic-rip"
++*cupsFilter:	"application/vnd.cups-pdf 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Epson EPL-5800L"
++*ShortNickName: "Epson EPL-5800L epl5800l"
++*NickName:      "Epson EPL-5800L Foomatic/epl5800l (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*PSVersion:	"(3010.000) 815"
++*PSVersion:	"(3010.000) 850"
++*PSVersion:	"(3010.000) 860"
++*PSVersion:	"(3010.000) 861"
++*PSVersion:	"(3010.000) 862"
++*PSVersion:	"(3010.000) 863"
++*PSVersion:	"(3010.000) 864"
++*PSVersion:	"(3010.000) 870"
++*LanguageLevel:	"3"
++*ColorDevice:	False
++*DefaultColorSpace: Gray
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Depl5800l,R1,M0,TG;"
++
++*driverName epl5800l: ""
++*driverType G/Ghostscript built-in: ""
++*driverUrl: "http://sourceforge.net/projects/epsonepl/"
++*driverObsolete: False
++
++*DefaultResolution: 1200x600dpi
++
++
++
++*HWMargins: 12 12 12 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 100 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop
++<</PageSize [ 5 -2 roll ] /ImagingBBox null>>setpagedevice"
++*End
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Epson-EPL-5800L epl5800l
++*FoomaticRIPCommandLine: "gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessCol&&
++orModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ij&&
++s_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDevice&&
++Model=EPL5800L -sIjsParams=&quot;%B&quot; -sOutputFile=- -"
++*End
++
++*OpenUI *PageSize/Page Size: PickOne
++*OrderDependency: 100 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageSize A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageSize A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageSize B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageSize Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageSize EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageSize EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageSize EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageSize EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageSize Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageSize Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 100 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageRegion A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageRegion A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageRegion B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageRegion Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageRegion Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageRegion Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/US Letter: "12 12 600 780"
++*ImageableArea A4/A4: "12 12 583 830"
++*ImageableArea A5/A5: "12 12 409 583"
++*ImageableArea B5/B5 (JIS): "12 12 504 717"
++*ImageableArea Env10/Envelope #10: "12 12 285 672"
++*ImageableArea EnvC5/Envelope C5: "12 12 447 637"
++*ImageableArea EnvDL/Envelope DL: "12 12 300 612"
++*ImageableArea EnvISOB5/Envelope B5: "12 12 487 697"
++*ImageableArea EnvMonarch/Envelope Monarch: "12 12 267 528"
++*ImageableArea Executive/Executive: "12 12 510 744"
++*ImageableArea Legal/US Legal: "12 12 600 996"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/US Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension A5/A5: "421 595"
++*PaperDimension B5/B5 (JIS): "516 729"
++*PaperDimension Env10/Envelope #10: "297 684"
++*PaperDimension EnvC5/Envelope C5: "459 649"
++*PaperDimension EnvDL/Envelope DL: "312 624"
++*PaperDimension EnvISOB5/Envelope B5: "499 709"
++*PaperDimension EnvMonarch/Envelope Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension Legal/US Legal: "612 1008"
++
++*OpenGroup: General/General
++
++*OpenUI *FlowControl/Flow Control: PickOne
++*FoomaticRIPOption FlowControl: enum CmdLine B
++*OrderDependency: 190 AnySetup *FlowControl
++*DefaultFlowControl: Off
++*FlowControl libieee1284/ParPort (libieee1284): "%% FoomaticRIPOptionSetting: FlowControl=libieee1284"
++*FoomaticRIPOptionSetting FlowControl=libieee1284: "EplFlowControl=lib&&
++ieee1284,"
++*End
++*FlowControl libusb/USB (libusb): "%% FoomaticRIPOptionSetting: FlowControl=libusb"
++*FoomaticRIPOptionSetting FlowControl=libusb: "EplFlowControl=libusb,"
++*FlowControl Off/Off: "%% FoomaticRIPOptionSetting: FlowControl=Off"
++*FoomaticRIPOptionSetting FlowControl=Off: "EplFlowControl=off,"
++*FlowControl ParPort_kernel_dev_lp0/ParPort (kernel dev_lp0): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp0"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp0: "EplFlow&&
++Control=/dev/lp0,"
++*End
++*FlowControl ParPort_kernel_dev_lp1/ParPort (kernel dev_lp1): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp1"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp1: "EplFlow&&
++Control=/dev/lp1,"
++*End
++*FlowControl USB_kernel_dev_usb_lp0/USB (kernel dev_usb_lp0): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp0"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp0: "EplFlow&&
++Control=/dev/usb/lp0,"
++*End
++*FlowControl USB_kernel_dev_usb_lp1/USB (kernel dev_usb_lp1): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp1"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp1: "EplFlow&&
++Control=/dev/usb/lp1,"
++*End
++*CloseUI: *FlowControl
++
++*OpenUI *Dpi/Dpi: PickOne
++*FoomaticRIPOption Dpi: enum CmdLine B
++*OrderDependency: 200 AnySetup *Dpi
++*DefaultDpi: 600x600dpi
++*Dpi 300x300dpi/300x300 dpi: "%% FoomaticRIPOptionSetting: Dpi=300x300dpi"
++*FoomaticRIPOptionSetting Dpi=300x300dpi: "EplDpi=300,"
++*Dpi 600x300dpi/600x300 dpi (Class600): "%% FoomaticRIPOptionSetting: Dpi=600x300dpi"
++*FoomaticRIPOptionSetting Dpi=600x300dpi: "EplDpi=Class600,"
++*Dpi 600x600dpi/600x600 dpi: "%% FoomaticRIPOptionSetting: Dpi=600x600dpi"
++*FoomaticRIPOptionSetting Dpi=600x600dpi: "EplDpi=600,"
++*Dpi 1200x600dpi/1200x600 dpi (Class1200): "%% FoomaticRIPOptionSetting: Dpi=1200x600dpi"
++*FoomaticRIPOptionSetting Dpi=1200x600dpi: "EplDpi=Class1200,"
++*CloseUI: *Dpi
++
++*OpenUI *Ritech/Ritech: PickOne
++*FoomaticRIPOption Ritech: enum CmdLine B
++*OrderDependency: 210 AnySetup *Ritech
++*DefaultRitech: On
++*Ritech Off/Off: "%% FoomaticRIPOptionSetting: Ritech=Off"
++*FoomaticRIPOptionSetting Ritech=Off: "EplRitech=off,"
++*Ritech On/On: "%% FoomaticRIPOptionSetting: Ritech=On"
++*FoomaticRIPOptionSetting Ritech=On: "EplRitech=on,"
++*CloseUI: *Ritech
++
++*OpenUI *TonerSave/Toner Save: PickOne
++*FoomaticRIPOption TonerSave: enum CmdLine B
++*OrderDependency: 215 AnySetup *TonerSave
++*DefaultTonerSave: Off
++*TonerSave Off/Off: "%% FoomaticRIPOptionSetting: TonerSave=Off"
++*FoomaticRIPOptionSetting TonerSave=Off: "EplTonerSave=off,"
++*TonerSave On/On: "%% FoomaticRIPOptionSetting: TonerSave=On"
++*FoomaticRIPOptionSetting TonerSave=On: "EplTonerSave=on,"
++*CloseUI: *TonerSave
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *Density/Density: PickOne
++*FoomaticRIPOption Density: enum CmdLine B
++*OrderDependency: 205 AnySetup *Density
++*DefaultDensity: 3
++*Density 1/1: "%% FoomaticRIPOptionSetting: Density=1"
++*FoomaticRIPOptionSetting Density=1: "EplDensity=1,"
++*Density 2/2: "%% FoomaticRIPOptionSetting: Density=2"
++*FoomaticRIPOptionSetting Density=2: "EplDensity=2,"
++*Density 3/3: "%% FoomaticRIPOptionSetting: Density=3"
++*FoomaticRIPOptionSetting Density=3: "EplDensity=3,"
++*Density 4/4: "%% FoomaticRIPOptionSetting: Density=4"
++*FoomaticRIPOptionSetting Density=4: "EplDensity=4,"
++*Density 5/5: "%% FoomaticRIPOptionSetting: Density=5"
++*FoomaticRIPOptionSetting Density=5: "EplDensity=5,"
++*CloseUI: *Density
++
++*CloseGroup: Adjustment
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+diff --git a/foomatic-fresh-ppds/Epson-EPL-5900L-epl5900l.ppd b/foomatic-fresh-ppds/Epson-EPL-5900L-epl5900l.ppd
+new file mode 100644
+index 0000000..ea33a62
+--- /dev/null
++++ b/foomatic-fresh-ppds/Epson-EPL-5900L-epl5900l.ppd
+@@ -0,0 +1,281 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with all supported printer drivers and printing
++*% spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Epson-EPL-5900L-epl5900l.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"EPL5900L.PPD"
++*Manufacturer:	"Epson"
++*Product:	"(EPL-5900L)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 100 foomatic-rip"
++*cupsFilter:	"application/vnd.cups-pdf 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Epson EPL-5900L"
++*ShortNickName: "Epson EPL-5900L epl5900l"
++*NickName:      "Epson EPL-5900L Foomatic/epl5900l (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*PSVersion:	"(3010.000) 815"
++*PSVersion:	"(3010.000) 850"
++*PSVersion:	"(3010.000) 860"
++*PSVersion:	"(3010.000) 861"
++*PSVersion:	"(3010.000) 862"
++*PSVersion:	"(3010.000) 863"
++*PSVersion:	"(3010.000) 864"
++*PSVersion:	"(3010.000) 870"
++*LanguageLevel:	"3"
++*ColorDevice:	False
++*DefaultColorSpace: Gray
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Depl5900l,R1,M0,TG;"
++
++*driverName epl5900l: ""
++*driverType G/Ghostscript built-in: ""
++*driverUrl: "http://sourceforge.net/projects/epsonepl/"
++*driverObsolete: False
++
++*DefaultResolution: 1200x600dpi
++
++
++
++*HWMargins: 12 12 12 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 100 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop
++<</PageSize [ 5 -2 roll ] /ImagingBBox null>>setpagedevice"
++*End
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Epson-EPL-5900L epl5900l
++*FoomaticRIPCommandLine: "gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessCol&&
++orModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ij&&
++s_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDevice&&
++Model=EPL5900L -sIjsParams=&quot;%B&quot; -sOutputFile=- -"
++*End
++
++*OpenUI *PageSize/Page Size: PickOne
++*OrderDependency: 100 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageSize A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageSize A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageSize B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageSize Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageSize EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageSize EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageSize EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageSize EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageSize Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageSize Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 100 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageRegion A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageRegion A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageRegion B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageRegion Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageRegion Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageRegion Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/US Letter: "12 12 600 780"
++*ImageableArea A4/A4: "12 12 583 830"
++*ImageableArea A5/A5: "12 12 409 583"
++*ImageableArea B5/B5 (JIS): "12 12 504 717"
++*ImageableArea Env10/Envelope #10: "12 12 285 672"
++*ImageableArea EnvC5/Envelope C5: "12 12 447 637"
++*ImageableArea EnvDL/Envelope DL: "12 12 300 612"
++*ImageableArea EnvISOB5/Envelope B5: "12 12 487 697"
++*ImageableArea EnvMonarch/Envelope Monarch: "12 12 267 528"
++*ImageableArea Executive/Executive: "12 12 510 744"
++*ImageableArea Legal/US Legal: "12 12 600 996"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/US Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension A5/A5: "421 595"
++*PaperDimension B5/B5 (JIS): "516 729"
++*PaperDimension Env10/Envelope #10: "297 684"
++*PaperDimension EnvC5/Envelope C5: "459 649"
++*PaperDimension EnvDL/Envelope DL: "312 624"
++*PaperDimension EnvISOB5/Envelope B5: "499 709"
++*PaperDimension EnvMonarch/Envelope Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension Legal/US Legal: "612 1008"
++
++*OpenGroup: General/General
++
++*OpenUI *FlowControl/Flow Control: PickOne
++*FoomaticRIPOption FlowControl: enum CmdLine B
++*OrderDependency: 190 AnySetup *FlowControl
++*DefaultFlowControl: Off
++*FlowControl libieee1284/ParPort (libieee1284): "%% FoomaticRIPOptionSetting: FlowControl=libieee1284"
++*FoomaticRIPOptionSetting FlowControl=libieee1284: "EplFlowControl=lib&&
++ieee1284,"
++*End
++*FlowControl libusb/USB (libusb): "%% FoomaticRIPOptionSetting: FlowControl=libusb"
++*FoomaticRIPOptionSetting FlowControl=libusb: "EplFlowControl=libusb,"
++*FlowControl Off/Off: "%% FoomaticRIPOptionSetting: FlowControl=Off"
++*FoomaticRIPOptionSetting FlowControl=Off: "EplFlowControl=off,"
++*FlowControl ParPort_kernel_dev_lp0/ParPort (kernel dev_lp0): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp0"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp0: "EplFlow&&
++Control=/dev/lp0,"
++*End
++*FlowControl ParPort_kernel_dev_lp1/ParPort (kernel dev_lp1): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp1"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp1: "EplFlow&&
++Control=/dev/lp1,"
++*End
++*FlowControl USB_kernel_dev_usb_lp0/USB (kernel dev_usb_lp0): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp0"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp0: "EplFlow&&
++Control=/dev/usb/lp0,"
++*End
++*FlowControl USB_kernel_dev_usb_lp1/USB (kernel dev_usb_lp1): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp1"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp1: "EplFlow&&
++Control=/dev/usb/lp1,"
++*End
++*CloseUI: *FlowControl
++
++*OpenUI *Dpi/Dpi: PickOne
++*FoomaticRIPOption Dpi: enum CmdLine B
++*OrderDependency: 200 AnySetup *Dpi
++*DefaultDpi: 600x600dpi
++*Dpi 300x300dpi/300x300 dpi: "%% FoomaticRIPOptionSetting: Dpi=300x300dpi"
++*FoomaticRIPOptionSetting Dpi=300x300dpi: "EplDpi=300,"
++*Dpi 600x300dpi/600x300 dpi (Class600): "%% FoomaticRIPOptionSetting: Dpi=600x300dpi"
++*FoomaticRIPOptionSetting Dpi=600x300dpi: "EplDpi=Class600,"
++*Dpi 600x600dpi/600x600 dpi: "%% FoomaticRIPOptionSetting: Dpi=600x600dpi"
++*FoomaticRIPOptionSetting Dpi=600x600dpi: "EplDpi=600,"
++*Dpi 1200x600dpi/1200x600 dpi (Class1200): "%% FoomaticRIPOptionSetting: Dpi=1200x600dpi"
++*FoomaticRIPOptionSetting Dpi=1200x600dpi: "EplDpi=Class1200,"
++*CloseUI: *Dpi
++
++*OpenUI *Ritech/Ritech: PickOne
++*FoomaticRIPOption Ritech: enum CmdLine B
++*OrderDependency: 210 AnySetup *Ritech
++*DefaultRitech: On
++*Ritech Off/Off: "%% FoomaticRIPOptionSetting: Ritech=Off"
++*FoomaticRIPOptionSetting Ritech=Off: "EplRitech=off,"
++*Ritech On/On: "%% FoomaticRIPOptionSetting: Ritech=On"
++*FoomaticRIPOptionSetting Ritech=On: "EplRitech=on,"
++*CloseUI: *Ritech
++
++*OpenUI *TonerSave/Toner Save: PickOne
++*FoomaticRIPOption TonerSave: enum CmdLine B
++*OrderDependency: 215 AnySetup *TonerSave
++*DefaultTonerSave: Off
++*TonerSave Off/Off: "%% FoomaticRIPOptionSetting: TonerSave=Off"
++*FoomaticRIPOptionSetting TonerSave=Off: "EplTonerSave=off,"
++*TonerSave On/On: "%% FoomaticRIPOptionSetting: TonerSave=On"
++*FoomaticRIPOptionSetting TonerSave=On: "EplTonerSave=on,"
++*CloseUI: *TonerSave
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *Density/Density: PickOne
++*FoomaticRIPOption Density: enum CmdLine B
++*OrderDependency: 205 AnySetup *Density
++*DefaultDensity: 3
++*Density 1/1: "%% FoomaticRIPOptionSetting: Density=1"
++*FoomaticRIPOptionSetting Density=1: "EplDensity=1,"
++*Density 2/2: "%% FoomaticRIPOptionSetting: Density=2"
++*FoomaticRIPOptionSetting Density=2: "EplDensity=2,"
++*Density 3/3: "%% FoomaticRIPOptionSetting: Density=3"
++*FoomaticRIPOptionSetting Density=3: "EplDensity=3,"
++*Density 4/4: "%% FoomaticRIPOptionSetting: Density=4"
++*FoomaticRIPOptionSetting Density=4: "EplDensity=4,"
++*Density 5/5: "%% FoomaticRIPOptionSetting: Density=5"
++*FoomaticRIPOptionSetting Density=5: "EplDensity=5,"
++*CloseUI: *Density
++
++*CloseGroup: Adjustment
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+diff --git a/foomatic-fresh-ppds/Epson-EPL-6100L-epl6100l.ppd b/foomatic-fresh-ppds/Epson-EPL-6100L-epl6100l.ppd
+new file mode 100644
+index 0000000..afc9fbd
+--- /dev/null
++++ b/foomatic-fresh-ppds/Epson-EPL-6100L-epl6100l.ppd
+@@ -0,0 +1,281 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with all supported printer drivers and printing
++*% spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Epson-EPL-6100L-epl6100l.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"EPL6100L.PPD"
++*Manufacturer:	"Epson"
++*Product:	"(EPL-6100L)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 100 foomatic-rip"
++*cupsFilter:	"application/vnd.cups-pdf 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Epson EPL-6100L"
++*ShortNickName: "Epson EPL-6100L epl6100l"
++*NickName:      "Epson EPL-6100L Foomatic/epl6100l (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*PSVersion:	"(3010.000) 815"
++*PSVersion:	"(3010.000) 850"
++*PSVersion:	"(3010.000) 860"
++*PSVersion:	"(3010.000) 861"
++*PSVersion:	"(3010.000) 862"
++*PSVersion:	"(3010.000) 863"
++*PSVersion:	"(3010.000) 864"
++*PSVersion:	"(3010.000) 870"
++*LanguageLevel:	"3"
++*ColorDevice:	False
++*DefaultColorSpace: Gray
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Depl6100l,R1,M0,TG;"
++
++*driverName epl6100l: ""
++*driverType G/Ghostscript built-in: ""
++*driverUrl: "http://sourceforge.net/projects/epsonepl/"
++*driverObsolete: False
++
++*DefaultResolution: 600x600dpi
++
++
++
++*HWMargins: 12 12 12 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 100 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop
++<</PageSize [ 5 -2 roll ] /ImagingBBox null>>setpagedevice"
++*End
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Epson-EPL-6100L epl6100l
++*FoomaticRIPCommandLine: "gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessCol&&
++orModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ij&&
++s_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDevice&&
++Model=EPL6100L -sIjsParams=&quot;%B&quot; -sOutputFile=- -"
++*End
++
++*OpenUI *PageSize/Page Size: PickOne
++*OrderDependency: 100 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageSize A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageSize A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageSize B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageSize Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageSize EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageSize EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageSize EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageSize EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageSize Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageSize Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 100 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageRegion A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageRegion A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageRegion B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageRegion Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageRegion Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageRegion Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/US Letter: "12 12 600 780"
++*ImageableArea A4/A4: "12 12 583 830"
++*ImageableArea A5/A5: "12 12 409 583"
++*ImageableArea B5/B5 (JIS): "12 12 504 717"
++*ImageableArea Env10/Envelope #10: "12 12 285 672"
++*ImageableArea EnvC5/Envelope C5: "12 12 447 637"
++*ImageableArea EnvDL/Envelope DL: "12 12 300 612"
++*ImageableArea EnvISOB5/Envelope B5: "12 12 487 697"
++*ImageableArea EnvMonarch/Envelope Monarch: "12 12 267 528"
++*ImageableArea Executive/Executive: "12 12 510 744"
++*ImageableArea Legal/US Legal: "12 12 600 996"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/US Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension A5/A5: "421 595"
++*PaperDimension B5/B5 (JIS): "516 729"
++*PaperDimension Env10/Envelope #10: "297 684"
++*PaperDimension EnvC5/Envelope C5: "459 649"
++*PaperDimension EnvDL/Envelope DL: "312 624"
++*PaperDimension EnvISOB5/Envelope B5: "499 709"
++*PaperDimension EnvMonarch/Envelope Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension Legal/US Legal: "612 1008"
++
++*OpenGroup: General/General
++
++*OpenUI *FlowControl/Flow Control: PickOne
++*FoomaticRIPOption FlowControl: enum CmdLine B
++*OrderDependency: 190 AnySetup *FlowControl
++*DefaultFlowControl: Off
++*FlowControl libieee1284/ParPort (libieee1284): "%% FoomaticRIPOptionSetting: FlowControl=libieee1284"
++*FoomaticRIPOptionSetting FlowControl=libieee1284: "EplFlowControl=lib&&
++ieee1284,"
++*End
++*FlowControl libusb/USB (libusb): "%% FoomaticRIPOptionSetting: FlowControl=libusb"
++*FoomaticRIPOptionSetting FlowControl=libusb: "EplFlowControl=libusb,"
++*FlowControl Off/Off: "%% FoomaticRIPOptionSetting: FlowControl=Off"
++*FoomaticRIPOptionSetting FlowControl=Off: "EplFlowControl=off,"
++*FlowControl ParPort_kernel_dev_lp0/ParPort (kernel dev_lp0): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp0"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp0: "EplFlow&&
++Control=/dev/lp0,"
++*End
++*FlowControl ParPort_kernel_dev_lp1/ParPort (kernel dev_lp1): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp1"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp1: "EplFlow&&
++Control=/dev/lp1,"
++*End
++*FlowControl USB_kernel_dev_usb_lp0/USB (kernel dev_usb_lp0): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp0"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp0: "EplFlow&&
++Control=/dev/usb/lp0,"
++*End
++*FlowControl USB_kernel_dev_usb_lp1/USB (kernel dev_usb_lp1): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp1"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp1: "EplFlow&&
++Control=/dev/usb/lp1,"
++*End
++*CloseUI: *FlowControl
++
++*OpenUI *Dpi/Dpi: PickOne
++*FoomaticRIPOption Dpi: enum CmdLine B
++*OrderDependency: 200 AnySetup *Dpi
++*DefaultDpi: 600x600dpi
++*Dpi 300x300dpi/300x300 dpi: "%% FoomaticRIPOptionSetting: Dpi=300x300dpi"
++*FoomaticRIPOptionSetting Dpi=300x300dpi: "EplDpi=300,"
++*Dpi 600x300dpi/600x300 dpi (Class600): "%% FoomaticRIPOptionSetting: Dpi=600x300dpi"
++*FoomaticRIPOptionSetting Dpi=600x300dpi: "EplDpi=Class600,"
++*Dpi 600x600dpi/600x600 dpi: "%% FoomaticRIPOptionSetting: Dpi=600x600dpi"
++*FoomaticRIPOptionSetting Dpi=600x600dpi: "EplDpi=600,"
++*Dpi 1200x600dpi/1200x600 dpi (Class1200): "%% FoomaticRIPOptionSetting: Dpi=1200x600dpi"
++*FoomaticRIPOptionSetting Dpi=1200x600dpi: "EplDpi=Class1200,"
++*CloseUI: *Dpi
++
++*OpenUI *Ritech/Ritech: PickOne
++*FoomaticRIPOption Ritech: enum CmdLine B
++*OrderDependency: 210 AnySetup *Ritech
++*DefaultRitech: On
++*Ritech Off/Off: "%% FoomaticRIPOptionSetting: Ritech=Off"
++*FoomaticRIPOptionSetting Ritech=Off: "EplRitech=off,"
++*Ritech On/On: "%% FoomaticRIPOptionSetting: Ritech=On"
++*FoomaticRIPOptionSetting Ritech=On: "EplRitech=on,"
++*CloseUI: *Ritech
++
++*OpenUI *TonerSave/Toner Save: PickOne
++*FoomaticRIPOption TonerSave: enum CmdLine B
++*OrderDependency: 215 AnySetup *TonerSave
++*DefaultTonerSave: Off
++*TonerSave Off/Off: "%% FoomaticRIPOptionSetting: TonerSave=Off"
++*FoomaticRIPOptionSetting TonerSave=Off: "EplTonerSave=off,"
++*TonerSave On/On: "%% FoomaticRIPOptionSetting: TonerSave=On"
++*FoomaticRIPOptionSetting TonerSave=On: "EplTonerSave=on,"
++*CloseUI: *TonerSave
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *Density/Density: PickOne
++*FoomaticRIPOption Density: enum CmdLine B
++*OrderDependency: 205 AnySetup *Density
++*DefaultDensity: 3
++*Density 1/1: "%% FoomaticRIPOptionSetting: Density=1"
++*FoomaticRIPOptionSetting Density=1: "EplDensity=1,"
++*Density 2/2: "%% FoomaticRIPOptionSetting: Density=2"
++*FoomaticRIPOptionSetting Density=2: "EplDensity=2,"
++*Density 3/3: "%% FoomaticRIPOptionSetting: Density=3"
++*FoomaticRIPOptionSetting Density=3: "EplDensity=3,"
++*Density 4/4: "%% FoomaticRIPOptionSetting: Density=4"
++*FoomaticRIPOptionSetting Density=4: "EplDensity=4,"
++*Density 5/5: "%% FoomaticRIPOptionSetting: Density=5"
++*FoomaticRIPOptionSetting Density=5: "EplDensity=5,"
++*CloseUI: *Density
++
++*CloseGroup: Adjustment
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+diff --git a/foomatic-fresh-ppds/Epson-EPL-6200L-epl6200l.ppd b/foomatic-fresh-ppds/Epson-EPL-6200L-epl6200l.ppd
+new file mode 100644
+index 0000000..b413209
+--- /dev/null
++++ b/foomatic-fresh-ppds/Epson-EPL-6200L-epl6200l.ppd
+@@ -0,0 +1,281 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with all supported printer drivers and printing
++*% spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Epson-EPL-6200L-epl6200l.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"EPL6200L.PPD"
++*Manufacturer:	"Epson"
++*Product:	"(EPL-6200L)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 100 foomatic-rip"
++*cupsFilter:	"application/vnd.cups-pdf 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Epson EPL-6200L"
++*ShortNickName: "Epson EPL-6200L epl6200l"
++*NickName:      "Epson EPL-6200L Foomatic/epl6200l"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*PSVersion:	"(3010.000) 815"
++*PSVersion:	"(3010.000) 850"
++*PSVersion:	"(3010.000) 860"
++*PSVersion:	"(3010.000) 861"
++*PSVersion:	"(3010.000) 862"
++*PSVersion:	"(3010.000) 863"
++*PSVersion:	"(3010.000) 864"
++*PSVersion:	"(3010.000) 870"
++*LanguageLevel:	"3"
++*ColorDevice:	False
++*DefaultColorSpace: Gray
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Depl6200l,R0,M0,TG;"
++
++*driverName epl6200l: ""
++*driverType G/Ghostscript built-in: ""
++*driverUrl: "http://sourceforge.net/projects/epsonepl/"
++*driverObsolete: False
++
++*DefaultResolution: 600x600dpi
++
++
++
++*HWMargins: 12 12 12 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 100 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop
++<</PageSize [ 5 -2 roll ] /ImagingBBox null>>setpagedevice"
++*End
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Epson-EPL-6200L epl6200l
++*FoomaticRIPCommandLine: "gs -q -dBATCH -dSAFER -dNOPAUSE -sProcessCol&&
++orModel=DeviceGray -dBitsPerSample=1 -sDEVICE=ijs %A %Z -sIjsServer=ij&&
++s_server_epsonepl -dIjsUseOutputFD -sDeviceManufacturer=Epson -sDevice&&
++Model=EPL6200L -sIjsParams=&quot;%B&quot; -sOutputFile=- -"
++*End
++
++*OpenUI *PageSize/Page Size: PickOne
++*OrderDependency: 100 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageSize A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageSize A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageSize B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageSize Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageSize EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageSize EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageSize EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageSize EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageSize Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageSize Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 100 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageRegion A4/A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageRegion A5/A5: "<</PageSize[421 595]/ImagingBBox null>>setpagedevice"
++*PageRegion B5/B5 (JIS): "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageRegion Env10/Envelope #10: "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvC5/Envelope C5: "<</PageSize[459 649]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvDL/Envelope DL: "<</PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvISOB5/Envelope B5: "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
++*PageRegion EnvMonarch/Envelope Monarch: "<</PageSize[279 540]/ImagingBBox null>>setpagedevice"
++*PageRegion Executive/Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
++*PageRegion Legal/US Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/US Letter: "12 12 600 780"
++*ImageableArea A4/A4: "12 12 583 830"
++*ImageableArea A5/A5: "12 12 409 583"
++*ImageableArea B5/B5 (JIS): "12 12 504 717"
++*ImageableArea Env10/Envelope #10: "12 12 285 672"
++*ImageableArea EnvC5/Envelope C5: "12 12 447 637"
++*ImageableArea EnvDL/Envelope DL: "12 12 300 612"
++*ImageableArea EnvISOB5/Envelope B5: "12 12 487 697"
++*ImageableArea EnvMonarch/Envelope Monarch: "12 12 267 528"
++*ImageableArea Executive/Executive: "12 12 510 744"
++*ImageableArea Legal/US Legal: "12 12 600 996"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/US Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension A5/A5: "421 595"
++*PaperDimension B5/B5 (JIS): "516 729"
++*PaperDimension Env10/Envelope #10: "297 684"
++*PaperDimension EnvC5/Envelope C5: "459 649"
++*PaperDimension EnvDL/Envelope DL: "312 624"
++*PaperDimension EnvISOB5/Envelope B5: "499 709"
++*PaperDimension EnvMonarch/Envelope Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension Legal/US Legal: "612 1008"
++
++*OpenGroup: General/General
++
++*OpenUI *FlowControl/Flow Control: PickOne
++*FoomaticRIPOption FlowControl: enum CmdLine B
++*OrderDependency: 190 AnySetup *FlowControl
++*DefaultFlowControl: Off
++*FlowControl libieee1284/ParPort (libieee1284): "%% FoomaticRIPOptionSetting: FlowControl=libieee1284"
++*FoomaticRIPOptionSetting FlowControl=libieee1284: "EplFlowControl=lib&&
++ieee1284,"
++*End
++*FlowControl libusb/USB (libusb): "%% FoomaticRIPOptionSetting: FlowControl=libusb"
++*FoomaticRIPOptionSetting FlowControl=libusb: "EplFlowControl=libusb,"
++*FlowControl Off/Off: "%% FoomaticRIPOptionSetting: FlowControl=Off"
++*FoomaticRIPOptionSetting FlowControl=Off: "EplFlowControl=off,"
++*FlowControl ParPort_kernel_dev_lp0/ParPort (kernel dev_lp0): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp0"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp0: "EplFlow&&
++Control=/dev/lp0,"
++*End
++*FlowControl ParPort_kernel_dev_lp1/ParPort (kernel dev_lp1): "%% FoomaticRIPOptionSetting: FlowControl=ParPort_kernel_dev_lp1"
++*FoomaticRIPOptionSetting FlowControl=ParPort_kernel_dev_lp1: "EplFlow&&
++Control=/dev/lp1,"
++*End
++*FlowControl USB_kernel_dev_usb_lp0/USB (kernel dev_usb_lp0): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp0"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp0: "EplFlow&&
++Control=/dev/usb/lp0,"
++*End
++*FlowControl USB_kernel_dev_usb_lp1/USB (kernel dev_usb_lp1): "%% FoomaticRIPOptionSetting: FlowControl=USB_kernel_dev_usb_lp1"
++*FoomaticRIPOptionSetting FlowControl=USB_kernel_dev_usb_lp1: "EplFlow&&
++Control=/dev/usb/lp1,"
++*End
++*CloseUI: *FlowControl
++
++*OpenUI *Dpi/Dpi: PickOne
++*FoomaticRIPOption Dpi: enum CmdLine B
++*OrderDependency: 200 AnySetup *Dpi
++*DefaultDpi: 600x600dpi
++*Dpi 300x300dpi/300x300 dpi: "%% FoomaticRIPOptionSetting: Dpi=300x300dpi"
++*FoomaticRIPOptionSetting Dpi=300x300dpi: "EplDpi=300,"
++*Dpi 600x300dpi/600x300 dpi (Class600): "%% FoomaticRIPOptionSetting: Dpi=600x300dpi"
++*FoomaticRIPOptionSetting Dpi=600x300dpi: "EplDpi=Class600,"
++*Dpi 600x600dpi/600x600 dpi: "%% FoomaticRIPOptionSetting: Dpi=600x600dpi"
++*FoomaticRIPOptionSetting Dpi=600x600dpi: "EplDpi=600,"
++*Dpi 1200x600dpi/1200x600 dpi (Class1200): "%% FoomaticRIPOptionSetting: Dpi=1200x600dpi"
++*FoomaticRIPOptionSetting Dpi=1200x600dpi: "EplDpi=Class1200,"
++*CloseUI: *Dpi
++
++*OpenUI *Ritech/Ritech: PickOne
++*FoomaticRIPOption Ritech: enum CmdLine B
++*OrderDependency: 210 AnySetup *Ritech
++*DefaultRitech: On
++*Ritech Off/Off: "%% FoomaticRIPOptionSetting: Ritech=Off"
++*FoomaticRIPOptionSetting Ritech=Off: "EplRitech=off,"
++*Ritech On/On: "%% FoomaticRIPOptionSetting: Ritech=On"
++*FoomaticRIPOptionSetting Ritech=On: "EplRitech=on,"
++*CloseUI: *Ritech
++
++*OpenUI *TonerSave/Toner Save: PickOne
++*FoomaticRIPOption TonerSave: enum CmdLine B
++*OrderDependency: 215 AnySetup *TonerSave
++*DefaultTonerSave: Off
++*TonerSave Off/Off: "%% FoomaticRIPOptionSetting: TonerSave=Off"
++*FoomaticRIPOptionSetting TonerSave=Off: "EplTonerSave=off,"
++*TonerSave On/On: "%% FoomaticRIPOptionSetting: TonerSave=On"
++*FoomaticRIPOptionSetting TonerSave=On: "EplTonerSave=on,"
++*CloseUI: *TonerSave
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *Density/Density: PickOne
++*FoomaticRIPOption Density: enum CmdLine B
++*OrderDependency: 205 AnySetup *Density
++*DefaultDensity: 3
++*Density 1/1: "%% FoomaticRIPOptionSetting: Density=1"
++*FoomaticRIPOptionSetting Density=1: "EplDensity=1,"
++*Density 2/2: "%% FoomaticRIPOptionSetting: Density=2"
++*FoomaticRIPOptionSetting Density=2: "EplDensity=2,"
++*Density 3/3: "%% FoomaticRIPOptionSetting: Density=3"
++*FoomaticRIPOptionSetting Density=3: "EplDensity=3,"
++*Density 4/4: "%% FoomaticRIPOptionSetting: Density=4"
++*FoomaticRIPOptionSetting Density=4: "EplDensity=4,"
++*Density 5/5: "%% FoomaticRIPOptionSetting: Density=5"
++*FoomaticRIPOptionSetting Density=5: "EplDensity=5,"
++*CloseUI: *Density
++
++*CloseGroup: Adjustment
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+diff --git a/foomatic-fresh-ppds/generate-ppds b/foomatic-fresh-ppds/generate-ppds
+new file mode 100755
+index 0000000..7728e42
+--- /dev/null
++++ b/foomatic-fresh-ppds/generate-ppds
+@@ -0,0 +1,7 @@
++#!/bin/sh
++
++foomatic-ppdfile -t cups -d epl5700l -p 312297          > Epson-EPL-5700L-epl5700l.ppd
++foomatic-ppdfile -t cups -d epl5800l -p Epson-EPL-5800L > Epson-EPL-5800L-epl5800l.ppd
++foomatic-ppdfile -t cups -d epl5900l -p Epson-EPL-5900L > Epson-EPL-5900L-epl5900l.ppd
++foomatic-ppdfile -t cups -d epl6100l -p Epson-EPL-6100L > Epson-EPL-6100L-epl6100l.ppd
++foomatic-ppdfile -t cups -d epl6200l -p Epson-EPL-6200L > Epson-EPL-6200L-epl6200l.ppd

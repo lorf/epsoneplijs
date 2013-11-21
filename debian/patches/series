@@ -1,5 +1,3 @@
-epsoneplijs-use_system_libs.diff
-epsoneplijs-mandriva-install.diff
-epsoneplijs-0.4.1-LDFLAGS.diff
-
-debian-prefix.patch
+epsoneplijs-use-system-libs.patch
+epsoneplijs-build.patch
+epsoneplijs-foomatic-fresh-ppds.patch
