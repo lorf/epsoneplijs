@@ -1,0 +1,43 @@
+--- epsoneplijs-0.4.1.orig/Makefile.in	2008-12-29 15:33:40.000000000 +0100
++++ epsoneplijs-0.4.1/Makefile.in	2008-12-29 15:35:19.000000000 +0100
+@@ -16,6 +16,7 @@
+ SHARED_OBJ=.so
+ #SHARED_LDFLAGS=-dylib
+ #SHARED_OBJ=.dylib
++LDFLAGS=
+ 
+ FE=-o 
+ IJS_EXEC_SERVER=ijs_exec_unix$(OBJ)
+@@ -58,26 +59,26 @@
+ # makes sense to separate them, but they're small enough to make this probably
+ # not worthwhile.
+ libijs$(SHARED_OBJ):	$(LIB_OBJS)
+-	$(CC) $(SHARED_LDFLAGS) $^ -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHARED_LDFLAGS) $^ -o $@
+ 
+ ijs_client_example$(EXE):	ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON_OBJ) $(IJS_EXEC_SERVER)
+-	$(CC) $(CFLAGS) $(FE)ijs_client_example$(EXE) ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON_OBJ) $(IJS_EXEC_SERVER) 
++	$(CC) $(CFLAGS) $(LDFLAGS) $(FE)ijs_client_example$(EXE) ijs_client_example$(OBJ) ijs_client$(OBJ) $(IJS_COMMON_OBJ) $(IJS_EXEC_SERVER) 
+ 
+ ijs_server_example$(EXE):	ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
+-	$(CC) $(CFLAGS) $(FE)ijs_server_example$(EXE) ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(FE)ijs_server_example$(EXE) ijs_server_example$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ)
+ 
+ ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMMON_OBJ) $(EPL_OBJS) $(EXTRA_DEPS) $(EPL_HEADERS)
+-	$(CC) $(CFLAGS) $(FE)ijs_server_epsonepl$(EXE) ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(EPL_OBJS) $(IJS_COMMON_OBJ) $(LDPATH) $(LDLIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(FE)ijs_server_epsonepl$(EXE) ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(EPL_OBJS) $(IJS_COMMON_OBJ) $(LDPATH) $(LDLIBS)
+ 
+ testlibusb$(OBJ): libusb/tests/testlibusb.c
+ 	$(CC) $(CFLAGS) -c -I./libusb -o testlibusb$(OBJ) libusb/tests/testlibusb.c
+ 
+ testlibusb$(EXE): testlibusb$(OBJ)
+-	$(CC) $(CFLAGS) $(FE)testlibusb$(EXE) testlibusb$(OBJ) $(LDPATH) $(LDLIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(FE)testlibusb$(EXE) testlibusb$(OBJ) $(LDPATH) $(LDLIBS)
+ 
+ #test5700lusb doesn't need a .o.c target as the source is in the same directory.
+ test5700lusb$(EXE): test5700lusb$(OBJ)
+-	$(CC) $(CFLAGS) $(FE)test5700lusb$(EXE) test5700lusb$(OBJ) $(LDPATH) $(LDLIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(FE)test5700lusb$(EXE) test5700lusb$(OBJ) $(LDPATH) $(LDLIBS)
+ 
+ # libusb.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 
+ libusb/.libs/libusb.a:
