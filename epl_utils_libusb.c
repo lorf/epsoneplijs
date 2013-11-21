@@ -25,7 +25,7 @@
  * SOFTWARE.
 **/
 
-#include "libusb/usb.h"
+#include <usb.h>
 
 #include <stdlib.h>
 #include <string.h>

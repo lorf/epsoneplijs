@@ -72,11 +72,11 @@ ijs_server_epsonepl$(EXE): ijs_server_epsonepl$(OBJ) ijs_server$(OBJ) $(IJS_COMM
 testlibusb$(OBJ): libusb/tests/testlibusb.c
 	$(CC) $(CFLAGS) -c -I./libusb -o testlibusb$(OBJ) libusb/tests/testlibusb.c
 
-testlibusb$(EXE): testlibusb$(OBJ) libusb/.libs/libusb.a
+testlibusb$(EXE): testlibusb$(OBJ)
 	$(CC) $(CFLAGS) $(FE)testlibusb$(EXE) testlibusb$(OBJ) $(LDPATH) $(LDLIBS)
 
 #test5700lusb doesn't need a .o.c target as the source is in the same directory.
-test5700lusb$(EXE): test5700lusb$(OBJ) libusb/.libs/libusb.a
+test5700lusb$(EXE): test5700lusb$(OBJ)
 	$(CC) $(CFLAGS) $(FE)test5700lusb$(EXE) test5700lusb$(OBJ) $(LDPATH) $(LDLIBS)
 
 # libusb.spec is a generated file that interfers with rpm building. Therefore removing as soon as possible 

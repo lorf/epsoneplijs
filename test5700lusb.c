@@ -5,7 +5,9 @@
  */
 
 #include <stdio.h>
-#include "libusb/usb.h"
+#include <linux/limits.h>
+#include <sys/types.h>
+#include <usb.h>
 
 void print_endpoint(struct usb_endpoint_descriptor *endpoint);
 void print_altsetting(struct usb_interface_descriptor *interface);

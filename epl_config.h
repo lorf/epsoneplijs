@@ -123,11 +123,11 @@
 
 
 #ifdef HAVE_LIBUSB
-#include "libusb/usb.h"
+#include <usb.h>
 #endif 
 
 #ifdef HAVE_LIBIEEE1284
-#include "libieee1284/include/ieee1284.h"
+#include <ieee1284.h>
 #endif 
 
 #if defined(HAVE_LIBUSB) || defined(HAVE_KERNEL_USB_DEVICE) || defined(HAVE_LIBIEEE1284) || defined(HAVE_KERNEL_1284) || defined(HAVE_NULLTRANS)
