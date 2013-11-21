@@ -9,6 +9,8 @@ Vcs-Browser: https://github.com/lorf/epsoneplijs
 
 Package: epsoneplijs
 Architecture: any
+Recommends: foomatic-filters, cups
+Suggests: foomatic-gui, foomatic-db-engine
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Printer driver for the Epson EPL range of printers
  Support for the Epson EPL-5700L/5800L/5900L/6100L/6200L printer family under
