@@ -100,7 +100,8 @@ clean: common_clean
 	[ -d libieee1284 ] && (cd libieee1284 ; make clean) || true
 
 install: all
-	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(bindir)/ijs_server_epsonepl$(EXE)
+	$(INSTALL) -d $(DESTDIR)/$(bindir)
+	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(DESTDIR)/$(bindir)/ijs_server_epsonepl$(EXE)
 
 uninstall:
 	$(RM) $(bindir)/ijs_server_epsonepl$(EXE)
