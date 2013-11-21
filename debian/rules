@@ -30,7 +30,7 @@ override_dh_auto_build:
 override_dh_auto_install:
 	dh_auto_install
 	install -d -m 0755 debian/epsoneplijs/usr/bin
-	install -c -m 0755 ps2epl.pl test5700lusb epl-5700 epl-5800 epl5x00l debian/epsoneplijs/usr/bin/
+	install -c -m 0755 ijs_server_epsonepl ps2epl.pl test5700lusb epl-5700 epl-5800 epl5x00l debian/epsoneplijs/usr/bin/
 	install -d -m 0755 debian/epsoneplijs/usr/share/foomatic/db/source/driver
 	install -m 0644 foomatic/driver/* debian/epsoneplijs/usr/share/foomatic/db/source/driver/
 	install -d -m 0755 debian/epsoneplijs/usr/share/foomatic/db/source/opt
