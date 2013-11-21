@@ -1,17 +1,14 @@
 Index: epsoneplijs/Makefile.in
 ===================================================================
---- epsoneplijs.orig/Makefile.in	2013-11-21 19:40:14.000000000 +0700
-+++ epsoneplijs/Makefile.in	2013-11-21 19:51:57.895703611 +0700
-@@ -28,9 +28,9 @@
- # Installation paths
- prefix=@prefix@
- exec_prefix=@exec_prefix@
--bindir=@bindir@
--libdir=@libdir@
--includedir=@includedir@
-+bindir=$(DESTDIR)/@bindir@
-+libdir=$(DESTDIR)/@libdir@
-+includedir=$(DESTDIR)/@includedir@
+--- epsoneplijs.orig/Makefile.in	2013-11-21 20:13:50.000000000 +0700
++++ epsoneplijs/Makefile.in	2013-11-21 20:53:51.437973635 +0700
+@@ -100,7 +100,8 @@
+ 	[ -d libieee1284 ] && (cd libieee1284 ; make clean) || true
  
- pkgincludedir=$(includedir)/ijs
+ install: all
+-	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(bindir)/ijs_server_epsonepl$(EXE)
++	$(INSTALL) -d $(DESTDIR)/$(bindir)
++	$(INSTALL) ijs_server_epsonepl$(EXE) -c $(DESTDIR)/$(bindir)/ijs_server_epsonepl$(EXE)
  
+ uninstall:
+ 	$(RM) $(bindir)/ijs_server_epsonepl$(EXE)
