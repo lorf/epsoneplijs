@@ -1,0 +1,17 @@
+Index: epsoneplijs/Makefile.in
+===================================================================
+--- epsoneplijs.orig/Makefile.in	2013-11-21 19:40:14.000000000 +0700
++++ epsoneplijs/Makefile.in	2013-11-21 19:51:57.895703611 +0700
+@@ -28,9 +28,9 @@
+ # Installation paths
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-bindir=@bindir@
+-libdir=@libdir@
+-includedir=@includedir@
++bindir=$(DESTDIR)/@bindir@
++libdir=$(DESTDIR)/@libdir@
++includedir=$(DESTDIR)/@includedir@
+ 
+ pkgincludedir=$(includedir)/ijs
+ 
