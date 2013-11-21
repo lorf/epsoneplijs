@@ -1,0 +1,7 @@
+#!/bin/sh
+
+foomatic-ppdfile -t cups -d epl5700l -p 312297          > Epson-EPL-5700L-epl5700l.ppd
+foomatic-ppdfile -t cups -d epl5800l -p Epson-EPL-5800L > Epson-EPL-5800L-epl5800l.ppd
+foomatic-ppdfile -t cups -d epl5900l -p Epson-EPL-5900L > Epson-EPL-5900L-epl5900l.ppd
+foomatic-ppdfile -t cups -d epl6100l -p Epson-EPL-6100L > Epson-EPL-6100L-epl6100l.ppd
+foomatic-ppdfile -t cups -d epl6200l -p Epson-EPL-6200L > Epson-EPL-6200L-epl6200l.ppd
