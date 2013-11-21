@@ -19,3 +19,15 @@ export DH_OPTIONS
 
 %:
 	dh $@  --with autotools-dev --with autoreconf
+
+override_dh_auto_build:
+	dh_auto_build
+	$(MAKE) test5700lusb
+	gcc -g -O2 -Wall -pedantic -Wmissing-prototypes -o epl-5700 epl_docs/epl-5700.c
+	gcc -g -O2 -Wall -pedantic -Wmissing-prototypes -o epl-5800 epl_docs/epl-5800.c
+	gcc -g -O2 -Wall -pedantic -Wmissing-prototypes -o epl5x00l epl_docs/epl5x00l.c
+
+override_dh_auto_install:
+	dh_auto_install
+	install -d -m 0755 debian/epsoneplijs/usr/bin
+	install -c -m 0755 ps2epl.pl test5700lusb epl-5700 epl-5800 epl5x00l debian/epsoneplijs/usr/bin/
