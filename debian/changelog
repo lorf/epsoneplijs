@@ -1,3 +1,9 @@
+epsoneplijs (0.4.1-20090803-cvs-1ubuntu1) trusty; urgency=medium
+
+  * Update to latest from CVS
+
+ -- Dmitry Frolov (Launchpad.net) <dmitry.frolov@gmail.com>  Thu, 06 Aug 2015 20:10:31 +0600
+
 epsoneplijs (0.4.1-1ubuntu1) raring; urgency=low
 
   * Initial release.
